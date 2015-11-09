@@ -1,0 +1,5 @@
+---
+- name: Ensure that project name specified
+  fail:
+    msg: 'You need to specify project name passing the "--project=NAME" parameter.'
+  when: project is undefined or project == ""

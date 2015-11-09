@@ -4,27 +4,28 @@
   gather_facts: no
 
   vars:
-    project: CHANGE_ME
     drupal_version: 7
 
   vars_files:
     - ../files/vagrant/box/provisioning/config.yml
 
   tasks:
+    - include: tasks/project-variable.yml
+
     - name: Downloading Drupal
       shell: "drush dl drupal --drupal-project-rename=docroot --destination=../{{ project }} -y"
 
     - name: Prepare CIBox-structured repository
       synchronize:
-        src: "../{{ item.src }}"
+        src: "{{ item.src }}"
         dest: "../{{ project }}/{{ item.dest | default('') }}"
         archive: no
         recursive: yes
       with_items:
-        - src: "files/drupal/{{ drupal_version }}/"
-        - src: "files/vagrant/box/"
-        - src: "inventory"
-        - src: "ansible.sh"
+        - src: "../files/drupal/{{ drupal_version }}/"
+        - src: "../files/vagrant/box/"
+        - src: "../inventory"
+        - src: "../ansible.sh"
 
         - src: "roles/"
           dest: "provisioning/ansible/roles/"
@@ -40,3 +41,9 @@
       lineinfile:
         dest: "../{{ project }}/inventory"
         line: "\n[vagrant]\n{{ vm.network.private_network }} ansible_ssh_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/default/virtualbox/private_key"
+
+    - name: Set name of the project to config.yml
+      lineinfile:
+        dest: "../{{ project }}/provisioning/config.yml"
+        line: "project: {{ project }}"
+        insertafter: "^---$"

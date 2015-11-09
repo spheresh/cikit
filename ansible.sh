@@ -12,6 +12,8 @@
 # - ansible-playbook
 
 SELF_PATH=$(cd -P -- $(dirname -- ${0}) && pwd -P)
+# List of variables which will be passed as parameters for "ansible-playbook".
+APB_VARS="limit tags list-tags module-path"
 
 while [ -h "${SELF_PATH}" ]; do
     # 1) cd to directory of the symlink
@@ -40,18 +42,23 @@ for ((i = 2; i <= $#; i++)); do
     var=${!i%=*}
     val=${!i#*=}
 
+    # Remove leading "--".
+    var=${var#--}
+    val=${val#--}
+
+    for j in ${APB_VARS}; do
+        if [ "${var}" == "${j}" ]; then
+            params+=" --${var}"
+
+            if [ "${var}" != "${val}" ]; then
+                params+="=${val}"
+            fi
+        fi
+    done
+
     if [ "${var}" == "${val}" ]; then
         val="True"
     fi
-
-    # Remove leading "--" from argument name.
-    var=${var#--}
-
-    for j in limit module-path; do
-        if [ "${var}" == "${j}" ]; then
-            params+=" --${var}=${val}"
-        fi
-    done
 
     # Replace all "-" by "_" in argument name.
     var=${var//-/_}
