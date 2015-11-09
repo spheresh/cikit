@@ -1,0 +1,36 @@
+/*
+
+!docroot/
+
+# Ignore user generated content.
+docroot/sites/*/files/
+# Ignore any custom settings.
+docroot/sites/*/settings*.php
+# Build reports.
+docroot/build_reports/
+
+# Ansible playbooks.
+!scripts/
+# Behat tests.
+!tests/
+# Ansible provision scripts for machine.
+!provisioning/
+
+.*
+~*
+
+!*.md
+!*.php
+
+# Apache configurations.
+!.htaccess
+# Helper file that afect to "synchronize" task of Ansible.
+!.rsync-filter
+
+!composer.json
+
+!.gitignore
+!.gitsubmodules
+
+!Vagrantfile
+!LICENSE

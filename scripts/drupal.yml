@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    project: DEMO
+    drupal_version: 7
+
+  tasks:
+    - name: Downloading Drupal
+      shell: "drush dl drupal --drupal-project-rename=docroot --destination=../{{ project }} -y"
+
+    - name: Prepare CIBox-structured repository
+      synchronize:
+        src: "../{{ item.src }}"
+        dest: "../{{ project }}/{{ item.dest | default('') }}"
+        archive: no
+        recursive: yes
+      with_items:
+        - src: "files/drupal/{{ drupal_version }}/"
+        - src: "files/vagrant/box/"
+        - src: "inventory"
+        - src: "ansible.sh"
+
+        - src: "roles/"
+          dest: "provisioning/ansible/roles/"
+
+    - name: Setting permissions for project tree
+      file:
+        mode: 0777
+        path: "../{{ project }}"
+        state: directory
+        recurse: yes

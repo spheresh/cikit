@@ -1,8 +1,4 @@
 ---
-# This playbook should be executed using 
-# ansible-playbook jenkinsbox.yml
-# command
-# Developed for ansible version >= 1.7
 - hosts: CHANGE_ME
   gather_facts: no
   remote_user: root
@@ -23,7 +19,7 @@
       - org.jenkinsci.plugins.ghprb.GhprbTrigger.xml
       - jobs/{{ project_name }}_PR_BUILDER/config.xml
       - jobs/DEMO/config.xml
-    
+
     protected_folders:
       - /var/www/backup
       - /var/www/cache
