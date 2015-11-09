@@ -4,8 +4,11 @@
   gather_facts: no
 
   vars:
-    project: DEMO
+    project: CHANGE_ME
     drupal_version: 7
+
+  vars_files:
+    - ../files/vagrant/box/provisioning/config.yml
 
   tasks:
     - name: Downloading Drupal
@@ -32,3 +35,8 @@
         path: "../{{ project }}"
         state: directory
         recurse: yes
+
+    - name: Add Vagrant host to inventory file
+      lineinfile:
+        dest: "../{{ project }}/inventory"
+        line: "\n[vagrant]\n{{ vm.network.private_network }} ansible_ssh_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/default/virtualbox/private_key"

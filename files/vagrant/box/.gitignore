@@ -13,24 +13,25 @@ docroot/build_reports/
 !scripts/
 # Behat tests.
 !tests/
-# Ansible provision scripts for machine.
+# Ansible provision scripts for VM.
 !provisioning/
 
+# Ignore hidden files.
 .*
 ~*
 
 !*.md
-!*.php
 
-# Apache configurations.
 !.htaccess
 # Helper file that afect to "synchronize" task of Ansible.
 !.rsync-filter
-
-!composer.json
-
 !.gitignore
 !.gitsubmodules
 
+!composer.json
+!adminer.php
+!ansible.sh
+
 !Vagrantfile
+!inventory
 !LICENSE

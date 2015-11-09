@@ -1,10 +1,10 @@
 ---
-- hosts: CHANGE_ME
+- hosts: all
   gather_facts: no
   remote_user: root
 
   vars:
-    project_name: CHANGE_ME
+    project: CHANGE_ME
 
     pear_channels:
       - pear.drush.org
@@ -17,7 +17,7 @@
     jenkins_configs:
       - jenkins.model.JenkinsLocationConfiguration.xml
       - org.jenkinsci.plugins.ghprb.GhprbTrigger.xml
-      - jobs/{{ project_name }}_PR_BUILDER/config.xml
+      - jobs/{{ project }}_PR_BUILDER/config.xml
       - jobs/DEMO/config.xml
 
     protected_folders:
@@ -111,7 +111,7 @@
   tasks:
     # @todo More smart way to upload jobs. Move job names to options.
   - name: Check if job already renamed.
-    stat: path=/var/lib/jenkins/jobs/{{ project_name }}_PR_BUILDER
+    stat: path=/var/lib/jenkins/jobs/{{ project }}_PR_BUILDER
     register: prbuilder_stat
     tags:
       - cibox-jenkins
@@ -130,7 +130,7 @@
 
   - name: Rename jenkins jobs to meet project name.
     sudo: yes
-    shell: "mv /var/lib/jenkins/jobs/PR_BUILDER /var/lib/jenkins/jobs/{{ project_name }}_PR_BUILDER"
+    shell: "mv /var/lib/jenkins/jobs/PR_BUILDER /var/lib/jenkins/jobs/{{ project }}_PR_BUILDER"
     when: prbuilder_stat.stat.exists == false
     tags:
       - cibox-jenkins

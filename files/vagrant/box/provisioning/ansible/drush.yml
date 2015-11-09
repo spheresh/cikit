@@ -1,15 +1,26 @@
 ---
-# This playbook installs drush
-
-- hosts: 127.0.0.1
+- hosts: localhost
   connection: local
   gather_facts: no
-
-  roles:
-    - { role: cibox-drush }
+  sudo: yes
 
   vars:
-    drushrc:
-      drush_usage_log: 1
-      drush_usage_send: 1
-      php-notices: warning
+    version: 6.*
+    user: vagrant
+
+  tasks:
+    - name: Install Drush
+      shell: "composer global require drush/drush:{{ version }} --no-interaction --no-ansi"
+      sudo_user: "{{ user }}"
+
+    - name: Create symlinks
+      file:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        force: yes
+        state: link
+      with_items:
+        - src: "/home/{{ user }}/.composer/vendor/drush/drush/drush"
+          dest: "/usr/local/bin/drush"
+        - src: "/home/{{ user }}/.composer/vendor/bin/drush.complete.sh"
+          dest: "/etc/bash_completion.d/drush"

@@ -1,1 +1,17 @@
+/*
+
+!.gitignore
+!.gitsubmodules
+
+!files/
+!library/
+!roles/
+!scripts/
+
+!ansible.sh
+!inventory
+!LICENSE
+
 .*
+
+!*.md

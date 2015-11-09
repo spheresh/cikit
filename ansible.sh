@@ -21,7 +21,7 @@ while [ -h "${SELF_PATH}" ]; do
     SELF_PATH=$(cd $(dirname -- ${SELF_PATH}) && cd $(dirname -- $(readlink ${SELF_PATH})) && pwd)
 done
 
-cd ${SELF_PATH}
+cd ${SELF_PATH}/scripts
 
 if [[ -z ${1} || ${1} == "--op" ]]; then
     echo "Available operations:"
@@ -47,7 +47,7 @@ for ((i = 2; i <= $#; i++)); do
     # Remove leading "--" from argument name.
     var=${var#--}
 
-    for j in limit module-path inventory-file; do
+    for j in limit module-path; do
         if [ "${var}" == "${j}" ]; then
             params+=" --${var}=${val}"
         fi
@@ -71,4 +71,5 @@ if [ -n "${extra_vars}" ]; then
 fi
 
 export PYTHONUNBUFFERED=1
-time eval "ansible-playbook -vvvv scripts/${1}.yml -i inventory ${params}"
+
+time eval "ansible-playbook -vvvv ${1}.yml -i ../inventory ${params}"

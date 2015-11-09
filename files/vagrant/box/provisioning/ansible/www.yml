@@ -1,10 +1,11 @@
 ---
-# This playbook installs apache
-
-- hosts: 127.0.0.1
+- hosts: localhost
   connection: local
   gather_facts: yes
   sudo: yes
+
+  vars_files:
+   - ../config.yml
 
   vars:
     # Varnish configuration.
@@ -14,7 +15,6 @@
 
     # SSL configuration.
     cibox_ssl_folder: /etc/apache/ssl
-    cibox_server_ip: 192.168.56.132
 
     # Apache configuration.
     apache_create_vhosts: true
@@ -22,16 +22,16 @@
     apache_remove_default_vhost: true
     apache_vhosts:
       - {
-        servername: "{{ cibox_server_ip }}.xip.io",
+        servername: "{{ {{ vm.network.private_network }} }}.xip.io",
         documentroot: "/var/www"
       }
       - {
-        servername: "drupal.{{ cibox_server_ip }}.xip.io",
+        servername: "drupal.{{ {{ vm.network.private_network }} }}.xip.io",
         documentroot: "/var/www/docroot"
       }
     apache_vhosts_ssl:
       - {
-        servername: "drupal.{{ cibox_server_ip }}.xip.io",
+        servername: "drupal.{{ {{ vm.network.private_network }} }}.xip.io",
         documentroot: "/var/www/docroot",
         certificate_file: "{{ cibox_ssl_folder }}/apache.crt",
         certificate_key_file: "{{ cibox_ssl_folder }}/apache.key",
