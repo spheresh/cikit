@@ -1,0 +1,82 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  sudo: yes
+
+  vars_files:
+    - ../provisioning/config.yml
+    - vars/main.yml
+
+  vars:
+    reports_dir: ../docroot/build_reports
+    artifacts_file: ../commentinfo.md
+
+    phpcs_extensions: php,inc,install,module
+    phpcs_standards:
+      - Drupal
+      - DrupalSecure
+      - Security
+      - DrupalPractice
+    phpcs_scan_dirs:
+      - ../docroot/sites/all/
+
+  tasks:
+    - name: Create directory for reports
+      file:
+        path: "{{ reports_dir }}"
+        mode: 0755
+        state: "{{ item }}"
+      with_items:
+        - absent
+        - directory
+
+    - name: Register variable with reports URL
+      set_fact:
+        reports_url: "{{ site_url }}/{{ reports_dir | basename }}"
+
+    - name: Creating SecurityReview report file
+      shell: "touch {{ reports_dir }}/security_review.txt"
+
+    - name: Run security review
+      shell: "cd ../docroot && drush secrev 2>&1 | grep error | tee -a {{ reports_dir }}/security_review.txt"
+      environment: env_vars
+
+    - name: Create SecurityReview report
+      shell: 'if [ -s {{ reports_dir }}/security_review.txt ]; then echo "<a href=\"{{ reports_url }}/security_review.txt\" target=\"_blank\">SecurityReview</a>" >> {{ artifacts_file }}; fi'
+
+    - name: Run CodeSniffer
+      shell: "phpcs --standard={{ item }} --extensions={{ phpcs_extensions }} -n {{ phpcs_scan_dirs | join(' ') }} --report-file={{ reports_dir }}/phpcs.{{ item }}.txt"
+      with_items: phpcs_standards
+      # Needed for ignoring PHP notices in packages with sniffers.
+      ignore_errors: yes
+
+    - name: Create CodeSniffer report
+      shell: 'if grep "FOUND\|error" {{ reports_dir }}/phpcs.{{ item }}.txt; then echo "<a href=\"{{ reports_url }}/phpcs.{{ item }}.txt\" target=\"_blank\">CodeSniffer {{ item }}</a>" >> {{ artifacts_file }}; fi;'
+      with_items: phpcs_standards
+
+    - name: Run JSHint
+      shell: 'find {{ item }} ! -path "*mute*" -type f \( -iname "*.js" ! -iname "*min.js" \) -print0 | sudo xargs -0 jshint > {{ reports_dir }}/jshint.txt'
+      with_items: phpcs_scan_dirs
+      # Needed for ignoring exit status codes.
+      ignore_errors: yes
+
+    - name: Create JSHint report
+      shell: 'if [ -s {{ reports_dir }}/jshint.txt ]; then echo "<a href=\"{{ reports_url }}/jshint.txt\" target=\"_blank\">JS Hint</a>" >> {{ artifacts_file }}; fi'
+      with_items: phpcs_scan_dirs
+
+    - name: Run SCSSLint
+      shell: 'find {{ item }} -name "*.scss" -print0 | xargs -0 -r scss-lint > {{ reports_dir }}/scsslint.txt'
+      with_items: phpcs_scan_dirs
+      # Needed for ignoring exit status codes.
+      ignore_errors: yes
+
+    - name: Create SCSSLint report
+      shell: 'if [ -s {{ reports_dir }}/scsslint.txt ]; then echo "<a href=\"{{ reports_url }}/scsslint.txt\" target=\"_blank\">SCSS Lint</a>" >> {{ artifacts_file }}; fi'
+      with_items: phpcs_scan_dirs
+
+    - name: Website credentials
+      lineinfile:
+        dest: "{{ artifacts_file }}"
+        line: "Site installed at <a href=\"{{ site_url }}\" target=\"_blank\">{{ site_url }}</a>"
+        state: present

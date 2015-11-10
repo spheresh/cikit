@@ -1,0 +1,34 @@
+---
+# This could be in "commands" variable but has a separate logic.
+modules:
+  en:
+    - stage_file_proxy
+    - security_review
+    - views_ui
+    - dblog
+    - devel
+    - diff
+  dis: []
+
+# This could be in "commands" variable but has a separate logic.
+features:
+  fr: []
+  fu: []
+
+commands: {}
+
+drupal:
+  # Values for $conf in settings.php.
+  conf:
+    environment: "{{ env }}"
+  # Variables in settings.php.
+  settings:
+    base_url: "{{ site_url }}"
+  # Variables in database.
+  variables:
+    file_temporary_path: "{{ tmproot }}"
+    error_level: 2
+  # Data for super-admin (UID 1).
+  user:
+    name: admin
+    pass: propeople

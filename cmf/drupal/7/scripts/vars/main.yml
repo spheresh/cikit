@@ -1,0 +1,21 @@
+---
+# Do not modify this variables set if you are not sure what you are doing!
+env: default
+profile: pp
+
+sql_workflow: False
+
+# Environment variables for each shell task.
+env_vars:
+  APP_ENV: "{{ env }}"
+
+mysql:
+  user: root
+  pass: root
+
+databases:
+  default: "{{ build_id | default(env) }}_drupal"
+
+# URL to the source database. Can be overridden by CI server.
+# @todo
+source_database: http://propeople:givemebackup@192.168.56.132/backup/latest_prod.sql.gz

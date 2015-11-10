@@ -1,0 +1,36 @@
+---
+modules:
+  en:
+    - dblog
+  dis:
+    - stage_file_proxy
+    - security_review
+    - views_ui
+    - devel
+    - diff
+
+features:
+  fr: []
+  fu: []
+
+commands:
+  search-api-clear: ""
+  search-api-index: ""
+  solr-mark-all: ""
+  solr-index: ""
+
+drupal:
+  # Values for $conf in settings.php.
+  conf:
+    environment: "{{ env }}"
+  # Variables in settings.php.
+  settings:
+    base_url: "{{ site_url }}"
+  # Variables in database.
+  variables:
+    file_temporary_path: "{{ tmproot }}"
+    error_level: 0
+  # Data for super-admin (UID 1).
+  user:
+    name: admin
+    pass: propeople

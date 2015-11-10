@@ -1,0 +1,13 @@
+{% for name, db in databases.iteritems() %}
+$databases['{{ name }}'] = [
+  'default' => [
+    'port' => '',
+    'host' => 'localhost',
+    'driver' => 'mysql',
+    'prefix' => '',
+    'database' => '{{ db }}',
+    'username' => '{{ mysql.user }}',
+    'password' => '{{ mysql.pass }}',
+  ],
+];
+{% endfor %}

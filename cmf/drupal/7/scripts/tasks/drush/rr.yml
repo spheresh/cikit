@@ -1,0 +1,5 @@
+---
+- name: Rebuild registry
+  sudo: no
+  shell: "cd ../docroot && drush rr -y"
+  environment: env_vars

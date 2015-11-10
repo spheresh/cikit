@@ -1,0 +1,6 @@
+---
+- name: Remove databases
+  mysql_db:
+    name: "{{ item.value }}"
+    state: absent
+  with_dict: databases

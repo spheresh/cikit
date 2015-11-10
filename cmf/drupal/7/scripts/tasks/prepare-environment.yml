@@ -1,0 +1,19 @@
+---
+- name: Set accesses for directories
+  sudo: yes
+  file:
+    mode: 0777
+    dest: "{{ item }}"
+    state: directory
+    recurse: yes
+  with_items:
+    - "{{ tmproot }}"
+    - "../cache"
+    - "../backup"
+    - "../docroot/sites/default"
+
+- name: Remove settings.php
+  sudo: yes
+  file:
+    path: ../docroot/sites/default/settings.php
+    state: absent

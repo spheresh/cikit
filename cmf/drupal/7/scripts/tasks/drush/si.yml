@@ -1,0 +1,6 @@
+---
+- name: Installing Drupal
+  shell: "cd ../docroot && drush -y si {{ profile }} --db-url=mysql://{{ mysql.user }}:{{ mysql.pass }}@127.0.0.1:/{{ databases.default }} --uri={{ site_url }}"
+  environment: env_vars
+
+- include: ../prepare-environment.yml
