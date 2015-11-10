@@ -12,46 +12,25 @@
  * @see system_install()
  */
 function pp_install() {
-  // Enable some standard blocks.
-  $default_theme = variable_get('theme_default', 'bartik');
-  $values = array(
+  $theme_default = variable_get('theme_default', 'bartik');
+  $block_insert = db_insert('block');
+
+  foreach (array(
     array(
       'module' => 'system',
       'delta' => 'main',
-      'theme' => $default_theme,
+      'theme' => $theme_default,
       'status' => 1,
       'weight' => 0,
       'region' => 'content',
       'pages' => '',
       'cache' => -1,
     ),
-    array(
-      'module' => 'user',
-      'delta' => 'login',
-      'theme' => $default_theme,
-      'status' => 1,
-      'weight' => 0,
-      'region' => 'sidebar_first',
-      'pages' => '',
-      'cache' => -1,
-    ),
-  );
-  $query = db_insert('block')->fields(
-    array(
-      'module',
-      'delta',
-      'theme',
-      'status',
-      'weight',
-      'region',
-      'pages',
-      'cache'
-    )
-  );
-  foreach ($values as $record) {
-    $query->values($record);
+  ) as $record) {
+    $block_insert->values($record);
   }
-  $query->execute();
+
+  $block_insert->execute();
 
   // Allow visitor account creation, but with administrative approval.
   variable_set('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL);
