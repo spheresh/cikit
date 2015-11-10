@@ -1,3 +1,3 @@
-[submodule "files/drupal/7/docroot/drush/registry_rebuild"]
-	path = files/drupal/7/docroot/drush/registry_rebuild
+[submodule "cmf/drupal/7/docroot/drush/registry_rebuild"]
+	path = cmf/drupal/7/docroot/drush/registry_rebuild
 	url = git://git.drupal.org/project/registry_rebuild.git

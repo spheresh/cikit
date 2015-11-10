@@ -3,12 +3,14 @@
 !.gitignore
 !.gitmodules
 
+!cmf/
 !files/
 !roles/
 !scripts/
+!vagrant/
 
 !ansible.sh
-!inventory
+!config.yml
 !LICENSE
 
 .*
