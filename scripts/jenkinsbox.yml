@@ -3,25 +3,28 @@
   gather_facts: no
   remote_user: root
 
+  vars_files:
+    - ../config.yml
+
   vars:
-    project: CHANGE_ME
-    pear_channels:
-      - pear.drush.org
-    pear_packages:
-      - drush/drush
     cibox_apt_packages: []
+
+    cibox_composer_drush:
+      version: 6.*
+      user: "{{ ansible_ssh_user }}"
+
     apache2_modules:
       - rewrite
 
     jenkins_configs:
-      - jenkins.model.JenkinsLocationConfiguration.xml
-      - org.jenkinsci.plugins.ghprb.GhprbTrigger.xml
-      - jobs/{{ project }}_PR_BUILDER/config.xml
-      - jobs/DEMO/config.xml
+      - "jenkins.model.JenkinsLocationConfiguration.xml"
+      - "org.jenkinsci.plugins.ghprb.GhprbTrigger.xml"
+      - "jobs/{{ project | upper }}_PR_BUILDER/config.xml"
+      - "jobs/DEMO/config.xml"
 
     protected_folders:
-      - /var/www/backup
-      - /var/www/cache
+      - "{{ webroot }}/cache"
+      - "{{ webroot }}/backup"
 
     protected_folders_user: propeople
     protected_folders_pass: givemebackup
@@ -52,16 +55,17 @@
       register: allmy
       tags: ["cibox-jenkins"]
 
-    - name: Adding jenkins user to group shadow
-      user: name=jenkins groups=shadow append=yes
-      tags: ["cibox-jenkins"]
-
-    - name: Adding jenkins user to group adm
-      user: name=jenkins groups=adm append=yes
+    - name: Adding jenkins user to permitted groups
+      user:
+        name: jenkins
+        groups: shadow,adm
+        append: yes
       tags: ["cibox-jenkins"]
 
     - name: Adding jenkins user to nopasswd sudoers
-      lineinfile: dest=/etc/sudoers line="jenkins ALL=(ALL) NOPASSWD:ALL"
+      lineinfile:
+        dest: /etc/sudoers
+        line: "jenkins ALL=(ALL) NOPASSWD:ALL"
       tags: ["cibox-jenkins"]
 
     - name: Install apt packages
@@ -99,14 +103,14 @@
     - role: ansible-role-php
       tags: ["php-stack"]
 
-    - role: ansible-php-pear
-      tags: ["ansible-php-pear", "php-stack"]
-
     - role: ansible-role-php-xhprof
       tags: ["ansible-php-xhprof", "php-stack"]
 
     - role: ansible-composer
       tags: ["ansible-composer", "php-stack"]
+
+    - role: cibox-composer-drush
+      tags: ["ansible-composer", "php-stack", "drush"]
 
     - role: ansible-role-mysql
       tags: ["mysql", "php-stack", "ansible-role-mysql"]
@@ -131,9 +135,9 @@
 
   tasks:
     # @todo More smart way to upload jobs. Move job names to options.
-    - name: Check if job already renamed.
+    - name: Check if job already renamed
       stat:
-        path: "/var/lib/jenkins/jobs/{{ project }}_PR_BUILDER"
+        path: "/var/lib/jenkins/jobs/{{ project | upper }}_PR_BUILDER"
       register: prbuilder_stat
       tags: ["cibox-jenkins"]
 
@@ -147,7 +151,7 @@
       when: not prbuilder_stat.stat.exists
       tags: ["cibox-jenkins"]
 
-    - name: Change owner for jenkins files.
+    - name: Change owner for jenkins files
       file:
         path: /var/lib/jenkins
         owner: jenkins
@@ -157,13 +161,13 @@
         recurse: yes
       tags: ["cibox-jenkins"]
 
-    - name: Rename jenkins jobs to meet project name.
+    - name: Rename jenkins jobs to meet project name
       sudo: yes
-      shell: "mv /var/lib/jenkins/jobs/PR_BUILDER /var/lib/jenkins/jobs/{{ project }}_PR_BUILDER"
+      shell: "mv /var/lib/jenkins/jobs/PR_BUILDER /var/lib/jenkins/jobs/{{ project | upper }}_PR_BUILDER"
       when: not prbuilder_stat.stat.exists
       tags: ["cibox-jenkins"]
 
-    - name: Remove PR_BUILDER from remote.
+    - name: Remove PR_BUILDER from remote
       sudo: yes
       file:
         path: /var/lib/jenkins/jobs/PR_BUILDER

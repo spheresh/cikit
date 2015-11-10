@@ -1,0 +1,64 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    # As name of folder inside of "cmf/".
+    cmf: drupal
+    # As name of folder inside of "cmf/<NAME>/"
+    version: 7
+
+  vars_files:
+    - ../config.yml
+
+  tasks:
+    - include: tasks/project-variable.yml
+
+    - name: Check for CMF configuration
+      stat:
+        path: "../cmf/{{ cmf }}/{{ version }}/"
+      register: cmf_configs
+
+    - name: CMF is not available
+      fail:
+        msg: 'You are not allowed to install the "{{ cmf }}" CMF because it is not pre-configured.'
+      when: not cmf_configs.stat.exists
+
+    # @todo Fix to tasks/download-{{ cmf }}.yml in Ansible 2.0
+    - include: tasks/download/drupal.yml
+      when: cmf == "drupal"
+
+    - name: Prepare CIBox-structured repository
+      synchronize:
+        src: "{{ item.src }}"
+        dest: "../{{ project }}/{{ item.dest | default('') }}"
+        archive: no
+        recursive: yes
+      with_items:
+        - src: "{{ cmf_configs.stat.path }}/"
+        - src: "../ansible.sh"
+        - src: "../config.yml"
+        - src: "../inventory"
+        - src: "../vagrant/"
+
+        - src: "roles/"
+          dest: "provisioning/ansible/roles/"
+
+    - name: Setting permissions for project tree
+      file:
+        mode: 0777
+        path: "../{{ project }}"
+        state: directory
+        recurse: yes
+
+    - name: Add Vagrant host to inventory file
+      lineinfile:
+        dest: "../{{ project }}/inventory"
+        line: "\n[vagrant]\n{{ vm.network.private_network }} ansible_ssh_user={{ vm.ssh.username }} ansible_ssh_private_key_file=.vagrant/machines/default/virtualbox/private_key"
+
+    - name: Set name of the project to config.yml
+      lineinfile:
+        dest: "../{{ project }}/config.yml"
+        line: "project: {{ project }}\nsite_url: http://{{ project }}.dev"
+        insertafter: "^---$"
