@@ -26,7 +26,7 @@ docroot/build_reports/
 # Helper file that afect to "synchronize" task of Ansible.
 !.rsync-filter
 !.gitignore
-!.gitsubmodules
+!.gitmodules
 
 !composer.json
 !adminer.php

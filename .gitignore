@@ -1,10 +1,9 @@
 /*
 
 !.gitignore
-!.gitsubmodules
+!.gitmodules
 
 !files/
-!library/
 !roles/
 !scripts/
 
