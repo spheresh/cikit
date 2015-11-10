@@ -11,21 +11,31 @@
 # - eval
 # - ansible-playbook
 
-SELF_PATH=$(cd -P -- $(dirname -- ${0}) && pwd -P)
+locate_path()
+{
+    local SELF_PATH=$(cd -P -- $(dirname -- ${1}) && pwd -P)
+
+    while [ -h "${SELF_PATH}" ]; do
+        # 1) cd to directory of the symlink
+        # 2) cd to the directory of where the symlink points
+        # 3) Get the pwd
+        # 4) Append the basename
+        SELF_PATH=$(cd $(dirname -- ${SELF_PATH}) && cd $(dirname -- $(readlink ${SELF_PATH})) && pwd)
+    done
+
+    echo ${SELF_PATH}
+}
+
 # List of variables which will be passed as parameters for "ansible-playbook".
 APB_VARS="limit tags list-tags module-path"
 
-while [ -h "${SELF_PATH}" ]; do
-    # 1) cd to directory of the symlink
-    # 2) cd to the directory of where the symlink points
-    # 3) Get the pwd
-    # 4) Append the basename
-    SELF_PATH=$(cd $(dirname -- ${SELF_PATH}) && cd $(dirname -- $(readlink ${SELF_PATH})) && pwd)
-done
+if [ -z "${ANSIBLE_PLAYBOOKS_PATH+x}" ]; then
+    cd $(locate_path ${0})/scripts
+else
+    cd $(locate_path ${ANSIBLE_PLAYBOOKS_PATH})
+fi
 
-cd ${SELF_PATH}/scripts
-
-if [[ -z ${1} || ${1} == "--op" ]]; then
+if [ -z ${1} ]; then
     echo "Available operations:"
     for operation in $(ls -A *.yml); do
         echo "- ${operation%%.*}"
