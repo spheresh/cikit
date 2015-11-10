@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  sudo: yes
+
+  vars_files:
+    - ../../config.yml
+
+  vars:
+    cibox_composer_drush:
+      version: 6.*
+      user: "{{ vm.ssh.username }}"
+
+  tasks:
+    - role: cibox-composer-drush
