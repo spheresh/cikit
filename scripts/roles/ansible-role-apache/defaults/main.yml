@@ -1,5 +1,5 @@
 ---
-apache_enablerepo: ""
+apache_version: 2.4.7-1ubuntu4.5
 
 apache_listen_port: 80
 apache_listen_port_ssl: 443

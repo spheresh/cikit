@@ -1,0 +1,10 @@
+---
+- name: Reinstall Apache
+  shell: "apt-get autoremove {{ item }} -y && apt-get install {{ item }}={{ apache_version }} -y"
+  with_items:
+    - apache2-bin
+    - apache2-data
+
+- name: Install Apache packages
+  shell: "apt-get install {{ item }}={{ apache_version }} -y"
+  with_items: apache_packages
