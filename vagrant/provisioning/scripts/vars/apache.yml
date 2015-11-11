@@ -1,0 +1,16 @@
+---
+apache_version: 2.4.7-1ubuntu4.5
+apache_create_vhosts: true
+apache_vhosts_filename: vhosts.conf
+apache_remove_default_vhost: true
+apache_mods_enabled:
+  - rewrite.load
+  - ssl.load
+apache_vhosts:
+  - servername: "{{ site_url }}"
+    documentroot: "{{ webroot }}/docroot"
+apache_vhosts_ssl:
+  - servername: "{{ site_url }}"
+    documentroot: "{{ webroot }}/docroot"
+    certificate_file: "{{ cibox_ssl_folder }}/apache.crt"
+    certificate_key_file: "{{ cibox_ssl_folder }}/apache.key"

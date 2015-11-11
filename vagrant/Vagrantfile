@@ -5,8 +5,7 @@ VAGRANTFILE_API_VERSION = "2"
 require 'yaml'
 require 'rbconfig'
 
-dir = File.dirname(File.expand_path(__FILE__))
-configValues = YAML::load_file("#{dir}/config.yml")
+configValues = YAML::load_file("config.yml")
 
 if !configValues['vm']['provider']['virtualbox'].empty?
   ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
@@ -68,15 +67,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.provision "shell" do |s|
-    s.path = "provisioning/shell/initial-setup.sh"
-    s.args = "/vagrant/provisioning"
-  end
-
-  # Install Ansible inside the box.
-  config.vm.provision :shell, :path => "provisioning/shell/ansible.sh"
-  # Install Ansible playbooks inside the box.
-  config.vm.provision :shell, :path => "provisioning/ansible/run-ansible-playbook.sh"
+  config.vm.provision :shell, :path => "provisioning/shell/provision.sh"
 
   # Install Drupal site.
   if !ENV['VAGRANT_CI'].nil?

@@ -11,6 +11,9 @@
 # - eval
 # - ansible-playbook
 
+# List of variables which will be passed as parameters for "ansible-playbook".
+APB_VARS="limit tags list-tags module-path"
+
 locate_path()
 {
     local SELF_PATH=$(cd -P -- $(dirname -- ${1}) && pwd -P)
@@ -26,16 +29,19 @@ locate_path()
     echo ${SELF_PATH}
 }
 
-# List of variables which will be passed as parameters for "ansible-playbook".
-APB_VARS="limit tags list-tags module-path"
+SELF_PATH=$(locate_path ${0})
+SCRIPTS_PATH=${SELF_PATH}/scripts
+PLAYBOOK=${1%%.*}.yml
 
-if [ -z "${ANSIBLE_PLAYBOOKS_PATH+x}" ]; then
-    cd $(locate_path ${0})/scripts
-else
-    cd $(locate_path ${ANSIBLE_PLAYBOOKS_PATH})
-fi
+for playbook in ${SCRIPTS_PATH}/${PLAYBOOK} ${SELF_PATH}/${PLAYBOOK} ${PLAYBOOK}; do
+    if [ -f "${playbook}" ]; then
+        cd $(locate_path ${playbook})
+        break
+    fi
+done
 
 if [ -z ${1} ]; then
+    cd ${SCRIPTS_PATH}
     echo "Available operations:"
     for operation in $(ls -A *.yml); do
         echo "- ${operation%%.*}"
@@ -88,5 +94,6 @@ if [ -n "${extra_vars}" ]; then
 fi
 
 export PYTHONUNBUFFERED=1
+chmod -x ${SELF_PATH}/inventory
 
-time eval "ansible-playbook -vvvv ${1}.yml -i ../inventory ${params}"
+time eval "ansible-playbook -vvvv ${playbook} -i ${SELF_PATH}/inventory ${params}"
