@@ -6,15 +6,6 @@
 - `./ansible.sh jenkinsbox --project=NAME --limit=HOST`
 - `./ansible.sh drupal --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal]`
 
-## Dependencies
-
-| Name        | Version |
-| ----------- | ------- |
-| Git         | 1.7+    |
-| Vagrant     | 1.7+    |
-| Ansible     | 1.9+    |
-| VirtualBox  | 4.0+    |
-
 ## CIBox mailing list
 
 - To post to this group, send email to ci_box@googlegroups.com
@@ -62,7 +53,6 @@ Currently `jenkinsbox.yml` playbook powered with tags, so you can run only part 
 - cibox-swap
 - cibox-ssl-config
 
-
 ## OpenVZ support
 
 If your system build on OpenVZ stack and swap is disabled you may bypass
@@ -81,3 +71,11 @@ for adding `4086MB` swap size.
 - `ansible-role-php-pecl`: originally developed by @geerlingguy but without 
  dependency from his PHP playbook. Can be used for installing PECL packages.
 
+## Dependencies
+
+| Name        | Version |
+| ----------- | ------- |
+| Git         | 1.7+    |
+| Vagrant     | 1.7+    |
+| Ansible     | 1.9+    |
+| VirtualBox  | 4.0+    |
