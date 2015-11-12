@@ -5,6 +5,7 @@ VAGRANTFILE_API_VERSION = "2"
 require 'yaml'
 require 'rbconfig'
 
+isWindows = RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
 configValues = YAML::load_file("config.yml")
 
 if !configValues['vm']['provider']['virtualbox'].empty?
@@ -29,11 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # If hostsupdater plugin is installed, add all servernames as aliases.
   if Vagrant.has_plugin?("vagrant-hostsupdater")
-    config.hostsupdater.aliases = []
-
-    for host in ["#{configValues['project']}.dev"]
-      config.hostsupdater.aliases.push(host)
-    end
+    config.hostsupdater.aliases = ["#{configValues['project']}.dev"]
   end
 
   if configValues['vm']['network']['private_network'].to_s != ''
@@ -48,13 +45,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   for folder in configValues['vm']['synced_folder'];
     config.vm.synced_folder folder['source'], folder['target'],
-      id: folder['id'],
-      type: "nfs",
-      rsync__auto: "true",
-      rsync__exclude: folder['excluded_paths'],
-      rsync__args: ["--verbose", "--archive", "--delete", "-z", "--chmod=ugo=rwX"],
-      :nfs => true,
-      :linux__nfs_options => ['rw', 'no_subtree_check', 'no_root_squash', 'async']
+      :id => folder['id'],
+      :type => isWindows ? "rsync" : "nfs",
+      :mount_options => ["dmode=777", "fmode=770"],
+      :rsync__auto => "true",
+      :rsync__args => ["--verbose", "--archive", "--delete", "-z", "--chmod=ugo=rwX"],
+      :rsync__exclude => folder['excluded_paths'],
+      :linux__nfs_options => ["rw", "no_subtree_check", "no_root_squash", "async"]
   end
 
   config.vm.usable_port_range = (10200..10500)
@@ -68,11 +65,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision :shell, :path => "provisioning/shell/provision.sh"
-
-  # Install Drupal site.
-  if !ENV['VAGRANT_CI'].nil?
-    config.vm.provision :shell, :inline => "/var/www/ansible.sh reinstall" + (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/ ? " --windows" : "")
-  end
+  config.vm.provision :shell, :inline => "/var/www/ansible.sh reinstall"
 
   config.ssh.username = configValues['vm']['ssh']['username']
   config.ssh.shell = "sh"

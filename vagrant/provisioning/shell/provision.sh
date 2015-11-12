@@ -44,4 +44,4 @@ pip install paramiko pyyaml jinja2 markupsafe MySQL-python
 echo "Installing Ansible"
 pip install ansible
 
-/vagrant/ansible.sh /vagrant/provisioning/scripts/provision.yml
+/var/www/ansible.sh /vagrant/provisioning/scripts/provision.yml
