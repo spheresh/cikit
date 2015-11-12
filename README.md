@@ -8,12 +8,12 @@
 
 ## Dependencies
 
-| Name        |    | Version |
-| ----------- | -- | ------- |
-| Git         | >= | 1.7     |
-| Ansible     | >= | 1.9     |
-| Vagrant     | >= | 1.7     |
-| VirtualBox  | >= | 4.0     |
+| Name        | Version |
+| ----------- | ------- |
+| Git         | 1.7+    |
+| Vagrant     | 1.7+    |
+| Ansible     | 1.9+    |
+| VirtualBox  | 4.0+    |
 
 ## CIBox mailing list
 
