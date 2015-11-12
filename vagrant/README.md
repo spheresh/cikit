@@ -92,33 +92,6 @@ VAGRANT_CI=yes vagrant up
 ### Windows Containers
 
 - Install [Cygwin](https://servercheck.in/blog/running-ansible-within-windows) according to provided steps.
-- Run Cygwin as Administrator user.
+- Run Cygwin as administrator.
+- Add `export VAGRANT_DETECTED_OS=cygwin` to `~/.bash_profile` using Cygwin CLI.
 - Use default flow to up Vagrant.
-
-### Windows troubleshooting
-
-If you will see error like `...[error 26] file is busy...` during re-installation, modify that lines:
-
-before:
-
-```yml
-name: Stage File Proxy settings
-sudo: yes
-lineinfile: dest='sites/default/settings.php' line='$conf[\"stage_file_proxy_origin\"] = \"{{ stage_file_proxy_url }}";'
-```
-
-after:
-
-```yml
-name: Copy settings.php
-sudo: yes
-shell: cp sites/default/settings.php /tmp/reinstall_settings.php
-
-name: Stage File Proxy settings
-sudo: yes
-lineinfile: dest='sites/default/settings.php' line='$conf[\"stage_file_proxy_origin\"] = \"{{ stage_file_proxy_url }}\";'
-
-name: Restore settings.php
-sudo: yes
-shell: cp /tmp/reinstall_settings.php sites/default/settings.php
-```

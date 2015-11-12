@@ -1,17 +1,26 @@
 # CIBox (Continuous Integration Box)
 
+## Quick Start
+
+- Add your host credentials to the `inventory` file.
+- `./ansible.sh jenkinsbox --project=NAME --limit=HOST`
+- `./ansible.sh drupal --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal]`
+
+## Dependencies
+
+| Name        |    | Version |
+| ----------- | -- | ------- |
+| Git         | >= | 1.7     |
+| Ansible     | >= | 1.9     |
+| Vagrant     | >= | 1.7     |
+| VirtualBox  | >= | 4.0     |
+
 ## CIBox mailing list
 
 - To post to this group, send email to ci_box@googlegroups.com
 - To unsubscribe from this group, send email to ci_box+unsubscribe@googlegroups.com
 - Visit and Join this group at https://groups.google.com/d/forum/ci_box
 - For more options, visit https://groups.google.com/d/optout
-
-## Quick Start
-
-- Add your host credentials to the `inventory` file.
-- `./ansible.sh jenkinsbox --project=NAME --limit=HOST`
-- `./ansible.sh drupal --project=NAME`
 
 ## WIKI
 
