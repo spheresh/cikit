@@ -1,11 +1,11 @@
 ---
 - hosts: localhost
-  connection: local
   gather_facts: no
+  connection: local
   sudo: yes
 
   vars_files:
-    - ../provisioning/config.yml
+    - ../config.yml
     - vars/main.yml
 
   vars:
