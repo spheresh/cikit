@@ -33,4 +33,5 @@ docroot/build_reports/
 !ansible.sh
 
 !Vagrantfile
+!inventory
 !LICENSE

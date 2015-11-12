@@ -11,6 +11,8 @@
 
 !ansible.sh
 !config.yml
+
+!inventory
 !LICENSE
 
 .*
