@@ -1,3 +1,0 @@
----
-- name: Downloading Drupal
-  shell: "drush dl drupal --drupal-project-rename=docroot --destination=../{{ project }} -y"

@@ -7,7 +7,11 @@
     # As name of folder inside of "cmf/".
     cmf: drupal
     # As name of folder inside of "cmf/<NAME>/"
-    version: 7
+    version: 7.41
+    # Host for cloning repository from.
+    host: https://github.com
+    # Part of namespace on a host (vendor name).
+    vendor: drupal
 
   vars_files:
     - ../config.yml
@@ -15,19 +19,25 @@
   tasks:
     - include: tasks/project-variable.yml
 
+    - name: Determine major version of CMF
+      set_fact:
+        major: '{{ version | regex_replace("^(\d).*$", "\\1") }}'
+
     - name: Check for CMF configuration
       stat:
-        path: "../cmf/{{ cmf }}/{{ version }}/"
+        path: "../cmf/{{ cmf }}/{{ major }}/"
       register: cmf_configs
 
     - name: CMF is not available
       fail:
-        msg: 'You are not allowed to install the "{{ cmf }}" CMF because it is not pre-configured.'
+        msg: "You are not allowed to install {{ cmf | major }} {{ version }} because it isn't pre-configured."
       when: not cmf_configs.stat.exists
 
-    # @todo Fix to tasks/download-{{ cmf }}.yml in Ansible 2.0
-    - include: tasks/download/drupal.yml
-      when: cmf == "drupal"
+    - name: Downloading CMF
+      git:
+        dest: "../{{ project }}/docroot"
+        repo: "{{ host }}/{{ vendor }}/{{ cmf }}.git"
+        version: "{{ version }}"
 
     - name: Prepare CIBox-structured repository
       synchronize:
@@ -43,7 +53,7 @@
         - src: "../vagrant/"
 
         - src: "roles/"
-          dest: "provisioning/ansible/roles/"
+          dest: "provisioning/scripts/roles/"
 
     - name: Setting permissions for project tree
       file:
