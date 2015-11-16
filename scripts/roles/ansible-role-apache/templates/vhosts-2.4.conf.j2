@@ -1,8 +1,8 @@
-
 DirectoryIndex index.php index.html
 
 {# Set up VirtualHosts #}
 {% for vhost in apache_vhosts %}
+{% if vhost.servername != "" and vhost.documentroot != "" %}
 <VirtualHost *:{{ apache_listen_port }}>
   ServerName {{ vhost.servername }}
 {% if vhost.serveralias is defined %}
@@ -22,11 +22,13 @@ DirectoryIndex index.php index.html
   {{ vhost.extra_parameters }}
 {% endif %}
 </VirtualHost>
+{% endif %}
 
 {% endfor %}
 
 {# Set up SSL VirtualHosts #}
 {% for vhost in apache_vhosts_ssl %}
+{% if vhost.servername != "" and vhost.documentroot != "" %}
 <VirtualHost *:{{ apache_listen_port_ssl }}>
   ServerName {{ vhost.servername }}
 {% if vhost.serveralias is defined %}
@@ -57,5 +59,6 @@ DirectoryIndex index.php index.html
   {{ vhost.extra_parameters }}
 {% endif %}
 </VirtualHost>
+{% endif %}
 
 {% endfor %}

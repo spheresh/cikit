@@ -1,0 +1,42 @@
+---
+- name: Check if job already renamed
+  stat:
+    path: "{{ jenkins_lib }}/jobs/{{ jenkins_job | upper }}_PR_BUILDER"
+  register: prbuilder_stat
+
+- name: Copy local files for enabling Jenkins permissions
+  sudo: yes
+  synchronize:
+    src: ./
+    dest: "{{ jenkins_lib }}"
+    archive: no
+    recursive: yes
+  when: not prbuilder_stat.stat.exists
+
+- name: Change owner for Jenkins files
+  file:
+    path: "{{ jenkins_lib }}"
+    owner: "{{ jenkins_data.user }}"
+    group: "{{ jenkins_data.group }}"
+    state: directory
+    force: yes
+    recurse: yes
+
+- name: Rename Jenkins jobs to meet project name
+  sudo: yes
+  shell: "cd {{ jenkins_lib }}/jobs/ && mv PR_BUILDER {{ jenkins_job | upper }}_PR_BUILDER"
+  when: not prbuilder_stat.stat.exists
+
+- name: Remove PR_BUILDER from remote
+  sudo: yes
+  file:
+    path: "{{ jenkins_lib }}/jobs/PR_BUILDER"
+    state: absent
+  when: prbuilder_stat.stat.exists
+
+- name: Change host IP address in Jenkins config
+  replace:
+    dest: "{{ jenkins_lib }}/{{ item }}"
+    regexp: "ci_server_ip_address"
+    replace: "{{ ansible_default_ipv4.address }}"
+  with_items: jenkins_data.configs

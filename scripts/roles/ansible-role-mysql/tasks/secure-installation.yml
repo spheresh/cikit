@@ -1,32 +1,53 @@
 ---
-- name: Check if .my.cnf file already exists.
-  stat: "path={{ mysql_user_home }}/.my.cnf"
+- name: Obtain user's home directory
+  shell: eval echo ~$USER
+  register: user_home
+
+- name: Check if .my.cnf file already exists
+  stat: "path={{ user_home.stdout }}/.my.cnf"
   register: mycnf_file
 
-# 'localhost' needs to be the last item for idempotency, see
-# http://ansible.cc/docs/modules.html#mysql-user
-- name: Update MySQL root password for all root accounts.
-  mysql_user:
-    name: "root"
-    host: "{{ item }}"
-    password: "{{ mysql_root_password }}"
-  with_items:
-    - 127.0.0.1
-    - ::1
-    - localhost
-  when: mycnf_file.stat.exists == false
+- name: Stop MySQL service
+  service:
+    name: mysql
+    state: stopped
+
+- name: Ensure that MySQL service stopped
+  shell: /etc/init.d/mysql stop
+
+- name: Start MySQL daemon with --skip-grant-tables option for reseting password for root user
+  shell: mysqld_safe --skip-grant-tables &
+
+- name: Wait for MySQL daemon
+  wait_for:
+    port: "{{ mysql_port }}"
+    delay: 5
+
+- name: Reset password for root user
+  shell: "mysql -uroot -e \"use mysql; update user set Password=PASSWORD('{{ mysql_root_password }}') where user='{{ mysql_root_username }}'; flush privileges;\""
+
+- name: Start MySQL service
+  sudo: yes
+  service:
+    name: mysql
+    state: started
 
 # Has to be after the root password assignment, for idempotency.
-- name: Copy .my.cnf file with root password credentials.
+- name: Copy .my.cnf file with root password credentials
   template:
     src: "python-my.cnf.j2"
-    dest: "{{ mysql_user_home }}/.my.cnf"
+    dest: "{{ user_home.stdout }}/.my.cnf"
     owner: root
     group: root
     mode: 0600
+  when: not mycnf_file.stat.exists
 
-- name: Remove anonymous MySQL user.
-  mysql_user: "name='' state=absent"
+- name: Remove anonymous MySQL user
+  mysql_user:
+    name: ""
+    state: absent
 
-- name: Remove MySQL test database.
-  mysql_db: "name='test' state=absent"
+- name: Remove MySQL test database
+  mysql_db:
+    name: test
+    state: absent

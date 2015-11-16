@@ -4,15 +4,21 @@
   shell: "composer global require drush/drush:{{ cibox_composer_drush.version }} --no-interaction --no-ansi"
   sudo_user: "{{ cibox_composer_drush.user }}"
 
+- name: Obtain user's home directory
+  shell: "eval echo ~{{ ansible_ssh_user }}"
+  register: user_home
+
 - name: Create symlinks
   sudo: yes
   file:
-    src: "{{ item.src }}"
+    src: "{{ user_home.stdout }}/.composer/vendor/{{ item.src }}"
     dest: "{{ item.dest }}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
     force: yes
     state: link
   with_items:
-    - src: "/home/{{ cibox_composer_drush.user }}/.composer/vendor/drush/drush/drush"
+    - src: "drush/drush/drush"
       dest: "/usr/local/bin/drush"
-    - src: "/home/{{ cibox_composer_drush.user }}/.composer/vendor/bin/drush.complete.sh"
+    - src: "bin/drush.complete.sh"
       dest: "/etc/bash_completion.d/drush"

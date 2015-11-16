@@ -4,9 +4,9 @@
 
 - [Vagrant](https://www.vagrantup.com/downloads.html)
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-- Useful plugins:
+- Vagrant plugins:
   - [vagrant plugin install vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
-  - [vagrant plugin install vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
+  - [vagrant plugin install vagrant-host-shell](https://github.com/phinze/vagrant-host-shell)
 
 ## Usage
 
@@ -17,10 +17,10 @@ vagrant up
 vagrant ssh
 ```
 
-Re-installation from scratch:
+Site re-installation from scratch:
 
 ```shell
-./ansible.sh reinstall [--windows]
+./ansible.sh reinstall
 ```
 
 - By default your site will be accessible using this URL: `http://drupal.192.168.56.132.xip.io/`.

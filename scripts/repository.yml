@@ -12,6 +12,7 @@
     host: https://github.com
     # Part of namespace on a host (vendor name).
     vendor: drupal
+    adminer: 4.2.2
 
   vars_files:
     - ../config.yml
@@ -33,11 +34,17 @@
         msg: "You are not allowed to install {{ cmf | major }} {{ version }} because it isn't pre-configured."
       when: not cmf_configs.stat.exists
 
-    - name: Downloading CMF
-      git:
-        dest: "../{{ project }}/docroot"
-        repo: "{{ host }}/{{ vendor }}/{{ cmf }}.git"
-        version: "{{ version }}"
+    - shell: "drush dl drupal --drupal-project-rename=docroot --destination=../{{ project }} -y"
+#    - name: Downloading CMF
+#      git:
+#        dest: "../{{ project }}/docroot"
+#        repo: "{{ host }}/{{ vendor }}/{{ cmf }}.git"
+#        version: "{{ version }}"
+#
+#    - name: Downloading Adminer.php
+#      get_url:
+#        url: "https://www.adminer.org/static/download/{{ adminer }}/adminer-{{ adminer }}-en.php"
+#        dest: "../{{ project }}/adminer.php"
 
     - name: Prepare CIBox-structured repository
       synchronize:
@@ -52,8 +59,15 @@
         - src: "../inventory"
         - src: "../vagrant/"
 
-        - src: "roles/"
-          dest: "provisioning/scripts/roles/"
+        - src: "../scripts/"
+          dest: "provisioning"
+
+    - name: Clear created repository
+      file:
+        path: "../{{ project }}/{{ item }}"
+        state: absent
+      with_items:
+        - provisioning/repository.yml
 
     - name: Setting permissions for project tree
       file:

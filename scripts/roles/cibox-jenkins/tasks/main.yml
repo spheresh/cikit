@@ -1,4 +1,31 @@
 ---
-# Add Jenkins repository
-- include: jenkins.yml tags=jenkins
-  when: ansible_distribution in [ 'Debian', 'Ubuntu' ]
+- include: repo.yml
+- include: dependencies_deb.yml
+
+- name: Download Jenkins
+  get_url:
+    url: "{{ jenkins_pkg_version }}"
+    dest: ~/jenkins.deb
+    mode: 440
+  sudo: yes
+
+- name: Install Jenkins
+  sudo: yes
+  shell: "dpkg -i ~/jenkins.deb"
+  register: jenkins_install
+
+- include: cli.yml
+- include: plugins.yml
+
+- name: Adding Jenkins user to permitted groups
+  user:
+    name: "{{ jenkins_data.user }}"
+    groups: shadow,adm
+    append: yes
+
+- name: Adding Jenkins user to nopasswd sudoers
+  lineinfile:
+    dest: /etc/sudoers
+    line: "{{ jenkins_data.user }} ALL=(ALL) NOPASSWD:ALL"
+
+- include: jobs.yml

@@ -34,12 +34,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   if configValues['vm']['network']['private_network'].to_s != ''
-    config.vm.network "private_network", ip: "#{configValues['vm']['network']['private_network']}", lxc__bridge_name: "lxcbr0"
+    config.vm.network "private_network",
+      :ip => "#{configValues['vm']['network']['private_network']}",
+      :lxc__bridge_name => "lxcbr0"
   end
 
   configValues['vm']['network']['forwarded_port'].each do |i, port|
     if port['guest'] != '' && port['host'] != ''
-      config.vm.network :forwarded_port, guest: port['guest'].to_i, host: port['host'].to_i, auto_correct: true
+      config.vm.network :forwarded_port,
+        :host => port['host'].to_i,
+        :guest => port['guest'].to_i,
+        :auto_correct => true
     end
   end
 
@@ -47,7 +52,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.synced_folder folder['source'], folder['target'],
       :id => folder['id'],
       :type => isWindows ? "rsync" : "nfs",
-      :mount_options => ["dmode=777", "fmode=770"],
       :rsync__auto => "true",
       :rsync__args => ["--verbose", "--archive", "--delete", "-z", "--chmod=ugo=rwX"],
       :rsync__exclude => folder['excluded_paths'],
@@ -64,10 +68,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.provision :shell, :path => "provisioning/shell/provision.sh"
+  config.vm.provision :host_shell, :inline => "./ansible.sh provisioning/provision --limit=vagrant"
   config.vm.provision :shell, :inline => "/var/www/ansible.sh reinstall"
 
   config.ssh.username = configValues['vm']['ssh']['username']
+  config.ssh.password = configValues['vm']['ssh']['username']
   config.ssh.shell = "sh"
   config.ssh.insert_key = "false"
   config.ssh.forward_agent = true

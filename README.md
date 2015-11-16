@@ -4,7 +4,7 @@
 
 - Add your host credentials to the `inventory` file.
 - `./ansible.sh jenkinsbox --project=NAME --limit=HOST`
-- `./ansible.sh drupal --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal]`
+- `./ansible.sh drupal --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal] [--adminer=4.2.2]`
 
 ## CIBox mailing list
 

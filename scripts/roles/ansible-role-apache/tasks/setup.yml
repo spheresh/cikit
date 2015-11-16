@@ -1,10 +1,30 @@
 ---
+- name: Purge Apache configs
+  apt:
+    name: apache2
+    purge: yes
+
+- name: Remove directory with Apache configs
+  file:
+    path: "{{ apache_conf_path }}"
+    state: absent
+
 - name: Reinstall Apache
-  shell: "apt-get autoremove {{ item }} -y && apt-get install {{ item }}={{ apache_version }} -y"
+  shell: "apt-get autoremove {{ item }} --purge -y && apt-get install {{ item }}={{ apache_version }} -y"
   with_items:
     - apache2-bin
     - apache2-data
 
 - name: Install Apache packages
-  shell: "apt-get install {{ item }}={{ apache_version }} -y"
+  shell: "apt-get install {{ item }}={{ apache_version }} -y --force-yes"
   with_items: apache_packages
+
+- name: Ensure that necessary ports free and processes stopped
+  sudo: yes
+  shell: "kill $(sudo lsof -t -i:{{ item }}) > /dev/null 2>&1"
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+  with_items:
+    - "{{ apache_listen_port }}"
+    - "{{ apache_listen_port_ssl }}"
