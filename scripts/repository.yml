@@ -34,17 +34,17 @@
         msg: "You are not allowed to install {{ cmf | major }} {{ version }} because it isn't pre-configured."
       when: not cmf_configs.stat.exists
 
-    - shell: "drush dl drupal --drupal-project-rename=docroot --destination=../{{ project }} -y"
-#    - name: Downloading CMF
-#      git:
-#        dest: "../{{ project }}/docroot"
-#        repo: "{{ host }}/{{ vendor }}/{{ cmf }}.git"
-#        version: "{{ version }}"
-#
-#    - name: Downloading Adminer.php
-#      get_url:
-#        url: "https://www.adminer.org/static/download/{{ adminer }}/adminer-{{ adminer }}-en.php"
-#        dest: "../{{ project }}/adminer.php"
+    - name: Downloading CMF
+      git:
+        dest: "../{{ project }}/docroot"
+        repo: "{{ host }}/{{ vendor }}/{{ cmf }}.git"
+        version: "{{ version }}"
+
+    - name: Downloading Adminer.php
+      get_url:
+        url: "https://www.adminer.org/static/download/{{ adminer }}/adminer-{{ adminer }}-en.php"
+        dest: "../{{ project }}/adminer.php"
+      when: adminer != "none"
 
     - name: Prepare CIBox-structured repository
       synchronize:
