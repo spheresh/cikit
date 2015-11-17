@@ -130,19 +130,20 @@
       tags: ["wp-cli", "php-stack"]
 
     - role: ansible-role-mysql
-      tags: ["mysql", "php-stack", "ansible-role-mysql"]
+      tags: ["mysql", "php-stack"]
 
     - role: cibox-jetty-solr
       when: solr_enabled
       tags: ["solr", "php-stack"]
 
     - role: cibox-sniffers
-      tags: ["cibox-sniffers", "php-stack"]
+      tags: ["sniffers", "php-stack"]
 
     - role: cibox-mysql-config
-      tags: ["mysql", "php-stack", "cibox-mysql-config"]
+      tags: ["mysql", "php-stack"]
 
     - role: cibox-ssl-config
+      tags: ["ssl-config"]
 
     - role: cibox-varnish
       when: varnish_enabled
@@ -153,7 +154,7 @@
 
     - role: cibox-swap
       when: not vagrant and ansible_virtualization_type != "openvz"
-      tags: ["cibox-swap"]
+      tags: ["swap"]
 
     - role: cibox-jenkins
       when: not vagrant

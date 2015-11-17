@@ -1,6 +1,7 @@
 ---
 # Do not modify this variables set if you are not sure what you are doing!
 env: default
+# Only for Drupal.
 profile: pp
 
 sql_workflow: False

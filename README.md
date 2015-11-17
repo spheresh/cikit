@@ -3,7 +3,7 @@
 ## Quick Start
 
 - Add your host credentials to the `inventory` file.
-- `./ansible.sh provision --project=<NAME> --limit=<HOST>`
+- `./ansible.sh provision --project=<NAME> [--limit=<HOST>]`
 - `./ansible.sh repository --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal] [--adminer=4.2.2|none]`
 
 ### Examples
@@ -36,36 +36,28 @@ https://github.com/propeoplemd/cibox/wiki
 Don't forget to setup all http://ci_hostname:8080/configure settings with CHANGE_ME... placeholders to be able meet project requirements.
 Also you should change all CHANGE_ME placeholders for DEMO and PR builders jobs as well.
 
-This repo consists basically from two playbooks:
-- CI server installation/provisioning `jenkinsbox.yml`;
-- `drupal.yml` repo builder with Drupal, vagrant, `pp` installation profile, scripts for reinstalling and sniffing
-
 You have to use *64bit* Ubuntu 14.04 LTS system for CI server
-
-## Common and base apps and packages
-
-`cibox-misc` role contains all basic packages required for cibox and vagrant installation.
 
 ## Possible variations
 
-Currently `jenkinsbox.yml` playbook powered with tags, so you can run only part of it.
+Currently `provision.yml` playbook powered with tags, so you can run only part of it.
 
 ```sh
 ./ansible.sh jenkinsbox --tags="TAGNAME"
 ```
 
 - php-stack
-- ansible-jetty-solr
-- ansible-jenkins
-- ansible-composer
-- ansible-php-pear
-- ansible-php-xhprof
-- ansible-sniffers
+- solr
+- jenkins
+- composer
+- pear
+- drush
+- xhprof
+- sniffers
 - apache
 - mysql
-- cibox-mysql-config
-- cibox-swap
-- cibox-ssl-config
+- swap
+- ssl-config
 
 ## OpenVZ support
 

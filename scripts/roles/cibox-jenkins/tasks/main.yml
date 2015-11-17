@@ -12,7 +12,6 @@
 - name: Install Jenkins
   sudo: yes
   shell: "dpkg -i ~/jenkins.deb"
-  register: jenkins_install
 
 - include: cli.yml
 - include: plugins.yml

@@ -32,6 +32,3 @@ plugins:
   - http://mirrors.jenkins-ci.org/plugins/parameterized-trigger/2.28/parameterized-trigger.hpi
 
 jenkins_pkg_version: http://pkg.jenkins-ci.org/debian/binary/jenkins_1.624_all.deb
-
-# Delay before jenkins up and running. Sometimes it is not enouph.
-startup_delay_s: 40
