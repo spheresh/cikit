@@ -8,6 +8,7 @@
 !roles/
 !scripts/
 !vagrant/
+!repository/
 
 !ansible.sh
 !config.yml

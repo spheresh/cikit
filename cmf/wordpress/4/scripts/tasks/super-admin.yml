@@ -1,0 +1,4 @@
+---
+- name: Set password for super-admin
+  shell: "cd ../docroot && wp user update 1 --user_login={{ wordpress.user.name }} --user_pass={{ wordpress.user.pass }} --allow-root"
+  environment: env_vars

@@ -124,7 +124,10 @@
       tags: ["composer", "php-stack"]
 
     - role: cibox-composer-drush
-      tags: ["composer", "php-stack", "drush"]
+      tags: ["drush", "composer", "php-stack"]
+
+    - role: cibox-wp-cli
+      tags: ["wp-cli", "php-stack"]
 
     - role: ansible-role-mysql
       tags: ["mysql", "php-stack", "ansible-role-mysql"]

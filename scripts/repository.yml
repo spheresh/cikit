@@ -31,7 +31,7 @@
 
     - name: CMF is not available
       fail:
-        msg: "You are not allowed to install {{ cmf | major }} {{ version }} because it isn't pre-configured."
+        msg: "You are not allowed to install {{ cmf | capitalize }} {{ version }} because it isn't pre-configured."
       when: not cmf_configs.stat.exists
 
     - name: Downloading CMF
@@ -62,6 +62,9 @@
         - src: "../scripts/"
           dest: "provisioning"
 
+        - src: "../repository/"
+          dest: "scripts"
+
     - name: Clear created repository
       file:
         path: "../{{ project }}/{{ item }}"
@@ -84,5 +87,5 @@
     - name: Set name of the project to config.yml
       lineinfile:
         dest: "../{{ project }}/config.yml"
-        line: "project: {{ project }}\nsite_url: http://{{ project }}.dev"
+        line: "project: {{ project }}\nsite_url: http://{{ project }}.dev\ncmf: {{ cmf }}"
         insertafter: "^---$"

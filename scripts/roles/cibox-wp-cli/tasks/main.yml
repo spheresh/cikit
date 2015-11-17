@@ -1,0 +1,6 @@
+---
+- name: Downloading WP CLI
+  get_url:
+    url: "{{ wp_cli_url }}"
+    dest: /usr/local/bin/wp
+    mode: +x

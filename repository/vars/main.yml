@@ -14,7 +14,7 @@ mysql:
   pass: root
 
 databases:
-  default: "{{ build_id | default(env) }}_drupal"
+  default: "{{ build_id | default(env) }}_{{ cmf }}"
 
 # URL to the source database. Can be overridden by CI server.
 # @todo
