@@ -1,4 +1,9 @@
 ---
+- name: Wait Jenkins server
+  wait_for:
+    port: 8080
+    delay: 10
+
 # Create Jenkins CLI destination directory
 - name: Create Jenkins CLI destination directory
   sudo: yes
