@@ -6,6 +6,20 @@
 - `./ansible.sh provision --project=<NAME> --limit=<HOST>`
 - `./ansible.sh repository --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal] [--adminer=4.2.2|none]`
 
+### Examples
+
+**Drupal 7** (standard system):
+
+```shell
+./ansible.sh repository --project=test
+```
+
+**WordPress 4** (supported system):
+
+```shell
+./ansible.sh repository --project=test --cmf=wordpress --version=4.3.1
+```
+
 ## CIBox mailing list
 
 - To post to this group, send email to ci_box@googlegroups.com

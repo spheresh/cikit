@@ -10,8 +10,6 @@
     version: 7.41
     # Host for cloning repository from.
     host: https://github.com
-    # Part of namespace on a host (vendor name).
-    vendor: drupal
     adminer: 4.2.2
 
   vars_files:
@@ -23,6 +21,12 @@
     - name: Determine major version of CMF
       set_fact:
         major: '{{ version | regex_replace("^(\d).*$", "\\1") }}'
+
+    # Part of namespace on a host (vendor name).
+    - name: Set vendor name
+      set_fact:
+        vendor: "{{ cmf }}"
+      when: vendor is undefined
 
     - name: Check for CMF configuration
       stat:
