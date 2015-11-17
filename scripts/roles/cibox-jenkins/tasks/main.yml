@@ -28,3 +28,4 @@
     line: "{{ jenkins_data.user }} ALL=(ALL) NOPASSWD:ALL"
 
 - include: jobs.yml
+  when: jenkins_job is defined

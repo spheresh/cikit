@@ -1,7 +1,7 @@
 ---
 - name: Check if job already renamed
   stat:
-    path: "{{ jenkins_lib }}/jobs/{{ jenkins_job | upper }}_PR_BUILDER"
+    path: "{{ jenkins_lib }}/jobs/{{ jenkins_job }}_PR_BUILDER"
   register: prbuilder_stat
 
 - name: Copy local files for enabling Jenkins permissions
