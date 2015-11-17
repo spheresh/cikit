@@ -11,6 +11,7 @@ php_packages:
   - php-apc
   - libapache2-mod-php5
   - php5-dev
+  - sendmail
 php_use_managed_ini: true
 php_display_errors: On
 php_error_reporting: "-1"

@@ -172,12 +172,6 @@
       shell: rngd -r /dev/urandom
       when: not vagrant and ansible_virtualization_type != "openvz"
 
-    - name: Create Sendmail symlink
-      file:
-        src: /bin/true
-        dest: /usr/sbin/sendmail
-        state: link
-
     - name: Restart services
       service:
         name: "{{ item }}"
