@@ -54,7 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :type => isWindows ? "rsync" : "nfs",
       :rsync__auto => "true",
       :rsync__args => ["--verbose", "--archive", "--delete", "-z", "--chmod=ugo=rwX"],
-      :rsync__exclude => folder['excluded_paths'],
+      :rsync__exclude => folder['exclude'],
       :linux__nfs_options => ["rw", "no_subtree_check", "no_root_squash", "async"]
   end
 

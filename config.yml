@@ -26,5 +26,9 @@ vm:
     - id: drupal
       source: ./
       target: /var/www
+      exclude:
+        - .vagrant/
+        - .idea/
+        - .git/
   ssh:
     username: vagrant
