@@ -1,3 +1,3 @@
 ---
 - name: Installing WordPress
-- shell: "cd ../docroot && wp core install --title=WP --admin_email=email@example.com --url={{ site_url }} --admin_user={{ wordpress.user.name }} --admin_password={{ wordpress.user.pass }} --allow-root"
+  shell: "cd ../docroot && wp core install --title=WP --admin_email=email@example.com --url={{ site_url }} --admin_user={{ wordpress.user.name }} --admin_password={{ wordpress.user.pass }} --allow-root"
