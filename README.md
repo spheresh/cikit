@@ -62,7 +62,7 @@ Currently `provision.yml` playbook powered with tags, so you can run only part o
 ## OpenVZ support
 
 If your system build on OpenVZ stack and swap is disabled you may bypass
-it with using `fakeswap.sh` file within `files/fakeswap` directory.
+it with using `fakeswap.sh` file within `files` directory.
 
 ```shell
 chmod a+x fakeswap.sh
@@ -81,7 +81,6 @@ for adding `4086MB` swap size.
 
 | Name        | Version |
 | ----------- | ------- |
-| Git         | 1.7+    |
 | Vagrant     | 1.7+    |
 | Ansible     | 1.9+    |
 | VirtualBox  | 4.0+    |
