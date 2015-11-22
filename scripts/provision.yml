@@ -55,7 +55,7 @@
     - name: Is Vagrant machine will be provisioned?
       set_fact:
         vagrant: yes
-      when: limit is defined and limit == "vagrant"
+      when: ansible_ssh_host is defined and ansible_ssh_host == "127.0.0.1"
 
     - include: tasks/project-variable.yml
       when: not vagrant

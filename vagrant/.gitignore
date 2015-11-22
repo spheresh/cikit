@@ -15,6 +15,7 @@ docroot/build_reports/
 !tests/
 # Ansible provision scripts for VM.
 !provisioning/
+!provisioners/
 
 # Ignore hidden files.
 .*

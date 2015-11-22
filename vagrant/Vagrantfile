@@ -2,45 +2,53 @@
 # vi: set ft=ruby :
 VAGRANTFILE_API_VERSION = "2"
 
-require 'yaml'
-require 'rbconfig'
+require "yaml"
 
-isWindows = RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
+isWindows = Vagrant::Util::Platform.windows?
 configValues = YAML::load_file("config.yml")
 
-if !configValues['vm']['provider']['virtualbox'].empty?
-  ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
+ENV["VAGRANT_DEFAULT_PROVIDER"] = ENV.has_key?("VAGRANT_CI") && ENV["VAGRANT_CI"].include?("lxc") ? "lxc" : "virtualbox"
+
+if isWindows
+  ENV["VAGRANT_DETECTED_OS"] = "cygwin"
+  # Prevent closing connection.
+  # https://github.com/ansible/ansible/issues/6363#issuecomment-49349902
+  ENV["ANSIBLE_SSH_ARGS"] = "-o ControlMaster=no"
 end
 
-if !ENV['VAGRANT_CI'].nil?
-  ENV['VAGRANT_DEFAULT_PROVIDER'] = 'lxc'
+if not Vagrant.has_plugin?("vagrant-hostsupdater")
+  system "vagrant plugin install vagrant-hostsupdater"
+end
+
+# Dynamically load provisioners.
+Dir["provisioners/*"].each do |file|
+  file += "/#{File.basename(file)}.rb"
+
+  if File.exist?(file)
+    require_relative file
+  end
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = File.basename(configValues['vm']['box_url'])
-  config.vm.box_url = "#{configValues['vm']['box_url']}"
+  config.vm.box_url = "#{configValues["vm"][ENV["VAGRANT_DEFAULT_PROVIDER"]]["box"]}"
+  config.vm.box = File.basename(config.vm.box_url)
+  config.vm.hostname = "#{configValues["project"]}.dev"
+  config.vm.usable_port_range = (10200..10500)
 
-  if !ENV['VAGRANT_CI'].nil?
-    config.vm.box = "#{configValues['vm']['provider']['lxc']['box']}"
+  config.hostsupdater.aliases = [config.vm.hostname]
+
+  config.vm.network "private_network",
+    :ip => "#{configValues["vm"]["ip"]}",
+    :lxc__bridge_name => "lxcbr0"
+
+  config.vm.provider :virtualbox do |vb|
+    configValues["vm"]["virtualbox"].each do |key, value|
+      vb.customize ["modifyvm", :id, "--#{key}", "#{value}"]
+    end
   end
 
-  if configValues['vm']['hostname'].to_s != ''
-    config.vm.hostname = "#{configValues['vm']['hostname']}"
-  end
-
-  # If hostsupdater plugin is installed, add all servernames as aliases.
-  if Vagrant.has_plugin?("vagrant-hostsupdater")
-    config.hostsupdater.aliases = ["#{configValues['project']}.dev"]
-  end
-
-  if configValues['vm']['network']['private_network'].to_s != ''
-    config.vm.network "private_network",
-      :ip => "#{configValues['vm']['network']['private_network']}",
-      :lxc__bridge_name => "lxcbr0"
-  end
-
-  configValues['vm']['network']['forwarded_port'].each do |i, port|
-    if port['guest'] != '' && port['host'] != ''
+  configValues["vm"]["forwarded_port"].each do |i, port|
+    if port["guest"] != "" && port["host"] != ""
       config.vm.network :forwarded_port,
         :host => port['host'].to_i,
         :guest => port['guest'].to_i,
@@ -48,32 +56,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  for folder in configValues['vm']['synced_folder'];
-    config.vm.synced_folder folder['source'], folder['target'],
-      :id => folder['id'],
+  for folder in configValues["vm"]["synced_folder"];
+    config.vm.synced_folder folder["source"], folder["target"],
+      :id => folder["target"],
+      # Only using "rsync" we able to affect on file permissions inside of VM using "chmod" on Windows host.
       :type => isWindows ? "rsync" : "nfs",
       :rsync__auto => "true",
       :rsync__args => ["--verbose", "--archive", "--delete", "-z", "--chmod=ugo=rwX"],
-      :rsync__exclude => folder['exclude'],
+      :rsync__exclude => folder["excluded_paths"],
       :linux__nfs_options => ["rw", "no_subtree_check", "no_root_squash", "async"]
   end
 
-  config.vm.usable_port_range = (10200..10500)
+  config.vm.provision :cibox,
+    :controller => "./ansible.sh",
+    :playbook => "provisioning/provision"
 
-  if !configValues['vm']['provider']['virtualbox'].empty?
-    config.vm.provider :virtualbox do |virtualbox|
-      configValues['vm']['provider']['virtualbox']['modifyvm'].each do |key, value|
-        virtualbox.customize ["modifyvm", :id, "--#{key}", "#{value}"]
-      end
-    end
-  end
+  config.vm.provision :shell,
+    :inline => "/var/www/ansible.sh reinstall"
 
-  config.vm.provision :host_shell, :inline => "./ansible.sh provisioning/provision --limit=vagrant"
-  config.vm.provision :shell, :inline => "/var/www/ansible.sh reinstall"
-
-  config.ssh.username = configValues['vm']['ssh']['username']
-  config.ssh.password = configValues['vm']['ssh']['username']
   config.ssh.shell = "sh"
-  config.ssh.insert_key = "false"
+  config.ssh.insert_key = false
   config.ssh.forward_agent = true
 end

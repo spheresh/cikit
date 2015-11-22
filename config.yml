@@ -3,32 +3,24 @@
 tmproot: /tmp
 webroot: /var/www
 vm:
-  box_url: http://128.199.55.125/ubuntu14.04LTS_cibox.box
-  network:
-    private_network: 192.168.56.132
-    forwarded_port:
-      CocLsFE7aIwA:
-        host: 8081
-        guest: 80
-      CocLsFE7aIwE:
-        host: 8083
-        guest: 3306
-  provider:
-    virtualbox:
-      modifyvm:
-        natdnshostresolver1: "on"
-        memory: "2048"
-        cpus: "2"
-      lxc:
-        box: fgrehm/precise64-lxc
-        box_url: https://atlas.hashicorp.com/fgrehm/boxes/precise64-lxc/versions/1.2.0/providers/lxc.box
+  ip: 192.168.56.132
+  forwarded_port:
+    CocLsFE7aIwA:
+      host: 8081
+      guest: 80
+    CocLsFE7aIwE:
+      host: 8083
+      guest: 3306
+  virtualbox:
+    box: http://128.199.55.125/ubuntu14.04LTS_cibox.box
+    cpus: 2
+    memory: 2048
+    natdnshostresolver1: "on"
+  lxc:
+    box: https://atlas.hashicorp.com/fgrehm/boxes/precise64-lxc/versions/1.2.0/providers/lxc.box
   synced_folder:
-    - id: drupal
-      source: ./
+    - source: ./
       target: /var/www
       exclude:
-        - .vagrant/
         - .idea/
         - .git/
-  ssh:
-    username: vagrant

@@ -1,49 +1,42 @@
-# Drupal Vagrant box for CIBox support
+# CIBox
 
 ## Installation
 
 - [Vagrant](https://www.vagrantup.com/downloads.html)
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-- Vagrant plugins:
-  - [vagrant plugin install vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
-  - [vagrant plugin install vagrant-host-shell](https://github.com/phinze/vagrant-host-shell)
 
 ## Usage
 
-Start and provision the virtual machine:
+### Up
 
 ```shell
 vagrant up
 vagrant ssh
 ```
 
-Site re-installation from scratch:
+### Re-install
 
 ```shell
 ./ansible.sh reinstall
 ```
 
-- By default your site will be accessible using this URL: `http://drupal.192.168.56.132.xip.io/`.
-- If `xip.io` not working - create a row with `192.168.56.112 drupal.192.168.56.132.xip.io` in `/etc/hosts` or just use another ServerName in www.yml
-
 ## Tools
 
-- XDebug
 - Drush
-- Selenium 2
-- Composer
 - Adminer
+- Composer
+- XDebug
 - XHProf
-- PHP Daemon
-- PHP, SASS, JS sniffers/lints/hints
+- Selenium 2
+- Sniffers, lints and hints for PHP, CSS, JS
 
 ### Adminer
 
-Adminer for MySQL administration (credentials drupal:drupal and root:root): `http://192.168.56.112.xip.io/adminer.php`.
+**Adminer** for MySQL administration (credentials `drupal/drupal` and `root/root`): `http://192.168.56.112.xip.io/adminer.php`.
 
 ### PHP Profiler XHProf
 
-It is installed by default, but to use it as Devel module integration use:
+It is installed by default, but to use it as `Devel` module integration use:
 
 ```shell
 drush en devel -y
@@ -86,12 +79,11 @@ sudo /etc/init.d/apparmor reload
 and run the box by command:
 
 ```shell
-VAGRANT_CI=yes vagrant up
+VAGRANT_CI=lxc vagrant up
 ```
 
 ### Windows Containers
 
 - Install [Cygwin](https://servercheck.in/blog/running-ansible-within-windows) according to provided steps.
-- Run Cygwin as administrator.
-- Add `export VAGRANT_DETECTED_OS=cygwin` to `~/.bash_profile` using Cygwin CLI.
-- Use default flow to up Vagrant.
+- Run `Cygwin` as administrator.
+- Use default flow to [up Vagrant](#up).
