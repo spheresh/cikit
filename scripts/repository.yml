@@ -62,12 +62,10 @@
         - src: "../config.yml"
         - src: "../inventory"
         - src: "../vagrant/"
+        - src: "../cmf/all/"
 
         - src: "../scripts/"
           dest: "provisioning"
-
-        - src: "../repository/"
-          dest: "scripts"
 
     - name: Clear created repository
       file:
