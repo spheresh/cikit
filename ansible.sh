@@ -111,11 +111,15 @@ done
 # Remove last comma.
 extra_vars=${extra_vars%%,}
 
+if [ -z "${ANSIBLE_HOSTS}" ]; then
+  params+="-i ${SELF_PATH}/inventory"
+  chmod -x ${SELF_PATH}/inventory
+fi
+
 if [ -n "${extra_vars}" ]; then
     params+=" --extra-vars='{${extra_vars}}'"
 fi
 
 export PYTHONUNBUFFERED=1
-chmod -x ${SELF_PATH}/inventory
 
-time eval "ansible-playbook -vvvv ${playbook} -i ${SELF_PATH}/inventory ${params}"
+time eval "ansible-playbook -vvvv ${playbook} ${params}"
