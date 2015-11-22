@@ -35,14 +35,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = "#{configValues["project"]}.dev"
   config.vm.usable_port_range = (10200..10500)
 
-  config.hostsupdater.aliases = [config.vm.hostname]
-
   config.vm.network "private_network",
     :ip => "#{configValues["vm"]["ip"]}",
     :lxc__bridge_name => "lxcbr0"
 
   config.vm.provider :virtualbox do |vb|
-    configValues["vm"]["virtualbox"].each do |key, value|
+    configValues["vm"]["virtualbox"]["modifyvm"].each do |key, value|
       vb.customize ["modifyvm", :id, "--#{key}", "#{value}"]
     end
   end

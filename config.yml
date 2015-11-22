@@ -13,9 +13,10 @@ vm:
       guest: 3306
   virtualbox:
     box: http://128.199.55.125/ubuntu14.04LTS_cibox.box
-    cpus: 2
-    memory: 2048
-    natdnshostresolver1: "on"
+    modifyvm:
+      cpus: 2
+      memory: 2048
+      natdnshostresolver1: "on"
   lxc:
     box: https://atlas.hashicorp.com/fgrehm/boxes/precise64-lxc/versions/1.2.0/providers/lxc.box
   synced_folder:

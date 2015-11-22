@@ -83,11 +83,6 @@
         state: directory
         recurse: yes
 
-    - name: Add Vagrant host to inventory file
-      lineinfile:
-        dest: "../{{ project }}/inventory"
-        line: "\n[vagrant]\n{{ vm.network.private_network }} ansible_ssh_user={{ vm.ssh.username }} ansible_ssh_private_key_file=.vagrant/machines/default/virtualbox/private_key"
-
     - name: Update config.yml
       lineinfile:
         dest: "../{{ project }}/config.yml"
