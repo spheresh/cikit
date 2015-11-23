@@ -7,14 +7,10 @@ module VagrantPlugins::CIBox
       errors = _detected_errors
 
       unless controller
-        errors << ':cibox provisioner requires :controller to be set.'
+        errors << ":cibox provisioner requires :controller to be set."
       end
 
-      unless playbook
-        errors << ':cibox provisioner requires :playbook to be set.'
-      end
-
-      {'CIBox Provisioner' => errors}
+      {"CIBox Provisioner" => errors}
     end
   end
 end
