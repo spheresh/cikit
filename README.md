@@ -1,4 +1,25 @@
-# CIBox (Continuous Integration Box)
+# Continuous Integration Box
+
+**CIBox** - is [Ansible](https://github.com/ansible/ansible) based system for deployment environment for web application development. With this tool you able to deploy local web-server based on [Vagrant](https://github.com/mitchellh/vagrant) and/or remote one.
+
+The power of the system - simplicity. All provisioning is the same for local and remote machines, except logic for installing additional software on remote (Jenkins, for example), but it quite simple too (just `when: not vagrant` as condition for Ansible tasks).
+
+```ascii
+  ██████╗██╗     ██████╗  ██████╗ ██╗  ██╗
+ ██╔════╝██║     ██╔══██╗██╔═══██╗╚██╗██╔╝
+ ██║     ██║     ██████╔╝██║   ██║ ╚███╔╝
+ ██║     ██║     ██╔══██╗██║   ██║ ██╔██╗
+ ╚██████╗██║     ██████╔╝╚██████╔╝██╔╝ ██╗
+  ╚═════╝╚═╝     ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
+```
+
+## Main possibilities
+
+- Automated builds for every commit in a pull request on GitHub (private repositories supported).
+- Multi CMS/CMF support. To add support of a new one, you just need to put pre-configurations to `cmf/<NAME>/<MAJOR_VERSION>` and ensure that core files can be downloaded via Git.
+- Opportunity to keep multiple projects on the same CI server.
+- Triggering builds via comments in pull requests.
+- Midnight server cleaning :)
 
 ## Quick Start
 
