@@ -4,6 +4,8 @@
 
 The power of the system - simplicity. All provisioning is the same for local and remote machines, except logic for installing additional software on remote (Jenkins, for example), but it quite simple too (just `when: not vagrant` as condition for Ansible tasks).
 
+*Currently based on `Ubuntu 14.04 LTS (64bit)`*.
+
 ```ascii
   ██████╗██╗     ██████╗  ██████╗ ██╗  ██╗
  ██╔════╝██║     ██╔══██╗██╔═══██╗╚██╗██╔╝
@@ -24,8 +26,8 @@ The power of the system - simplicity. All provisioning is the same for local and
 ## Quick Start
 
 - Add your host credentials to the `inventory` file.
-- `./ansible.sh provision --project=<NAME> [--limit=<HOST>]`
 - `./ansible.sh repository --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal] [--adminer=4.2.2|none]`
+- `./ansible.sh provision --project=<NAME> [--limit=<HOST>]`
 
 ### Examples
 
@@ -41,25 +43,15 @@ The power of the system - simplicity. All provisioning is the same for local and
 ./ansible.sh repository --project=test --cmf=wordpress --version=4.3.1
 ```
 
-## CIBox mailing list
-
-- To post to this group, send email to ci_box@googlegroups.com
-- To unsubscribe from this group, send email to ci_box+unsubscribe@googlegroups.com
-- Visit and Join this group at https://groups.google.com/d/forum/ci_box
-- For more options, visit https://groups.google.com/d/optout
-
 ## WIKI
 
 https://github.com/propeoplemd/cibox/wiki
 
-## TIP:
+## TIP
 
-Don't forget to setup all http://ci_hostname:8080/configure settings with CHANGE_ME... placeholders to be able meet project requirements.
-Also you should change all CHANGE_ME placeholders for DEMO and PR builders jobs as well.
+Don't forget to setup all http://ci_hostname:8080/configure settings with `CHANGE_ME` placeholders to be able meet project requirements. Also you should change all `CHANGE_ME` for all Jenkins jobs as well.
 
-You have to use *64bit* Ubuntu 14.04 LTS system for CI server
-
-## Possible variations
+## Variations
 
 Currently `provision.yml` playbook powered with tags, so you can run only part of it.
 
@@ -82,8 +74,7 @@ Currently `provision.yml` playbook powered with tags, so you can run only part o
 
 ## OpenVZ support
 
-If your system build on OpenVZ stack and swap is disabled you may bypass
-it with using `fakeswap.sh` file within `files` directory.
+If your system build on OpenVZ stack and swap is disabled you may bypass it with using `fakeswap.sh` file within `files` directory.
 
 ```shell
 chmod a+x fakeswap.sh
@@ -94,9 +85,7 @@ for adding `4086MB` swap size.
 
 ## Roles not used by default
 
-- `cibox-phpdaemon`: HP project for installing phpdaemon;
-- `ansible-role-php-pecl`: originally developed by @geerlingguy but without 
- dependency from his PHP playbook. Can be used for installing PECL packages.
+- [ansible-role-php-pecl](scripts/roles/ansible-role-php-pecl)
 
 ## Dependencies
 

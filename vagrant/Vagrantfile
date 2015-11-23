@@ -10,6 +10,8 @@ configValues = YAML::load_file("config.yml")
 ENV["VAGRANT_DEFAULT_PROVIDER"] = ENV.has_key?("VAGRANT_CI") && ENV["VAGRANT_CI"].include?("lxc") ? "lxc" : "virtualbox"
 
 if isWindows
+  # Help Vagrant to detect Cygwin.
+  # https://github.com/mitchellh/vagrant/blob/master/lib/vagrant/util/platform.rb#L14
   ENV["VAGRANT_DETECTED_OS"] = "cygwin"
   # Prevent closing connection.
   # https://github.com/ansible/ansible/issues/6363#issuecomment-49349902
@@ -20,7 +22,7 @@ if not Vagrant.has_plugin?("vagrant-hostsupdater")
   system "vagrant plugin install vagrant-hostsupdater"
 end
 
-# Dynamically load provisioners.
+# Automatically load custom provisioners.
 Dir["provisioners/*"].each do |file|
   file += "/#{File.basename(file)}.rb"
 
@@ -30,9 +32,13 @@ Dir["provisioners/*"].each do |file|
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Use the box, depending on Vagrant provider.
   config.vm.box_url = "#{configValues["vm"][ENV["VAGRANT_DEFAULT_PROVIDER"]]["box"]}"
+  # Automatically name the box.
   config.vm.box = File.basename(config.vm.box_url)
+  # Hosts Updated plugin insert this value to "hosts".
   config.vm.hostname = "#{configValues["project"]}.dev"
+  # Handle port collisions.
   config.vm.usable_port_range = (10200..10500)
 
   config.vm.network "private_network",

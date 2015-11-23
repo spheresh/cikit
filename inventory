@@ -1,11 +1,5 @@
-# This is CIBox inventory file. It includes all hosts the playbook will run on.
-# Servers from this file are used in playbooks in "hosts" line.
-# You can specify in playbook list of one or more groups or host patterns.
-#
-# Example:
-#
-# [my_server]
-# 192.168.1.1
+# This is Ansible inventory file. It includes hosts where playbooks will run.
+# Visit for more information: http://docs.ansible.com/ansible/intro_inventory.html
 
 [br0ken]
 185.86.76.75 ansible_ssh_user=root
