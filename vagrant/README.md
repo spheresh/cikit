@@ -2,6 +2,7 @@
 
 ## Installation
 
+- [Ansible](http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-pip)
 - [Vagrant](https://www.vagrantup.com/downloads.html)
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
@@ -9,12 +10,16 @@
 
 ### Up
 
+If `--reinstall` argument will be set, then Vagrant re-install your web application. Remember that this argument won't have any effect if machine already provisioned.
+
 ```shell
-vagrant up
+vagrant up [--reinstall]
 vagrant ssh
 ```
 
 ### Re-install
+
+Re-install web application (should be executed inside of VM).
 
 ```shell
 ./ansible.sh reinstall

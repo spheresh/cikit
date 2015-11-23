@@ -32,7 +32,6 @@
   file:
     path: "{{ jenkins_lib }}/jobs/PR_BUILDER"
     state: absent
-  when: prbuilder_stat.stat.exists
 
 - name: Change host IP address in Jenkins config
   replace:

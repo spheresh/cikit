@@ -49,7 +49,7 @@ https://github.com/propeoplemd/cibox/wiki
 
 ## TIP
 
-Don't forget to setup all http://ci_hostname:8080/configure settings with `CHANGE_ME` placeholders to be able meet project requirements. Also you should change all `CHANGE_ME` for all Jenkins jobs as well.
+Don't forget to setup all http://ci_hostname:8080/configure settings with `CHANGE_ME` placeholders to be able meet project requirements. Also you should change all `CHANGE_ME` for all Jenkins jobs.
 
 ## Variations
 
