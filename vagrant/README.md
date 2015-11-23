@@ -10,10 +10,10 @@
 
 ### Up
 
-If `--reinstall` argument will be set, then Vagrant re-install your web application. Remember that this argument won't have any effect if machine already provisioned.
+You able to automatically re-install web application when machine is in provisioning. Use `export REINSTALL=true` to do this.
 
 ```shell
-vagrant up [--reinstall]
+vagrant up
 vagrant ssh
 ```
 
