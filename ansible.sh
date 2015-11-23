@@ -112,7 +112,7 @@ done
 extra_vars=${extra_vars%%,}
 
 if [ -z "${ANSIBLE_HOSTS}" ]; then
-  params+="-i ${SELF_PATH}/inventory"
+  params+=" -i ${SELF_PATH}/inventory"
   chmod -x ${SELF_PATH}/inventory
 fi
 
