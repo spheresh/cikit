@@ -3,9 +3,14 @@
 VAGRANTFILE_API_VERSION = "2"
 
 require "yaml"
+require "getoptlong"
 
+arguments = []
 isWindows = Vagrant::Util::Platform.windows?
 configValues = YAML::load_file("config.yml")
+options = {
+  "reinstall" => GetoptLong::OPTIONAL_ARGUMENT,
+}
 
 ENV["VAGRANT_DEFAULT_PROVIDER"] = ENV.has_key?("VAGRANT_CI") && ENV["VAGRANT_CI"].include?("lxc") ? "lxc" : "virtualbox"
 
@@ -31,6 +36,19 @@ Dir["provisioners/*"].each do |file|
   end
 end
 
+# Define allowed arguments.
+options.each do |option, severity|
+  # Default value of every argument is "false".
+  options[option] = false
+  arguments.push(["--#{option}", severity])
+end
+
+# Process passed arguments.
+GetoptLong.new(*arguments).each do |key, value|
+  # If option passed without a value then set it to "true".
+  options[key.gsub("--", "")] = value.empty? ? true : value
+end
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Use the box, depending on Vagrant provider.
   config.vm.box_url = "#{configValues["vm"][ENV["VAGRANT_DEFAULT_PROVIDER"]]["box"]}"
@@ -52,10 +70,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   configValues["vm"]["forwarded_port"].each do |i, port|
-    if port["guest"] != "" && port["host"] != ""
+    if port["guest"] != "" and port["host"] != ""
       config.vm.network :forwarded_port,
-        :host => port['host'].to_i,
-        :guest => port['guest'].to_i,
+        :host => port["host"].to_i,
+        :guest => port["guest"].to_i,
         :auto_correct => true
     end
   end
@@ -75,8 +93,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     :controller => "./ansible.sh",
     :playbook => "provisioning/provision"
 
-  config.vm.provision :shell,
-    :inline => "/var/www/ansible.sh reinstall"
+  if options["reinstall"]
+    config.vm.provision :shell,
+      :inline => "/var/www/ansible.sh reinstall"
+  end
 
   config.ssh.shell = "sh"
   config.ssh.insert_key = false
