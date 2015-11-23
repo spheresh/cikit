@@ -4,7 +4,7 @@ module VagrantPlugins::CIBox
       Vagrant::Util::Subprocess.execute(
         "bash",
         "-c",
-        "#{config.controller} #{config.playbook} --limit=#{@machine.name}",
+        "#{config.controller} #{config.playbook} #{ansible_args}",
         :workdir => @machine.env.root_path.to_s,
         :notify => [:stdout, :stderr],
         :env => environment_variables,
@@ -35,6 +35,14 @@ module VagrantPlugins::CIBox
       ansible_ssh_args << ENV["ANSIBLE_SSH_ARGS"]
 
       return ansible_ssh_args.join(' ')
+    end
+
+    def ansible_args
+      ansible_args = []
+      ansible_args << "--limit=#{@machine.name}"
+      ansible_args << ENV["ANSIBLE_ARGS"]
+
+      return ansible_args.join(' ')
     end
 
     # Auto-generate "safe" inventory file based on Vagrantfile.
