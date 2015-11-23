@@ -43,7 +43,7 @@ You have to use *64bit* Ubuntu 14.04 LTS system for CI server
 Currently `provision.yml` playbook powered with tags, so you can run only part of it.
 
 ```sh
-./ansible.sh jenkinsbox --tags="TAGNAME"
+./ansible.sh provision --tags="TAGNAME"
 ```
 
 - php-stack
