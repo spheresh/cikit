@@ -73,6 +73,8 @@
         state: absent
       with_items:
         - provisioning/repository.yml
+        - docroot/.gitignore
+        - docroot/.git
 
     - name: Setting permissions for project tree
       file:
