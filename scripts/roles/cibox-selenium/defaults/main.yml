@@ -1,0 +1,26 @@
+---
+xvfb:
+  pid: /tmp/ansible_xvfb_99.pid
+  bin: /usr/bin/Xvfb
+  args: :99 -ac -screen 0 1024x768x24
+selenium_dependencies:
+  - src: http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
+    dest: /var/lib/chrome-driver/chromedriver.zip
+    unzip: yes
+    service: no
+  - src: http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar
+    dest: /var/lib/selenium/selenium.jar
+    unzip: no
+    service: java -jar
+selenium_packages:
+  - xfonts-100dpi
+  - xfonts-75dpi
+  - xfonts-scalable
+  - xfonts-cyrillic
+  - xvfb
+  - x11-apps
+  - imagemagick
+  - firefox
+  - google-chrome-stable
+  - unzip
+  - tar
