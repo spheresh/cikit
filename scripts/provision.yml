@@ -19,7 +19,7 @@
     # SSL configuration.
     cibox_ssl_enable_host: true
     composer_packages:
-      drush/drush: 6.*
+      drush/drush: 7.*
 
     cibox_protected_folders:
       user: propeople

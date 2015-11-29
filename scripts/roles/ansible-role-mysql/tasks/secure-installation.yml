@@ -8,7 +8,7 @@
   register: mysql_access
 
 - include: root-access.yml
-  when: mysql_access.failed
+  when: mysql_access.failed is defined
 
 - name: Ensure that MySQL service started
   sudo: yes

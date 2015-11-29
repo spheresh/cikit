@@ -17,11 +17,16 @@
     - name: Check if Behat is already installed
       stat:
         path: ../vendor/behat/behat/
-      register: behat_state
+      register: vendor_state
+
+    - name: Check for composer.json
+      stat:
+        path: ../composer.json
+      register: composer_json_state
 
     - name: Install Behat
       shell: cd ../ && composer install
-      when: not behat_state.stat.exists
+      when: not vendor_state.stat.exists and composer_json_state.stat.exists
 
   tasks:
     - name: Ensure Selenium service started

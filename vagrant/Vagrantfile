@@ -92,12 +92,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create Selenium hub.
   config.vm.provision :shell,
-    :inline => "/var/www/ansible.sh tests"
+    :inline => "/var/www/ansible.sh tests",
+    :run => "always"
 
   # Create Selenium node.
   config.vm.provision :cibox,
     :controller => "./selenium.sh",
-    :playbook => "#{configValues["selenium"]}"
+    :playbook => "#{configValues["selenium"]}",
+    :run => "always"
 
   config.ssh.shell = "sh"
   config.ssh.insert_key = false
