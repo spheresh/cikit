@@ -8,7 +8,8 @@ selenium_dependencies:
     dest: /var/lib/chrome-driver/chromedriver.zip
     unzip: yes
     service: no
-  - src: http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar
+  # The "selenium" variable can be found in global "config.yml".
+  - src: "{{ selenium }}"
     dest: /var/lib/selenium/selenium.jar
     unzip: no
     service: java -jar

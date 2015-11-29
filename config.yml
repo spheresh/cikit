@@ -2,6 +2,7 @@
 ---
 tmproot: /tmp
 webroot: /var/www
+selenium: http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar
 vm:
   ip: 192.168.56.132
   forwarded_port:
