@@ -1,0 +1,2 @@
+composer_packages:
+  drush/drush: 6.*
