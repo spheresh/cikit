@@ -7,12 +7,12 @@ The power of the system - simplicity. All provisioning is the same for local and
 *Currently based on `Ubuntu 14.04 LTS (64bit)`*.
 
 ```ascii
-  ██████╗██╗     ██████╗  ██████╗ ██╗  ██╗
- ██╔════╝██║     ██╔══██╗██╔═══██╗╚██╗██╔╝
- ██║     ██║     ██████╔╝██║   ██║ ╚███╔╝
- ██║     ██║     ██╔══██╗██║   ██║ ██╔██╗
- ╚██████╗██║     ██████╔╝╚██████╔╝██╔╝ ██╗
-  ╚═════╝╚═╝     ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
+  ██████╗ ██╗     ██████╗   ██████╗  ██╗  ██╗
+ ██╔════╝ ██║     ██╔══██╗ ██╔═══██╗ ╚██╗██╔╝
+ ██║      ██║     ██████╔╝ ██║   ██║  ╚███╔╝
+ ██║      ██║     ██╔══██╗ ██║   ██║  ██╔██╗
+ ╚██████╗ ██║     ██████╔╝ ╚██████╔╝ ██╔╝ ██╗
+  ╚═════╝ ╚═╝     ╚═════╝   ╚═════╝  ╚═╝  ╚═╝
 ```
 
 ## Main possibilities
@@ -55,8 +55,8 @@ Don't forget to setup all http://ci_hostname:8080/configure settings with `CHANG
 
 Currently `provision.yml` playbook powered with tags, so you can run only part of it.
 
-```sh
-./ansible.sh provision --tags="TAGNAME"
+```shell
+./ansible.sh provision --tags=TAGNAME
 ```
 
 - php-stack
@@ -71,6 +71,28 @@ Currently `provision.yml` playbook powered with tags, so you can run only part o
 - mysql
 - swap
 - ssl-config
+
+For provisioning Vagrant you also able to specify tags:
+
+```shell
+ANSIBLE_ARGS="--tags=TAGNAME" vagrant provision
+```
+
+As you see, any set of arguments can be passed for `ansible-playbook` command.
+
+## The power of Ansible.sh
+
+Run with custom inventory file:
+
+```shell
+ANSIBLE_HOSTS="/path/to/inventory ./ansible.sh"
+```
+
+Run with custom set of arguments:
+
+```shell
+ANSIBLE_ARGS="-vvvv" ./ansible.sh
+```
 
 ## OpenVZ support
 

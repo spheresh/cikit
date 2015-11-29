@@ -3,7 +3,6 @@
 VAGRANTFILE_API_VERSION = "2"
 
 require "yaml"
-require "getoptlong"
 
 isWindows = Vagrant::Util::Platform.windows?
 configValues = YAML::load_file("config.yml")
@@ -42,9 +41,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Handle port collisions.
   config.vm.usable_port_range = (10200..10500)
 
-  config.vm.network "private_network",
-    :ip => "#{configValues["vm"]["ip"]}",
-    :lxc__bridge_name => "lxcbr0"
+  config.vm.post_up_message = "Documentation: https://github.com/BR0kEN-/cibox
+
+ ██████╗ ██╗     ██████╗   ██████╗  ██╗  ██╗
+██╔════╝ ██║     ██╔══██╗ ██╔═══██╗ ╚██╗██╔╝
+██║      ██║     ██████╔╝ ██║   ██║  ╚███╔╝
+██║      ██║     ██╔══██╗ ██║   ██║  ██╔██╗
+╚██████╗ ██║     ██████╔╝ ╚██████╔╝ ██╔╝ ██╗
+ ╚═════╝ ╚═╝     ╚═════╝   ╚═════╝  ╚═╝  ╚═╝
+"
 
   config.vm.provider :virtualbox do |vb|
     configValues["vm"]["virtualbox"]["modifyvm"].each do |key, value|
@@ -52,7 +57,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  configValues["vm"]["forwarded_port"].each do |i, port|
+  config.vm.network :private_network,
+    :ip => "#{configValues["vm"]["ip"]}",
+    :lxc__bridge_name => "lxcbr0"
+
+  configValues["vm"]["forwarded_port"].each do |port|
     if port["guest"] != "" && port["host"] != ""
       config.vm.network :forwarded_port,
         :host => port["host"].to_i,
@@ -80,6 +89,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provision :shell,
       :inline => "/var/www/ansible.sh reinstall"
   end
+
+  # Initialize Selenium hub on guest OS.
+  config.vm.provision :shell,
+    :inline => "/var/www/ansible.sh tests",
+    :run => "always"
 
   config.ssh.shell = "sh"
   config.ssh.insert_key = false

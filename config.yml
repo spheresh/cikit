@@ -5,12 +5,12 @@ webroot: /var/www
 vm:
   ip: 192.168.56.132
   forwarded_port:
-    CocLsFE7aIwA:
-      host: 8081
+    - host: 8081
       guest: 80
-    CocLsFE7aIwE:
-      host: 8083
+    - host: 8083
       guest: 3306
+    - host: 4444
+      guest: 4444
   virtualbox:
     box: http://128.199.55.125/ubuntu14.04LTS_cibox.box
     modifyvm:

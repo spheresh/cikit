@@ -25,6 +25,14 @@ Re-install web application (should be executed inside of VM).
 ./ansible.sh reinstall
 ```
 
+### Provision
+
+Provision or re-provision VM using tags:
+
+```shell
+ANSIBLE_ARGS="--tags=selenium" vagrant provision
+```
+
 ## Tools
 
 - Drush

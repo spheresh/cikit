@@ -116,10 +116,16 @@ if [ -z "${ANSIBLE_HOSTS}" ]; then
   chmod -x ${SELF_PATH}/inventory
 fi
 
+# Pass any extra arguments for "ansible-playbook". Most useful
+# case: "ANSIBLE_ARGS=-vvvv ansible.sh reinstall"
+if [ -n "${ANSIBLE_ARGS}" ]; then
+    params+=" ${ANSIBLE_ARGS}"
+fi
+
 if [ -n "${extra_vars}" ]; then
     params+=" --extra-vars='{${extra_vars}}'"
 fi
 
 export PYTHONUNBUFFERED=1
 
-time eval "ansible-playbook -vvvv ${playbook} ${params}"
+time eval "ansible-playbook ${playbook} ${params}"

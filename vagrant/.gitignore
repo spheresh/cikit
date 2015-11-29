@@ -8,6 +8,8 @@ docroot/sites/*/files/
 docroot/sites/*/settings*.php
 # Build reports.
 docroot/build_reports/
+# Behat configuration file.
+behat.yml
 
 # Ansible playbooks.
 !scripts/

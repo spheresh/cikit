@@ -18,9 +18,8 @@
     varnish_secret: "14bac2e6-1e34-4770-8078-974373b76c90"
     # SSL configuration.
     cibox_ssl_enable_host: true
-    cibox_composer_drush:
-      version: 6.*
-      user: "{{ ansible_ssh_user }}"
+    composer_packages:
+      drush/drush: 6.*
 
     cibox_protected_folders:
       user: propeople
@@ -126,9 +125,6 @@
     - role: ansible-composer
       tags: ["composer", "php-stack"]
 
-    - role: cibox-composer-drush
-      tags: ["drush", "composer", "php-stack"]
-
     - role: cibox-wp-cli
       tags: ["wp-cli", "php-stack"]
 
@@ -163,9 +159,8 @@
       when: not vagrant
       tags: ["jenkins"]
 
-    - role: cibox-behat-selenium2
-      when: not vagrant
-      tags: ["selenium", "behat"]
+    - role: cibox-selenium
+      tags: ["selenium"]
 
     - role: cibox-protected-folders
       when: not vagrant
