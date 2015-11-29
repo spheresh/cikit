@@ -7,19 +7,7 @@
   vars_files:
     - ../config.yml
     - vars/main.yml
-
-  vars:
-    reports_dir: ../docroot/build_reports
-    artifacts_file: ../commentinfo.md
-
-    phpcs_extensions: php,inc,install,module
-    phpcs_standards:
-      - Drupal
-      - DrupalSecure
-      - Security
-      - DrupalPractice
-    phpcs_scan_dirs:
-      - ../docroot/sites/all/
+    - vars/tests.yml
 
   tasks:
     - name: Create directory for reports
@@ -31,9 +19,7 @@
         - absent
         - directory
 
-    - name: Register variable with reports URL
-      set_fact:
-        reports_url: "{{ site_url }}/{{ reports_dir | basename }}"
+    - include: tasks/reports-url.yml
 
     - name: Creating SecurityReview report file
       shell: "touch {{ reports_dir }}/security_review.txt"

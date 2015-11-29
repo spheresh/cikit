@@ -1,0 +1,4 @@
+---
+- name: Register variable with reports URL
+  set_fact:
+    reports_url: "{{ site_url }}/{{ reports_dir | basename }}"
