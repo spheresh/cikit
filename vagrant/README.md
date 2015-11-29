@@ -33,6 +33,12 @@ Provision or re-provision VM using tags:
 ANSIBLE_ARGS="--tags=php-stack" vagrant provision
 ```
 
+Also you can do provisioning with reinstalling:
+
+```shell
+REINSTALL=true vagrant provision
+```
+
 ### Run tests
 
 ```shell
