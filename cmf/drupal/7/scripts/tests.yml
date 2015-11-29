@@ -25,10 +25,7 @@
 
   tasks:
     - name: Ensure Selenium service started
-      service:
-        name: selenium
-        state: restarted
-        arguments: "{{ service_args }}"
+      shell: "service selenium restart {{ service_args }}"
 
     - name: Wait for establish Selenium connection
       wait_for:
@@ -40,7 +37,6 @@
       template:
         src: templates/behat.j2
         dest: ../tests/behat/behat.yml
-      when: run
 
     - name: Run Behat tests
       shell: "cd ../tests/behat && ../../bin/behat"

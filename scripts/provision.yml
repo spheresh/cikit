@@ -51,12 +51,12 @@
       - ansible
 
   pre_tasks:
-    - name: Is Vagrant machine will be provisioned?
+    - include: tasks/detect-vagrant.yml
+
+    - name: Create virtual hosts only inside of VM
       set_fact:
-        vagrant: yes
-        # Create virtual hosts only inside of VM.
         apache_create_vhosts: yes
-      when: ansible_ssh_host is defined and ansible_ssh_host == "127.0.0.1"
+      when: vagrant
 
     - include: tasks/project-variable.yml
       when: not vagrant

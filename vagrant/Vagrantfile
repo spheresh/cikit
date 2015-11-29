@@ -90,10 +90,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :inline => "/var/www/ansible.sh reinstall"
   end
 
-  # Initialize Selenium hub on guest OS.
+  # Create Selenium hub.
   config.vm.provision :shell,
-    :inline => "/var/www/ansible.sh tests",
-    :run => "always"
+    :inline => "/var/www/ansible.sh tests"
+
+  # Create Selenium node.
+  config.vm.provision :cibox,
+    :controller => "./selenium.sh",
+    :playbook => "#{configValues["selenium"]}"
 
   config.ssh.shell = "sh"
   config.ssh.insert_key = false

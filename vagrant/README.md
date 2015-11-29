@@ -30,6 +30,27 @@ Re-install web application (should be executed inside of VM).
 Provision or re-provision VM using tags:
 
 ```shell
+ANSIBLE_ARGS="--tags=php-stack" vagrant provision
+```
+
+### Run tests
+
+```shell
+cd /var/www/tests/behat/
+../../bin/behat
+```
+
+**Note**: If something happened and tests is not run, try the following steps:
+
+Check a `Selenium` processes on guest and host machines:
+
+```shell
+ps aux | grep selenium
+```
+
+If you'll see nothing, then boldly re-provision your VM:
+
+```shell
 ANSIBLE_ARGS="--tags=selenium" vagrant provision
 ```
 
