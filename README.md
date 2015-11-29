@@ -85,7 +85,7 @@ As you see, any set of arguments can be passed for `ansible-playbook` command.
 Run with custom inventory file:
 
 ```shell
-ANSIBLE_HOSTS="/path/to/inventory ./ansible.sh"
+ANSIBLE_HOSTS="/path/to/inventory" ./ansible.sh
 ```
 
 Run with custom set of arguments:
