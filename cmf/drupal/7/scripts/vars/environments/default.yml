@@ -4,7 +4,6 @@ modules:
   en:
     - stage_file_proxy
     - security_review
-    - views_ui
     - dblog
     - devel
     - diff

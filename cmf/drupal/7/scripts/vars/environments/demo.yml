@@ -5,7 +5,6 @@ modules:
   dis:
     - stage_file_proxy
     - security_review
-    - views_ui
     - devel
     - diff
 
