@@ -1,0 +1,8 @@
+{
+  "require": {
+    "drupal/tqextension": "~1.0"
+  },
+  "config": {
+    "bin-dir": "bin"
+  }
+}
