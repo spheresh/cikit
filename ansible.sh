@@ -112,8 +112,11 @@ done
 extra_vars=${extra_vars%%,}
 
 if [ -z "${ANSIBLE_HOSTS}" ]; then
-  params+=" -i ${SELF_PATH}/inventory"
-  chmod -x ${SELF_PATH}/inventory
+  # Move "inventory" into user's home directory because it is not mounted file
+  # system and can be affected via Linux commands (chmod, chown) under Windows.
+  cp ${SELF_PATH}/inventory ~/.ansible/
+  chmod a-x ~/.ansible/inventory
+  params+=" -i ~/.ansible/inventory"
 fi
 
 # Pass any extra arguments for "ansible-playbook". Most useful

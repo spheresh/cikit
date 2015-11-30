@@ -73,8 +73,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   for folder in configValues["vm"]["synced_folder"];
     config.vm.synced_folder folder["source"], folder["target"],
       :id => folder["target"],
-      # Only using "rsync" we able to affect on file permissions inside of VM using "chmod" on Windows host.
-      :type => isWindows ? "rsync" : "nfs",
+      :type => "nfs",
       :rsync__auto => "true",
       :rsync__args => ["--verbose", "--archive", "--delete", "-z", "--chmod=ugo=rwX"],
       :rsync__exclude => folder["excluded_paths"],
