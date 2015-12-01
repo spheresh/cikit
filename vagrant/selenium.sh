@@ -5,7 +5,8 @@ FILENAME="selenium.jar"
 ROOT=".vagrant"
 
 if [[ -z ${DOWNLOAD_URL} || ! -d ${ROOT} ]]; then
-  exit
+  echo "Download URL or ${ROOT} directory does not exists."
+  exit 1
 fi
 
 DESTINATION="${ROOT}/${FILENAME}"
@@ -13,6 +14,12 @@ LOGFILE="${ROOT}/${FILENAME%%.*}"
 
 if [ ! -f ${DESTINATION} ]; then
   curl -O ${DOWNLOAD_URL}
+
+  if [ $? -gt 0 ]; then
+    echo "Cannot download file: ${DOWNLOAD_URL}"
+    exit 1
+  fi
+
   mv ${DOWNLOAD_URL##*/} ${DESTINATION}
 fi
 
