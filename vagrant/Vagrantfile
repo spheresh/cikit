@@ -16,6 +16,13 @@ if isWindows
   # Prevent closing connection.
   # https://github.com/ansible/ansible/issues/6363#issuecomment-49349902
   ENV["ANSIBLE_SSH_ARGS"] = "-o ControlMaster=no"
+
+  # VBoxFS cannot work normally on Windows host, because Windows
+  # don't have POSIX file system:
+  # https://github.com/ansible/ansible/issues/9526#issue-48225420
+  if not Vagrant.has_plugin?("vagrant-winnfsd")
+    system "vagrant plugin install vagrant-winnfsd"
+  end
 end
 
 if not Vagrant.has_plugin?("vagrant-hostsupdater")
