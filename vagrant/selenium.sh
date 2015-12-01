@@ -11,6 +11,7 @@ fi
 
 DESTINATION="${ROOT}/${FILENAME}"
 LOGFILE="${ROOT}/${FILENAME%%.*}"
+PIDFILE="${LOGFILE}.pid"
 
 if [ ! -f ${DESTINATION} ]; then
   curl -O ${DOWNLOAD_URL}
@@ -23,10 +24,13 @@ if [ ! -f ${DESTINATION} ]; then
   mv ${DOWNLOAD_URL##*/} ${DESTINATION}
 fi
 
-PID=$(ps aux | grep ${FILENAME} | grep -v grep | awk '{print $2}')
+if [ -f ${PIDFILE} ]; then
+  PID=$(cat ${PIDFILE})
 
-if [ -n "${PID}" ]; then
-  kill ${PID}
+  if [ -n ${PID} ]; then
+    kill ${PID}
+  fi
 fi
 
 nohup java -jar ${DESTINATION} -role node > ${LOGFILE}.out.log 2> ${LOGFILE}.error.log < /dev/null &
+echo $! > ${PIDFILE}
