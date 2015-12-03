@@ -16,13 +16,6 @@ if isWindows
   # Prevent closing connection.
   # https://github.com/ansible/ansible/issues/6363#issuecomment-49349902
   ENV["ANSIBLE_SSH_ARGS"] = "-o ControlMaster=no"
-
-  # VBoxFS cannot work normally on Windows host, because Windows
-  # don't have POSIX file system:
-  # https://github.com/ansible/ansible/issues/9526#issue-48225420
-  if not Vagrant.has_plugin?("vagrant-winnfsd")
-    system "vagrant plugin install vagrant-winnfsd"
-  end
 end
 
 if not Vagrant.has_plugin?("vagrant-hostsupdater")
@@ -80,8 +73,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   for folder in configValues["vm"]["synced_folder"];
     config.vm.synced_folder folder["source"], folder["target"],
       :id => folder["target"],
-      :type => "nfs",
-      :rsync__auto => "true",
+      # Windows (https://github.com/coreos/coreos-vagrant/issues/185#issuecomment-145260933):
+      # - VBoxSF cannot be used due to "Text file busy" error (https://github.com/ansible/ansible/issues/9526#issue-48225420).
+      # - NFS cannot be used due to "Device or resource busy - directory may be a mount point?" error.
+      :type => isWindos ? "rsync" : "nfs",
+      :rsync__auto => true,
       :rsync__args => ["--verbose", "--archive", "--delete", "-z", "--chmod=ugo=rwX"],
       :rsync__exclude => folder["excluded_paths"],
       :linux__nfs_options => ["rw", "no_subtree_check", "no_root_squash", "async"]
