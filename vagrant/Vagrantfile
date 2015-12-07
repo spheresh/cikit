@@ -77,7 +77,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # - VBoxSF cannot be used due to "Text file busy" error (https://github.com/ansible/ansible/issues/9526#issue-48225420).
       # - NFS cannot be used due to "Device or resource busy - directory may be a mount point?" error.
       :type => isWindows ? "rsync" : "nfs",
-      :rsync__auto => true,
       :rsync__args => ["--verbose", "--archive", "--delete", "-z", "--chmod=ugo=rwX"],
       :rsync__exclude => folder["excluded_paths"],
       :linux__nfs_options => ["rw", "no_subtree_check", "no_root_squash", "async"]
