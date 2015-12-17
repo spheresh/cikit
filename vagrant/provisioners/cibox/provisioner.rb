@@ -15,6 +15,10 @@ module VagrantPlugins::CIBox
          :color => io_name == :stderr ? :red : :green,
        })
       end
+
+      if not result.exit_code.zero?
+        raise Vagrant::Errors::VagrantError.new(), "CIBox provisioner responded with a non-zero exit status."
+      end
     end
 
     protected
