@@ -10,6 +10,20 @@
 - include: root-access.yml
   when: mysql_access.failed is defined
 
+- name: Obtain user's home directory
+  shell: eval echo ~$USER
+  register: user_home
+
+# Has to be after the root password assignment, for idempotency.
+- name: Copy .my.cnf file with root password credentials
+  template:
+    src: "python-my.cnf.j2"
+    dest: "{{ user_home.stdout }}/.my.cnf"
+    owner: root
+    group: root
+    mode: 0600
+
+
 - name: Ensure that MySQL service started
   sudo: yes
   service:

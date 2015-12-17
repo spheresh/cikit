@@ -17,16 +17,3 @@
 
 - name: Reset password for root user
   shell: "mysql -uroot -e \"use mysql; update user set Password=PASSWORD('{{ mysql_root_password }}') where user='{{ mysql_root_username }}'; flush privileges;\""
-
-- name: Obtain user's home directory
-  shell: eval echo ~$USER
-  register: user_home
-
-# Has to be after the root password assignment, for idempotency.
-- name: Copy .my.cnf file with root password credentials
-  template:
-    src: "python-my.cnf.j2"
-    dest: "{{ user_home.stdout }}/.my.cnf"
-    owner: root
-    group: root
-    mode: 0600
