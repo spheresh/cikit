@@ -1,7 +1,7 @@
 module VagrantPlugins::CIBox
   class Provisioner < Vagrant.plugin("2", :provisioner)
     def provision
-      Vagrant::Util::Subprocess.execute(
+      result = Vagrant::Util::Subprocess.execute(
         "bash",
         "-c",
         "#{config.controller} #{config.playbook} #{ansible_args}",
