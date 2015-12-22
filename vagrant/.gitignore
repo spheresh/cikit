@@ -33,7 +33,7 @@ behat.yml
 
 !composer.json
 !adminer.php
-selenium.sh
+!selenium.sh
 !ansible.sh
 !config.yml
 
