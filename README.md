@@ -94,17 +94,6 @@ Run with custom set of arguments:
 ANSIBLE_ARGS="-vvvv" ./ansible.sh
 ```
 
-## OpenVZ support
-
-If your system build on OpenVZ stack and swap is disabled you may bypass it with using `fakeswap.sh` file within `files` directory.
-
-```shell
-chmod a+x fakeswap.sh
-sh ./fakeswap.sh 4086
-```
-
-for adding `4086MB` swap size.
-
 ## Roles not used by default
 
 - [ansible-role-php-pecl](scripts/roles/ansible-role-php-pecl)

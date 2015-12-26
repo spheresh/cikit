@@ -1,41 +1,48 @@
 ---
-- name: Check if job already renamed
-  stat:
-    path: "{{ jenkins_lib }}/jobs/{{ jenkins_job }}_PR_BUILDER"
-  register: prbuilder_stat
-
-- name: Copy local files for enabling Jenkins permissions
-  sudo: yes
-  synchronize:
-    src: ./
-    dest: "{{ jenkins_lib }}"
-    archive: no
-    recursive: yes
-  when: not prbuilder_stat.stat.exists
-
-- name: Change owner for Jenkins files
+- name: Create folders for jobs
   file:
-    path: "{{ jenkins_lib }}"
+    path: "{{ jenkins_lib }}/jobs/{{ item.name }}"
     owner: "{{ jenkins_data.user }}"
     group: "{{ jenkins_data.group }}"
     state: directory
+  with_items: jenkins_data.jobs
+
+- name: Copy jobs
+  template:
+    src: jobs/{{ item.template }}
+    dest: "{{ jenkins_lib }}/jobs/{{ item.name }}/config.xml"
+    owner: "{{ jenkins_data.user }}"
+    group: "{{ jenkins_data.group }}"
     force: yes
-    recurse: yes
+  with_items: jenkins_data.jobs
 
-- name: Rename Jenkins jobs to meet project name
-  sudo: yes
-  shell: "cd {{ jenkins_lib }}/jobs/ && mv PR_BUILDER {{ jenkins_job | upper }}_PR_BUILDER"
-  when: not prbuilder_stat.stat.exists
-
-- name: Remove PR_BUILDER from remote
-  sudo: yes
+# Automatically scan users directory.
+- name: Create folders for users
   file:
-    path: "{{ jenkins_lib }}/jobs/PR_BUILDER"
-    state: absent
+    path: '{{ jenkins_lib }}/users/{{ item | basename | regex_replace("\.xml.j2", "") }}'
+    owner: "{{ jenkins_data.user }}"
+    group: "{{ jenkins_data.group }}"
+    state: directory
+  with_fileglob:
+    - ../templates/users/*.j2
 
-- name: Change host IP address in Jenkins config
-  replace:
-    dest: "{{ jenkins_lib }}/{{ item }}"
-    regexp: "ci_server_ip_address"
-    replace: "{{ ansible_default_ipv4.address }}"
-  with_items: jenkins_data.configs
+- name: Copy users
+  template:
+    src: "users/{{ item | basename }}"
+    dest: '{{ jenkins_lib }}/users/{{ item | basename | regex_replace("\.xml.j2", "") }}/config.xml'
+    owner: "{{ jenkins_data.user }}"
+    group: "{{ jenkins_data.group }}"
+    force: yes
+  with_fileglob:
+    - ../templates/users/*.j2
+
+- name: Copy configs
+  template:
+    src: "configs/{{ item | basename }}"
+    dest: '{{ jenkins_lib }}/{{ item | basename | regex_replace("\.j2", "") }}'
+    owner: "{{ jenkins_data.user }}"
+    group: "{{ jenkins_data.group }}"
+    force: yes
+  notify: Restart Jenkins
+  with_fileglob:
+    - ../templates/configs/*.j2
