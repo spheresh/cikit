@@ -52,7 +52,7 @@
       with_items: phpcs_scan_dirs
 
     - name: Run SCSSLint
-      shell: 'find {{ item }} -name "*.scss" -print0 | xargs -0 -r scss-lint > {{ reports_dir }}/scsslint.txt'
+      shell: 'find {{ item }} -name "*.scss" -print0 | xargs -0 -r scss-lint -c configs/scss-lint.yml > {{ reports_dir }}/scsslint.txt'
       with_items: phpcs_scan_dirs
       # Needed for ignoring exit status codes.
       ignore_errors: yes
