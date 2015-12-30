@@ -19,6 +19,10 @@ jenkins_data:
     - name: SERVER_CLEANER
       template: server_cleaner.xml.j2
 
+  users:
+    - name: root
+      template: root.xml.j2
+
 plugins:
   - http://mirrors.jenkins-ci.org/plugins/ansicolor/0.4.2/ansicolor.hpi
   - http://mirrors.jenkins-ci.org/plugins/token-macro/1.11/token-macro.hpi

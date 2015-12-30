@@ -19,22 +19,20 @@
 # Automatically scan users directory.
 - name: Create folders for users
   file:
-    path: '{{ jenkins_lib }}/users/{{ item | basename | regex_replace("\.xml.j2", "") }}'
+    path: '{{ jenkins_lib }}/users/{{ item.name }}'
     owner: "{{ jenkins_data.user }}"
     group: "{{ jenkins_data.group }}"
     state: directory
-  with_fileglob:
-    - ../templates/users/*.j2
+  with_items: jenkins_data.users
 
 - name: Copy users
   template:
     src: "users/{{ item | basename }}"
-    dest: '{{ jenkins_lib }}/users/{{ item | basename | regex_replace("\.xml.j2", "") }}/config.xml'
+    dest: '{{ jenkins_lib }}/users/{{ item.name }}/config.xml'
     owner: "{{ jenkins_data.user }}"
     group: "{{ jenkins_data.group }}"
     force: yes
-  with_fileglob:
-    - ../templates/users/*.j2
+  with_items: jenkins_data.users
 
 - name: Copy configs
   template:
