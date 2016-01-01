@@ -1,5 +1,4 @@
 ---
-
 apt_repos:
   - ppa:ansible/ansible
 
