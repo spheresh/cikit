@@ -2,6 +2,8 @@
 
 ## Installation
 
+Dependencies that should be on your computer (host):
+
 - [Ansible](http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-pip)
 - [Vagrant](https://www.vagrantup.com/downloads.html)
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
