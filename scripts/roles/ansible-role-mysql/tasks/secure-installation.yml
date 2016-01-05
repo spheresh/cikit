@@ -23,9 +23,7 @@
     group: root
     mode: 0600
 
-
 - name: Ensure that MySQL service started
-  sudo: yes
   service:
     name: mysql
     state: started
