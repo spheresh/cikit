@@ -24,6 +24,7 @@ behat.yml
 ~*
 
 !*.md
+commentinfo.md
 
 !.htaccess
 # Helper file that afect to "synchronize" task of Ansible.
