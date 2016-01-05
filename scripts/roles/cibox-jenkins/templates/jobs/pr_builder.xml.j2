@@ -72,19 +72,31 @@
     <concurrentBuild>false</concurrentBuild>
     <builders>
         <hudson.tasks.Shell>
-            <command>
+            <command>#!/usr/bin/env bash
+
 export PYTHONUNBUFFERED=1
-echo "===============" > ${WORKSPACE}/commentinfo.md
-cd new_pull_request
-sudo rsync -avz docroot/ /var/www/build${BUILD_NUMBER}
-cd /var/www/build${BUILD_NUMBER}
-sudo chown -R www-data:jenkins *
-ansible-playbook reinstall.yml -i 'localhost,' --connection=local --extra-vars "php_env_vars='APP_ENV=dev' mysql_user=root mysql_pass=root mysql_db=drupal${BUILD_NUMBER} php_env_vars='APP_ENV=dev' drupal_folder=/var/www/build${BUILD_NUMBER} site_url=http://{{ ansible_default_ipv4.address }}/build${BUILD_NUMBER}"
-ansible-playbook sniffers.yml -i 'localhost,' --connection=local --extra-vars "workspace_root=${WORKSPACE} webroot=http://{{ ansible_default_ipv4.address }}/build${BUILD_NUMBER}"
-ansible-playbook tests.yml -i 'localhost,' --connection=local --extra-vars "workspace_root=${WORKSPACE} behat_base_url=http://{{ ansible_default_ipv4.address }}/build${BUILD_NUMBER} update_dependencies='yes' resources_path=${WORKSPACE}/new_pull_request//tests/behat/resources
-behat_drupal_root=/var/www/build${BUILD_NUMBER}
-behat_root=${WORKSPACE}/new_pull_request/tests/behat"
-sudo chown -R www-data:jenkins ../build${BUILD_NUMBER}
+
+# Create file for reports.
+touch $WORKSPACE/commentinfo.md
+# Store the name of file for reports to variable for future usage.
+export PR_ARTIFACTS=$_
+export PR_BUILD_ID=${JOB_NAME//_PR_BUILDER/}_build_${BUILD_NUMBER}
+export PR_BUILD_URL=${JOB_URL%:*}/${PR_BUILD_ID}/docroot
+
+# Move project from workspace to directory available in web.
+sudo rsync --delete -ra . /var/www/$PR_BUILD_ID
+# Go to project directory.
+cd $_
+# Set group and owner only for directory with an application.
+sudo chown -R www-data:jenkins ${PR_BUILD_URL##*/}
+
+./ansible.sh sniffers \
+--site-url=$PR_BUILD_URL \
+--artifacts-file=$PR_ARTIFACTS
+
+./ansible.sh reinstall \
+--build-id=$PR_BUILD_ID \
+--site-url=$PR_BUILD_URL
             </command>
         </hudson.tasks.Shell>
     </builders>
