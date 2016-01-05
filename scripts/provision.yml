@@ -167,9 +167,12 @@
 
   tasks:
     - name: Starting random rnd-tools service
-      sudo: yes
       shell: rngd -r /dev/urandom
       when: not vagrant and ansible_virtualization_type != "openvz"
+
+    # @todo Doesn't work using Ansible "gem" module.
+    - name: Install Compass
+      shell: gem install compass
 
     - name: Restart services
       service:
