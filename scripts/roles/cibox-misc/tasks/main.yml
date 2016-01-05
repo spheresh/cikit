@@ -4,6 +4,15 @@
   shell: dpkg --configure -a
   ignore_errors: yes
 
+# We have to disable mail sending from CI box.
+# Does not create a link if sendmail is installed.
+- name: Check for sendmail.
+  file:
+    src: /bin/true
+    path: /usr/sbin/sendmail
+    state: link
+    force: no
+
 - name: Install APT repos
   apt_repository:
     repo: "{{ item }}"
