@@ -79,24 +79,25 @@ export PYTHONUNBUFFERED=1
 # Create file for reports.
 touch $WORKSPACE/commentinfo.md
 # Store the name of file for reports to variable for future usage.
-export PR_ARTIFACTS=$_
-export PR_BUILD_ID=${JOB_NAME//_PR_BUILDER/}_build_${BUILD_NUMBER}
-export PR_BUILD_URL=${JOB_URL%:*}/${PR_BUILD_ID}/docroot
+export ARTIFACTS=$_
+export PROJECT=$(echo ${JOB_NAME//_PR_BUILDER/} | tr &apos;[:upper:]&apos; &apos;[:lower:]&apos;)
+export BUILD_NAME=${PROJECT}_build_${BUILD_NUMBER}
+export SITE_URL=${JOB_URL%:*}/${BUILD_NAME}/docroot
 
 # Move project from workspace to directory available in web.
-sudo rsync --delete -ra . /var/www/$PR_BUILD_ID
+sudo rsync --delete -ra . /var/www/${BUILD_NAME}
 # Go to project directory.
 cd $_
 # Set group and owner only for directory with an application.
-sudo chown -R www-data:jenkins ${PR_BUILD_URL##*/}
+sudo chown -R www-data:jenkins ${SITE_URL##*/}
 
 ./ansible.sh sniffers \
---site-url=$PR_BUILD_URL \
---artifacts-file=$PR_ARTIFACTS
+--site-url=${SITE_URL} \
+--artifacts-file=${ARTIFACTS}
 
 ./ansible.sh reinstall \
---build-id=$PR_BUILD_ID \
---site-url=$PR_BUILD_URL
+--build-id=${BUILD_NAME} \
+--site-url=${SITE_URL}
             </command>
         </hudson.tasks.Shell>
     </builders>
