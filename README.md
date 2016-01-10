@@ -94,10 +94,6 @@ Run with custom set of arguments:
 ANSIBLE_ARGS="-vvvv" ./ansible.sh
 ```
 
-## Roles not used by default
-
-- [ansible-role-php-pecl](scripts/roles/ansible-role-php-pecl)
-
 ## Dependencies
 
 | Name        | Version |
