@@ -103,6 +103,19 @@
         - varnish
         - apache2
 
+    - name: Create CIBox command line utility
+      file:
+        src: /var/www/cibox
+        dest: /usr/bin/cibox
+        state: link
+      when: vagrant
+
+    - name: Generate Bash completion for CIBox utility
+      template:
+        src: templates/cibox.complete.sh.j2
+        dest: /etc/bash_completion.d
+      when: vagrant
+
   roles:
     - role: cibox-misc
       tags: ["misc"]
