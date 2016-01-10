@@ -26,21 +26,21 @@ The power of the system - simplicity. All provisioning is the same for local and
 ## Quick Start
 
 - Add your host credentials to the `inventory` file.
-- `./ansible.sh repository --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal] [--adminer=4.2.2|none]`
-- `./ansible.sh provision --project=<NAME> [--limit=<HOST>]`
+- `./cibox repository --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal] [--adminer=4.2.2|none]`
+- `./cibox provision --project=<NAME> [--limit=<HOST>]`
 
 ### Examples
 
 **Drupal 7** (standard system):
 
 ```shell
-./ansible.sh repository --project=test
+./cibox repository --project=test
 ```
 
 **WordPress 4** (supported system):
 
 ```shell
-./ansible.sh repository --project=test --cmf=wordpress --version=4.3.1
+./cibox repository --project=test --cmf=wordpress --version=4.3.1
 ```
 
 ## WIKI
@@ -56,7 +56,7 @@ Don't forget to setup all http://ci_hostname:8080/configure settings with `CHANG
 Currently `provision.yml` playbook powered with tags, so you can run only part of it.
 
 ```shell
-./ansible.sh provision --tags=TAGNAME
+./cibox provision --tags=TAGNAME
 ```
 
 - php-stack

@@ -83,17 +83,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision :cibox,
-    :controller => "./ansible.sh",
+    :controller => "./cibox",
     :playbook => "provisioning/provision"
 
   if ENV["REINSTALL"]
     config.vm.provision :shell,
-      :inline => "/var/www/ansible.sh reinstall"
+      :inline => "cibox reinstall"
   end
 
   # Create Selenium hub.
   config.vm.provision :shell,
-    :inline => "/var/www/ansible.sh tests",
+    :inline => "cibox tests",
     :run => "always"
 
   # Create Selenium node.

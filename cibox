@@ -16,29 +16,45 @@ APB_VARS="limit tags list-tags module-path"
 
 locate_path()
 {
-  local SELF_PATH=$(cd -P -- $(dirname -- ${1}) && pwd -P)
+  local LINK=$(readlink ${1})
 
-  while [ -h "${SELF_PATH}" ]; do
-    # 1) cd to directory of the symlink
-    # 2) cd to the directory of where the symlink points
-    # 3) Get the pwd
-    # 4) Append the basename
-    SELF_PATH=$(cd $(dirname -- ${SELF_PATH}) && cd $(dirname -- $(readlink ${SELF_PATH})) && pwd)
-  done
+  if [ -n "${LINK}" ]; then
+    echo $(dirname ${LINK})
+  else
+    local PATH=$(cd -P -- $(dirname -- ${1}) && pwd -P)
 
-  echo ${SELF_PATH}
+    while [ -h "${PATH}" ]; do
+      # 1) cd to directory of the symlink
+      # 2) cd to the directory of where the symlink points
+      # 3) Get the pwd
+      # 4) Append the basename
+      PATH=$(cd $(dirname -- ${PATH}) && cd $(dirname -- $(readlink ${PATH})) && pwd)
+    done
+
+    echo ${PATH}
+  fi
 }
 
 exit_with_help()
 {
-  echo "Available operations:"
-  for operation in $(ls -A *.yml); do
-    echo "- ${operation%%.*}"
-  done
+  ls *.yml > /dev/null 2>&1
+
+  if [ $? -eq 0 ]; then
+    local OPERATIONS=""
+
+    for operation in $(ls *.yml); do
+      OPERATIONS+="${operation%.*} "
+    done
+
+    echo ${OPERATIONS}
+  else
+    echo "No available operations in $(pwd)."
+  fi
+
   exit
 }
 
-SELF_PATH=$(locate_path ${0})
+SELF_PATH=$(locate_path "${0}")
 SCRIPTS_PATH=${SELF_PATH}/scripts
 
 if [ -z ${1} ]; then
@@ -46,19 +62,12 @@ if [ -z ${1} ]; then
   exit_with_help
 fi
 
-POSSIBLE_SELF_PATH=${1}/empty
-locate_path ${POSSIBLE_SELF_PATH} > /dev/null 2>&1
-
-if [ $? -gt 0 ]; then
-  POSSIBLE_SELF_PATH=$(locate_path ${POSSIBLE_SELF_PATH})
-fi
-
-if [ -d ${POSSIBLE_SELF_PATH} ]; then
-  cd ${POSSIBLE_SELF_PATH}
+if [ -d ${1} ]; then
+  cd ${1}
   exit_with_help
 fi
 
-PLAYBOOK=${1%%.*}.yml
+PLAYBOOK=${1%.*}.yml
 
 for playbook in ${SCRIPTS_PATH}/${PLAYBOOK} ${SELF_PATH}/${PLAYBOOK} ${PLAYBOOK}; do
   if [ -f ${playbook} ]; then
@@ -67,8 +76,8 @@ for playbook in ${SCRIPTS_PATH}/${PLAYBOOK} ${SELF_PATH}/${PLAYBOOK} ${PLAYBOOK}
 done
 
 if [ ! -f ${playbook} ]; then
-  cd ${SCRIPTS_PATH}
-  exit_with_help
+  echo "Playbook ${playbook} does not exists!"
+  exit 1
 fi
 
 extra_vars=""

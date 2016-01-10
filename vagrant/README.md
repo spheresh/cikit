@@ -24,7 +24,7 @@ vagrant ssh
 Re-install web application (should be executed inside of VM).
 
 ```shell
-./ansible.sh reinstall
+cibox reinstall
 ```
 
 ### Provision

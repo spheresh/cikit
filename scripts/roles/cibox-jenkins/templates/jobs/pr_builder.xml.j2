@@ -91,11 +91,11 @@ cd $_
 # Set group and owner only for directory with an application.
 sudo chown -R www-data:jenkins ${SITE_URL##*/}
 
-./ansible.sh sniffers \
+./cibox sniffers \
 --site-url=${SITE_URL} \
 --artifacts-file=${ARTIFACTS}
 
-./ansible.sh reinstall \
+./cibox reinstall \
 --build-id=${BUILD_NAME} \
 --site-url=${SITE_URL}
             </command>

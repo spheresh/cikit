@@ -58,7 +58,7 @@
         recursive: yes
       with_items:
         - src: "{{ cmf_configs.stat.path }}/"
-        - src: "../ansible.sh"
+        - src: "../cibox"
         - src: "../config.yml"
         - src: "../inventory"
         - src: "../vagrant/"

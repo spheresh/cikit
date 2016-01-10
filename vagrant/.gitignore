@@ -35,9 +35,9 @@ commentinfo.md
 !composer.json
 !adminer.php
 !selenium.sh
-!ansible.sh
 !config.yml
 
 !Vagrantfile
 !inventory
 !LICENSE
+!cibox
