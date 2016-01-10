@@ -9,7 +9,6 @@
 !vagrant/
 
 !cibox
-!cibox.complete.sh
 !config.yml
 
 !inventory
