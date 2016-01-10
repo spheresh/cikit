@@ -21,6 +21,6 @@
 
 - name: Add ~/.composer/vendor/bin to PATH
   lineinfile:
-    dest: "{{ user_home.stdout }}/.bashrc"
-    line: "PATH=$PATH:{{ user_home.stdout }}/.composer/vendor/bin"
+    dest: /etc/bash.bashrc
+    line: "export PATH=$PATH:{{ user_home.stdout }}/.composer/vendor/bin"
     insertafter: BOF
