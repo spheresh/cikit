@@ -1,0 +1,14 @@
+---
+- name: Detect active theme
+  shell: 'cd ../docroot && drush ev "print path_to_theme();"'
+  register: theme_path
+
+- name: Check for SCSS
+  stat:
+    path: "../docroot/{{ theme_path.stdout }}/config.rb"
+  register: config_rb
+
+- name: Compile SCSS
+  become: no
+  shell: "cd ../docroot && compass compile {{ theme_path.stdout }} --force"
+  when: config_rb.stat.exists

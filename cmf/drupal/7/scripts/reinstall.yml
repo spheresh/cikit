@@ -52,3 +52,5 @@
       include: tasks/drush/drush.yml
       with_dict: commands
       ignore_errors: yes
+
+    - include: tasks/compass-compile.yml
