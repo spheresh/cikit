@@ -98,8 +98,10 @@ By default, `cibox` - is a global utility which looks for a project in `/var/www
 
 ## Dependencies
 
+On your host machine you should have the following software:
+
 | Name        | Version |
 | ----------- | ------- |
 | Vagrant     | 1.7+    |
-| Ansible     | 1.9+    |
+| Ansible     | 2.0+    |
 | VirtualBox  | 4.0+    |
