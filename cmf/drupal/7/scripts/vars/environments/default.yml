@@ -7,7 +7,6 @@ modules:
     - dblog
     - devel
     - diff
-  dis: []
 
 commands: {}
 

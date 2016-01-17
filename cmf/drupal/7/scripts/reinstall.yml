@@ -51,3 +51,4 @@
     - name: Execute Drush commands
       include: tasks/drush/drush.yml
       with_dict: commands
+      ignore_errors: yes

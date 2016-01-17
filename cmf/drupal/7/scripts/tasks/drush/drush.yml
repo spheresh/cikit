@@ -1,4 +1,3 @@
 ---
 - shell: "cd ../docroot && drush {{ item.key }} {{ item.value | join(' ') }} -y"
   environment: "{{ env_vars }}"
-  when: item.value | length
