@@ -126,6 +126,16 @@ VAGRANT_CI=lxc vagrant up
 
 ### Windows Containers
 
-- Install [Cygwin](https://servercheck.in/blog/running-ansible-within-windows) according to provided steps.
+- Install [Cygwin](https://cygwin.com/install.html) with following packages:
+  - curl
+  - python (2.7.x)
+  - python-crypto
+  - python-openssl
+  - python-setuptools
+  - git (1.7.x)
+  - vim
+  - openssh
+  - openssl
+  - openssl-devel
 - Run `Cygwin` as administrator.
 - Use default flow to [up Vagrant](#up).
