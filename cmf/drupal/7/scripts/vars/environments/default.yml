@@ -9,11 +9,6 @@ modules:
     - diff
   dis: []
 
-# This could be in "commands" variable but has a separate logic.
-features:
-  fr: []
-  fu: []
-
 commands: {}
 
 drupal:

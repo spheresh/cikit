@@ -1,4 +1,5 @@
 ---
 - name: Run database updates
-  shell: "cd ../docroot && drush updb -y"
-  environment: "{{ env_vars }}"
+  include: drush.yml
+  with_dict:
+    updb: []

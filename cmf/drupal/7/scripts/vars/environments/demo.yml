@@ -8,10 +8,6 @@ modules:
     - devel
     - diff
 
-features:
-  fr: []
-  fu: []
-
 commands:
   search-api-clear: ""
   search-api-index: ""

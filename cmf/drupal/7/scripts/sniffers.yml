@@ -22,7 +22,9 @@
     - include: tasks/reports-url.yml
 
     - name: Creating SecurityReview report file
-      shell: "touch {{ reports_dir }}/security_review.txt"
+      file:
+        path: "{{ reports_dir }}/security_review.txt"
+        state: touch
 
     - name: Run security review
       shell: "cd ../docroot && drush secrev 2>&1 | grep error | tee -a {{ reports_dir }}/security_review.txt"

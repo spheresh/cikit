@@ -11,13 +11,21 @@
   tasks:
     - include_vars: "vars/environments/{{ env }}.yml"
 
-    - include: tasks/database/remove.yml
+    - name: Remove databases
+      include: tasks/database/database.yml
+      args:
+        state: absent
+
     - include: tasks/prepare-environment.yml
 
     - include: tasks/drush/si.yml
       when: not sql_workflow
 
-    - include: tasks/database/create.yml
+    - name: Create databases
+      include: tasks/database/database.yml
+      args:
+        state: present
+
     - include: tasks/drupal-settings.yml
 
     # Download and import databases.
@@ -33,12 +41,13 @@
     - include: tasks/drush/vset.yml
 
     # Enable/disable configured modules.
-    - include: tasks/drush/modules.yml
+    - name: Managing modules
+      include: tasks/drush/drush.yml
+      with_dict: modules
 
     - include: tasks/drush/updb.yml
       when: sql_workflow
 
-    - include: tasks/drush/features.yml
-      when: sql_workflow
-
-    - include: tasks/drush/commands.yml
+    - name: Execute Drush commands
+      include: tasks/drush/drush.yml
+      with_dict: commands
