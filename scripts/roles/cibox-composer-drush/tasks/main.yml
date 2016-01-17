@@ -1,7 +1,7 @@
 ---
 - name: Install Drush
   shell: "composer global require drush/drush:{{ cibox_composer_drush.version }} --no-interaction --no-ansi"
-  sudo_user: "{{ cibox_composer_drush.user }}"
+  become_user: "{{ cibox_composer_drush.user }}"
 
 - name: Obtain user's home directory
   shell: "eval echo ~{{ ansible_ssh_user }}"

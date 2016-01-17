@@ -12,7 +12,7 @@
 
 - name: Install packages
   shell: "composer global require {{ item.key }}:{{ item.value }} --no-interaction --no-ansi"
-  sudo_user: "{{ ansible_ssh_user }}"
+  become_user: "{{ ansible_ssh_user }}"
   with_dict: composer_packages
 
 - name: Obtain user's home directory
