@@ -80,7 +80,7 @@ ANSIBLE_ARGS="--tags=TAGNAME" vagrant provision
 
 As you see, any set of arguments can be passed for `ansible-playbook` command.
 
-## The power of Ansible.sh
+## The power of `cibox` utility
 
 Run with custom inventory file:
 
@@ -93,6 +93,8 @@ Run with custom set of arguments:
 ```shell
 ANSIBLE_ARGS="-vvvv" ./cibox
 ```
+
+By default, `cibox` - is a global utility which looks for a project in `/var/www/`. But, if you specify a playbook outside of this directory, then working folder will be the path of this playbook.
 
 ## Dependencies
 
