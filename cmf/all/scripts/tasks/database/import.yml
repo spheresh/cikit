@@ -1,12 +1,10 @@
 ---
 - name: Creating backup folder for environment
-  sudo: yes
   file:
     path: "{{ webroot }}/backup/{{ env }}"
     state: directory
 
 - name: Making regular backup
-  sudo: yes
   mysql_db:
     name: "{{ item.value }}"
     state: dump

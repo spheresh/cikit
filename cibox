@@ -140,4 +140,8 @@ fi
 
 export PYTHONUNBUFFERED=1
 
+# Go to the directory with playbook to set a relative path for tasks.
+# https://groups.google.com/forum/#!topic/ansible-project/QqaBvKVKDDQ
+cd ${playbook%/*}
+
 time eval "ansible-playbook ${playbook} ${params}"

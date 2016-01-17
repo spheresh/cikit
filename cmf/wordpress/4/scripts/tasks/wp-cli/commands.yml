@@ -1,5 +1,5 @@
 ---
 - name: Execute WP CLI commands
   shell: "cd ../docroot && wp {{ item.key }} {{ item.value }} --allow-root"
-  environment: env_vars
+  environment: "{{ env_vars }}"
   with_dict: commands

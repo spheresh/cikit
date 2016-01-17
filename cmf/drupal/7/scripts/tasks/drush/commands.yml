@@ -1,5 +1,5 @@
 ---
 - name: Execute Drush commands
   shell: "cd ../docroot && drush {{ item.key }} {{ item.value }} -y"
-  environment: env_vars
+  environment: "{{ env_vars }}"
   with_dict: commands

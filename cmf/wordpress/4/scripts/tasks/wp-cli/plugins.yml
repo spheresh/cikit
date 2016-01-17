@@ -1,6 +1,6 @@
 ---
 - name: Managing plugins
   shell: "cd ../docroot && wp plugin {{ item.key }} {{ item.value | join(' ') }} --activate --allow-root"
-  environment: env_vars
+  environment: "{{ env_vars }}"
   when: item.value | length
   with_dict: plugins

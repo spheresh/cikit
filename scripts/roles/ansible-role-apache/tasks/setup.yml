@@ -20,7 +20,6 @@
   with_items: apache_packages
 
 - name: Ensure that necessary ports free and processes stopped
-  sudo: yes
   shell: "kill $(sudo lsof -t -i:{{ item }}) > /dev/null 2>&1"
   args:
     executable: /bin/bash

@@ -5,12 +5,12 @@
 
   vars:
     # As name of folder inside of "cmf/".
-    cmf: drupal
+    cmf: "drupal"
     # As name of folder inside of "cmf/<NAME>/"
-    version: 7.41
+    version: "7.41"
     # Host for cloning repository from.
-    host: https://github.com
-    adminer: 4.2.2
+    host: "https://github.com"
+    adminer: "4.2.2"
 
   vars_files:
     - ../config.yml
@@ -20,7 +20,7 @@
 
     - name: Determine major version of CMF
       set_fact:
-        major: '{{ version | regex_replace("^(\d).*$", "\\1") }}'
+        major: "{{ version | splitext | first }}"
 
     # Part of namespace on a host (vendor name).
     - name: Set vendor name

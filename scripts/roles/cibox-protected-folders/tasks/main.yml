@@ -1,6 +1,5 @@
 ---
 - name: Create protected folders
-  sudo: yes
   file:
     path: "{{ item }}"
     owner: www-data
@@ -9,14 +8,12 @@
   with_items: cibox_protected_folders.list
 
 - name: Copy .htaccess to the protected folders
-  sudo: yes
   template:
     src: htaccess-protect.j2
     dest: "{{ item }}/.htaccess"
   with_items: cibox_protected_folders.list
 
 - name: Generate .htpasswd in protected folders
-  sudo: yes
   htpasswd:
     path: "{{ item }}/.htpasswd"
     name: "{{ cibox_protected_folders.user }}"

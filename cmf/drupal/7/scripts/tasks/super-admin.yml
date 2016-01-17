@@ -1,8 +1,8 @@
 ---
 - name: Set username for super-admin
   shell: 'cd ../docroot && drush sqlc "UPDATE users SET name={{ drupal.user.name }} WHERE uid=1"'
-  environment: env_vars
+  environment: "{{ env_vars }}"
 
 - name: Set password for super-admin
   shell: 'cd ../docroot && drush upwd {{ drupal.user.name }} --password={{ drupal.user.pass }}'
-  environment: env_vars
+  environment: "{{ env_vars }}"

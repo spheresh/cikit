@@ -1,6 +1,5 @@
 ---
 - name: Install Drush
-  sudo: yes
   shell: "composer global require drush/drush:{{ cibox_composer_drush.version }} --no-interaction --no-ansi"
   sudo_user: "{{ cibox_composer_drush.user }}"
 
@@ -9,7 +8,6 @@
   register: user_home
 
 - name: Create symlinks
-  sudo: yes
   file:
     src: "{{ user_home.stdout }}/.composer/vendor/{{ item.src }}"
     dest: "{{ item.dest }}"
