@@ -1,6 +1,0 @@
----
-- name: Create databases
-  mysql_db:
-    name: "{{ item.value }}"
-    state: present
-  with_dict: databases

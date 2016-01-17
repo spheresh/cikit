@@ -4,7 +4,7 @@ env: default
 # Only for Drupal.
 profile: pp
 
-sql_workflow: False
+sql_workflow: no
 
 # Environment variables for each shell task.
 env_vars:

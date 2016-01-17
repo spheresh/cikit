@@ -5,7 +5,7 @@ plugins:
   uninstall: []
 
 commands:
-  theme: "status"
+  theme: ["status"]
 
 wordpress:
   user:

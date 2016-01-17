@@ -10,14 +10,21 @@
 
   tasks:
     - include_vars: "vars/environments/{{ env }}.yml"
-    - include: tasks/database/remove.yml
+
+    - name: Remove database
+      include: tasks/database/database.yml
+      args:
+        state: absent
 
     - name: Create config
       template:
         src: templates/wp-config.j2
         dest: ../docroot/wp-config.php
 
-    - include: tasks/database/create.yml
+    - name: Create database
+      include: tasks/database/database.yml
+      args:
+        state: present
 
     - include: tasks/wp-cli/core-install.yml
       when: not sql_workflow
