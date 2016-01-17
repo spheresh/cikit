@@ -1,6 +1,6 @@
 {
   "require": {
-    "drupal/tqextension": "~1.0"
+    "drupal/tqextension": "1.*"
   },
   "config": {
     "bin-dir": "bin"
