@@ -91,13 +91,13 @@ cd $_
 # Set group and owner only for directory with an application.
 sudo chown -R www-data:jenkins ${SITE_URL##*/}
 
-./cibox sniffers \
---site-url=${SITE_URL} \
---artifacts-file=${ARTIFACTS}
-
 ./cibox reinstall \
 --build-id=${BUILD_NAME} \
 --site-url=${SITE_URL}
+
+./cibox sniffers \
+--site-url=${SITE_URL} \
+--artifacts-file=${ARTIFACTS}
 
 # Ensure that permissions for created during installation folders and files were correctly set.
 sudo chown -R www-data:jenkins ${SITE_URL##*/}
