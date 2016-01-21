@@ -33,7 +33,6 @@ commentinfo.md
 !.gitmodules
 
 !composer.json
-!adminer.php
 !selenium.sh
 !config.yml
 

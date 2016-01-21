@@ -10,7 +10,6 @@
     version: "7.41"
     # Host for cloning repository from.
     host: "https://github.com"
-    adminer: "4.2.2"
 
   vars_files:
     - ../config.yml
@@ -43,12 +42,6 @@
         dest: "../{{ project }}/docroot"
         repo: "{{ host }}/{{ vendor }}/{{ cmf }}.git"
         version: "{{ version }}"
-
-    - name: Downloading Adminer.php
-      get_url:
-        url: "https://www.adminer.org/static/download/{{ adminer }}/adminer-{{ adminer }}-en.php"
-        dest: "../{{ project }}/adminer.php"
-      when: adminer != "none"
 
     - name: Prepare CIBox-structured repository
       synchronize:

@@ -26,7 +26,7 @@ The power of the system - simplicity. All provisioning is the same for local and
 ## Quick Start
 
 - Add your host credentials to the `inventory` file.
-- `./cibox repository --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal] [--adminer=4.2.2|none]`
+- `./cibox repository --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal]`
 - `./cibox provision --project=<NAME> [--limit=<HOST>]`
 
 ### Examples

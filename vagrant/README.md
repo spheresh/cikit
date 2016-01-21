@@ -72,10 +72,6 @@ ANSIBLE_ARGS="--tags=selenium" vagrant provision
 - Selenium 2
 - Sniffers, lints and hints for PHP, CSS, JS
 
-### Adminer
-
-**Adminer** for MySQL administration (credentials `drupal/drupal` and `root/root`): `http://192.168.56.112.xip.io/adminer.php`.
-
 ### PHP Profiler XHProf
 
 It is installed by default, but to use it as `Devel` module integration use:
