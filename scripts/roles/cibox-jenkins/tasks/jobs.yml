@@ -27,7 +27,7 @@
 
 - name: Copy users
   template:
-    src: "users/{{ item | basename }}"
+    src: "users/{{ item.template | basename }}"
     dest: '{{ jenkins_lib }}/users/{{ item.name }}/config.xml'
     owner: "{{ jenkins_data.user }}"
     group: "{{ jenkins_data.group }}"
