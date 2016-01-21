@@ -1,4 +1,8 @@
 ---
+- name: Prepare project variable
+  set_fact:
+    jenkins_job: "{{ jenkins_job | upper }}"
+
 - include: repo.yml
 - include: dependencies_deb.yml
 
@@ -26,4 +30,3 @@
     line: "{{ jenkins_data.user }} ALL=(ALL) NOPASSWD:ALL"
 
 - include: jobs.yml
-  when: jenkins_job is defined

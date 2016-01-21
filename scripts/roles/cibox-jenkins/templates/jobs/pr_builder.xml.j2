@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
     <actions/>
-    <description>This job will scan new PR in SRS github repo and executes Ci stuff</description>
+    <description>Create build on every commit to pull request on GitHub.</description>
     <keepDependencies>false</keepDependencies>
     <properties>
         <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.9.1">
-            <projectUrl>https://github.com/propeoplemd/PROJECTNAME_CHANGE_ME/</projectUrl>
+            <projectUrl>https://github.com/VENDOR/PROJECT/</projectUrl>
         </com.coravy.hudson.plugins.github.GithubProjectProperty>
     </properties>
     <scm class="hudson.plugins.git.GitSCM" plugin="git@2.2.5">
@@ -14,7 +14,7 @@
             <hudson.plugins.git.UserRemoteConfig>
                 <name>origin</name>
                 <refspec>+refs/pull/*:refs/remotes/origin/pr/*</refspec>
-                <url>https://github.com/propeoplemd/PROJECTNAME_CHANGE_ME.git</url>
+                <url>git@github.com:VENDOR/PROJECT.git</url>
                 <credentialsId>c55a496e-7717-4f51-88d5-1a50b478ba55</credentialsId>
             </hudson.plugins.git.UserRemoteConfig>
         </userRemoteConfigs>
@@ -101,7 +101,7 @@ sudo chown -R www-data:jenkins ${SITE_URL##*/}
 
 # Ensure that permissions for created during installation folders and files were correctly set.
 sudo chown -R www-data:jenkins ${SITE_URL##*/}
-            </command>
+</command>
         </hudson.tasks.Shell>
     </builders>
   <publishers>
