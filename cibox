@@ -62,11 +62,6 @@ if [ -z ${1} ]; then
   exit_with_help
 fi
 
-if [ -d ${1} ]; then
-  cd ${1}
-  exit_with_help
-fi
-
 PLAYBOOK=${1%.*}.yml
 
 for playbook in ${SCRIPTS_PATH}/${PLAYBOOK} ${SELF_PATH}/${PLAYBOOK} ${PLAYBOOK}; do
@@ -76,6 +71,11 @@ for playbook in ${SCRIPTS_PATH}/${PLAYBOOK} ${SELF_PATH}/${PLAYBOOK} ${PLAYBOOK}
 done
 
 if [ ! -f ${playbook} ]; then
+  if [ -d ${1} ]; then
+    cd ${1}
+    exit_with_help
+  fi
+
   echo "Playbook ${playbook} does not exists!"
   exit 1
 fi
