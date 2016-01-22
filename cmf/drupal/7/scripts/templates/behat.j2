@@ -34,9 +34,9 @@ default:
       blackbox: ~
       api_driver: drupal
       drush:
-        root: {{ webroot }}/docroot
+        root: {{ webroot }}/{{ build_id | default }}/docroot
       drupal:
-        drupal_root: {{ webroot }}/docroot
+        drupal_root: {{ webroot }}/{{ build_id | default }}/docroot
       text:
         log_in: Log in
         log_out: Log out
