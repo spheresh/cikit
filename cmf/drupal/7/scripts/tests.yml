@@ -11,7 +11,8 @@
 
   vars:
     run: no
-    service_args: "-role hub -log selenium.log"
+    headless: no
+    selenium_hub: yes
 
   pre_tasks:
     - name: Check if Behat is already installed
@@ -29,8 +30,20 @@
       when: not vendor_state.stat.exists and composer_json_state.stat.exists
 
   tasks:
+    - name: Ensure Xvfb service started
+      service:
+        name: xvfb
+        state: started
+        args: :99 -ac -screen 0 1024x768x24
+      when: headless
+
     - name: Ensure Selenium service started
-      shell: "service selenium restart {{ service_args }}"
+      service:
+        name: selenium
+        state: started
+        args: "{{ '-role hub' if selenium_hub | bool else '' }} -log selenium.log"
+      environment:
+        DISPLAY: "{{ ':99' if headless | bool else '' }}"
 
     - name: Wait for establish Selenium connection
       wait_for:
