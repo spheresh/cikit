@@ -2,4 +2,4 @@
 # Visit for more information: http://docs.ansible.com/ansible/intro_inventory.html
 
 [br0ken]
-185.86.76.75 ansible_ssh_user=root
+185.86.76.75 ansible_user=root

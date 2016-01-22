@@ -4,15 +4,15 @@
   become_user: "{{ cibox_composer_drush.user }}"
 
 - name: Obtain user's home directory
-  shell: "eval echo ~{{ ansible_ssh_user }}"
+  shell: "eval echo ~{{ ansible_user }}"
   register: user_home
 
 - name: Create symlinks
   file:
     src: "{{ user_home.stdout }}/.composer/vendor/{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: "{{ ansible_ssh_user }}"
-    group: "{{ ansible_ssh_user }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     force: yes
     state: link
   with_items:
