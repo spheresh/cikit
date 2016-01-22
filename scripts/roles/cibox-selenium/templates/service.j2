@@ -16,7 +16,6 @@ do_start()
   if [ -n "${PID}" ]; then
     echo ${STARTED}
   else
-    echo "Starting ${SERVICE} service..."
     nohup {{ item.service }} {{ item.dest }} ${ARGS} > /var/log/${SERVICE}.out.log 2> /var/log/${SERVICE}.error.log < /dev/null &
   fi
 }
@@ -24,7 +23,6 @@ do_start()
 do_stop()
 {
   if [ -n "${PID}" ]; then
-    echo "Stopping ${SERVICE} service..."
     kill ${PID}
     unset PID
   else

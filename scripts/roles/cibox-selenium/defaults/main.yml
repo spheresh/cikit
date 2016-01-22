@@ -1,8 +1,4 @@
 ---
-xvfb:
-  pid: /tmp/ansible_xvfb_99.pid
-  bin: /usr/bin/Xvfb
-  args: :99 -ac -screen 0 1024x768x24
 selenium_dependencies:
   - src: http://chromedriver.storage.googleapis.com/2.14/chromedriver_linux64.zip
     dest: /var/lib/chrome-driver/chromedriver.zip
