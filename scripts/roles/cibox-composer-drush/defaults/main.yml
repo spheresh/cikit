@@ -1,4 +1,0 @@
----
-cibox_composer_drush:
-  version: 6.*
-  user: root
