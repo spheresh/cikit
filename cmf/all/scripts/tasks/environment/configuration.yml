@@ -1,0 +1,12 @@
+---
+- name: Check environment configuration existence
+  stat:
+    path: "vars/environments/{{ env }}.yml"
+  register: is_env
+
+- name: Determining the configuration
+  set_fact:
+    env_file: "{{ env if is_env.stat.exists else 'default' }}"
+
+- name: "Load configuration for {{ env_file | upper }} environment"
+  include_vars: "vars/environments/{{ env_file }}.yml"
