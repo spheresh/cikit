@@ -15,25 +15,13 @@
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RUN_TESTS</name>
+          <description>Run Behat tests?</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
-    <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8.1">
-      <teamDomain></teamDomain>
-      <token></token>
-      <room></room>
-      <startNotification>true</startNotification>
-      <notifySuccess>true</notifySuccess>
-      <notifyAborted>true</notifyAborted>
-      <notifyNotBuilt>false</notifyNotBuilt>
-      <notifyUnstable>false</notifyUnstable>
-      <notifyFailure>true</notifyFailure>
-      <notifyBackToNormal>true</notifyBackToNormal>
-      <notifyRepeatedFailure>false</notifyRepeatedFailure>
-      <includeTestSummary>false</includeTestSummary>
-      <showCommitList>false</showCommitList>
-      <includeCustomMessage>false</includeCustomMessage>
-      <customMessage></customMessage>
-    </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.0">
     <configVersion>2</configVersion>
@@ -70,33 +58,39 @@
       <command>#!/usr/bin/env bash
 
 export PYTHONUNBUFFERED=1
-export DIR=${JOB_NAME//_BUILDER/}_${BUILD_ENV}
-export URL=${JOB_URL%:*}/${DIR}/docroot
+export PROJECT=$(echo ${JOB_NAME//_BUILDER/} | tr &apos;[:upper:]&apos; &apos;[:lower:]&apos;)
+export BUILD_NAME=${PROJECT}_${BUILD_ENV}
+export SITE_URL=${JOB_URL%:*}/${BUILD_NAME}/docroot
 
 ./cibox reinstall \
 --env=${BUILD_ENV} \
---build-id=${DIR} \
---site-url=${URL}
+--build-id=${BUILD_NAME} \
+--site-url=${SITE_URL}
+
+if ${RUN_TESTS}; then
+  ./cibox tests \
+  --run \
+  --headless \
+  --env=${BUILD_ENV} \
+  --build-id=${BUILD_NAME} \
+  --site-url=${SITE_URL} \
+  --artifacts-file=${ARTIFACTS}
+fi
 
 if [ $? -gt 0 ]; then
-    exit 1
+  exit 1
 fi
 
 # Move project from workspace to directory available in web.
-sudo rsync --delete -ra . /var/www/${DIR}
+sudo rsync --delete -ra . /var/www/${BUILD_NAME}
 # Go to project directory.
 cd $_
 # Set group and owner only for directory with an application.
-sudo chown -R www-data:jenkins ${URL##*/}
+sudo chown -R www-data:jenkins ${SITE_URL##*/}
 </command>
     </hudson.tasks.Shell>
   </builders>
   <buildWrappers>
-    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.28">
-      <deleteDirs>false</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
-    </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.1">
       <colorMapName>xterm</colorMapName>
     </hudson.plugins.ansicolor.AnsiColorBuildWrapper>

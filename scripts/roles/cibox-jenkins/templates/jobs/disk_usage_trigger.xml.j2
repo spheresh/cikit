@@ -25,12 +25,7 @@
       <spec>* * * * *</spec>
       <labelRestriction>false</labelRestriction>
       <enableConcurrentBuild>false</enableConcurrentBuild>
-      <script>
-space=$(echo $output | df -H | head -2 | tail -1 | awk &apos;{ printf &quot;%d&quot;, $5}&apos;)
-if [ $space -gt 95 ]
-then exit 0
-else exit 1
-fi
+      <script>[ $(df -H | head -2 | tail -1 | awk '{printf "%d", $5}') -gt 92 ] && exit 0 || exit 1
 </script>
     </org.jenkinsci.plugins.scripttrigger.ScriptTrigger>
   </triggers>
