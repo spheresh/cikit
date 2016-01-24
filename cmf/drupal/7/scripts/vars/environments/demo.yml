@@ -9,10 +9,10 @@ modules:
     - diff
 
 commands:
-  search-api-clear: ""
-  search-api-index: ""
-  solr-mark-all: ""
-  solr-index: ""
+  search-api-clear: ~
+  search-api-index: ~
+  solr-mark-all: ~
+  solr-index: ~
 
 drupal:
   # Values for $conf in settings.php.
