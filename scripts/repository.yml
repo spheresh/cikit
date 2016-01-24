@@ -19,7 +19,7 @@
 
     - name: Determine major version of CMF
       set_fact:
-        major: "{{ version | splitext | first }}"
+        major: "{{ version.split('.') | first }}"
 
     # Part of namespace on a host (vendor name).
     - name: Set vendor name
