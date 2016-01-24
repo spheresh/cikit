@@ -1,26 +1,35 @@
 ---
-- name: Install
-  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
+- name: Install Composer
+  shell: "curl -sS https://getcomposer.org/installer | php -- --install-dir={{ composer_bin }}"
 
 - name: Rename PHAR file
-  shell: cd /usr/local/bin/ && mv composer.phar composer
+  shell: "cd {{ composer_bin }} && mv composer.phar composer"
 
 - name: Make Composer executable
   file:
-    path: /usr/local/bin/composer
+    path: "{{ composer_bin }}/composer"
     mode: 0755
 
+- name: Prepare directory for global Composer packages
+  file:
+    path: "{{ composer_dir }}"
+    state: directory
+
 - name: Install packages
-  shell: "composer global require {{ item.key }}:{{ item.value }} --no-interaction --no-ansi"
-  become_user: "{{ ansible_user }}"
+  shell: "cd {{ composer_dir }} && composer require {{ item.key }}:{{ item.value }} --prefer-dist --no-interaction --no-ansi"
   with_dict: composer_packages
 
-- name: Obtain user's home directory
-  shell: "eval echo ~{{ ansible_user }}"
-  register: user_home
+- name: Determine Composer packages
+  shell: ls -A {{ composer_dir }}/vendor/bin/ | grep -v '\..*'
+  register: packages
 
-- name: Add ~/.composer/vendor/bin to PATH
-  lineinfile:
-    dest: /etc/bash.bashrc
-    line: "export PATH=$PATH:{{ user_home.stdout }}/.composer/vendor/bin"
-    insertafter: BOF
+- name: Make Composer packages executable
+  file:
+    src: "{{ composer_dir }}/vendor/bin/{{ item }}"
+    dest: "{{ composer_bin }}/{{ item }}"
+    state: link
+  with_items: packages.stdout_lines
+
+- name: Mark role as executed
+  set_fact:
+    ansible_composer_role_executed: yes

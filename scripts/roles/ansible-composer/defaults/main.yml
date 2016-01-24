@@ -1,2 +1,4 @@
+composer_bin: /usr/local/bin
+composer_dir: /usr/share/composer
 composer_packages:
-  drush/drush: 6.*
+  drush/drush: 7.*
