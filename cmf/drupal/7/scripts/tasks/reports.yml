@@ -1,0 +1,13 @@
+---
+- name: Create directory for reports
+  file:
+    path: "{{ reports_dir }}"
+    mode: 0755
+    state: "{{ item }}"
+  with_items:
+    - absent
+    - directory
+
+- name: Register variable with reports URL
+  set_fact:
+    reports_url: "{{ site_url }}/{{ reports_dir | basename }}"
