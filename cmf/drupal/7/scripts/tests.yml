@@ -1,3 +1,11 @@
+# This playbook could be run in various modes:
+#
+# 1. Install Behat, generate "behat.yml" from template and run Selenium hub.
+# cibox tests
+# 2. Actions from first step and run Behat tests.
+# cibox tests --run
+# 3. The same as second variant, but with Xvfb service started. Tests could be run without display.
+# cibox tests --run --headless
 ---
 - hosts: localhost
   gather_facts: yes
@@ -12,22 +20,21 @@
   vars:
     run: no
     headless: no
-    selenium_hub: yes
 
   pre_tasks:
     - name: Check if Behat is already installed
       stat:
         path: ../vendor/behat/behat/
-      register: vendor_state
+      register: is_vendor
 
     - name: Check for composer.json
       stat:
         path: ../composer.json
-      register: composer_json_state
+      register: is_composer_json
 
     - name: Install Behat
       shell: cd ../ && composer install
-      when: not vendor_state.stat.exists and composer_json_state.stat.exists
+      when: not is_vendor.stat.exists and is_composer_json.stat.exists
 
   tasks:
     - name: Ensure Xvfb service started
@@ -35,21 +42,24 @@
         name: xvfb
         state: started
         args: :99 -ac -screen 0 1024x768x24
-      when: headless
+      when: run and headless
 
     - name: Ensure Selenium service started
       service:
         name: selenium
         state: started
-        args: "{{ '-role hub' if selenium_hub | bool else '' }} -log selenium.log"
+        args: "{{ '' if headless else '-role hub' }} -log selenium.log"
       environment:
-        DISPLAY: "{{ ':99' if headless | bool else '' }}"
+        DISPLAY: "{{ ':99' if headless else '' }}"
 
     - name: Wait for establish Selenium connection
       wait_for:
         port: 4444
         host: 127.0.0.1
         delay: 10
+
+    - include: tasks/reports.yml
+      when: run
 
     - name: Create behat.yml
       template:
@@ -59,9 +69,6 @@
     - name: Run Behat tests
       shell: "cd ../tests/behat && ../../bin/behat"
       ignore_errors: yes
-      when: run
-
-    - include: tasks/reports-url.yml
       when: run
 
     - name: Create Behat report

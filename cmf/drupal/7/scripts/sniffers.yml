@@ -10,16 +10,7 @@
     - vars/tests.yml
 
   tasks:
-    - name: Create directory for reports
-      file:
-        path: "{{ reports_dir }}"
-        mode: 0755
-        state: "{{ item }}"
-      with_items:
-        - absent
-        - directory
-
-    - include: tasks/reports-url.yml
+    - include: tasks/reports.yml
 
     - name: Creating SecurityReview report file
       file:
