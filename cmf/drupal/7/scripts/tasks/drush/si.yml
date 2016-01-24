@@ -4,4 +4,4 @@
   with_dict:
     si: ["{{ profile }} --db-url=mysql://{{ mysql.user }}:{{ mysql.pass }}@{{ mysql.host | default('127.0.0.1') }}:{{ mysql.port | default('3306') }}/{{ databases.default }} --uri={{ site_url }}"]
 
-- include: ../prepare-environment.yml
+- include: ../environment/prepare.yml

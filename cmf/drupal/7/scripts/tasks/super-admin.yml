@@ -1,5 +1,5 @@
 ---
-- name: "Set credentials for super users: ({{ drupal.user.name }}/{{ drupal.user.pass }})"
+- name: "Set credentials for super user: ({{ drupal.user.name }}/{{ drupal.user.pass }})"
   include: drush/drush.yml
   with_dict:
     sqlc: ["UPDATE users SET name={{ drupal.user.name }} WHERE uid=1"]
