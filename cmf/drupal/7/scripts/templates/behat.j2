@@ -2,6 +2,9 @@
 # If you familiar with Behat configs then edit "/var/www/scripts/templates/behat.j2"
 # and run "cibox tests" to apply changes.
 default:
+  formatters:
+    html:
+      output_path: {{ reports_dir | realpath }}/behat
   suites:
     default:
       contexts:
@@ -11,6 +14,13 @@ default:
         - Drupal\DrupalExtension\Context\MarkupContext: ~
         - Drupal\DrupalExtension\Context\MessageContext: ~
   extensions:
+    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+      name: html
+      renderer: Twig
+      file_name: Index
+      print_args: true
+      print_outp: true
+      loop_break: true
     Behat\MinkExtension:
       goutte:
         guzzle_parameters:
