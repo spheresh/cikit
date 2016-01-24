@@ -15,15 +15,6 @@
     state: present
   with_items: sniffers_apt_packages
 
-- name: Prepare directory for global Composer libs
-  file:
-    path: "{{ composer_dir }}"
-    state: directory
-
-- name: Install Composer global requires
-  shell: "cd {{ composer_dir }} && composer require --prefer-dist {{ item }}"
-  with_items: composer_global_require
-
 - name: Clone Git repos
   git:
     repo: "{{ item.repo }}"
@@ -37,21 +28,6 @@
     dest: "{{ composer_dir }}/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/{{ item | basename }}"
     state: link
   with_items: phpcs_standards
-
-- name: Fix permissions for composer libs
-  file:
-    path: "{{ composer_dir }}"
-    mode: 0655
-    state: directory
-    recurse: yes
-
-- name: Create symlink to phpcs binary
-  file:
-    src: "{{ composer_dir }}/vendor/bin/phpcs"
-    dest: /usr/bin/phpcs
-    mode: 0655
-    state: link
-    force: yes
 
 - name: Install Node.js packages
   npm:

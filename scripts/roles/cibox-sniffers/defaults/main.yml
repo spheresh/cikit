@@ -1,10 +1,4 @@
 ---
-composer_dir: /usr/share/composer
-
-composer_global_require:
-  - drupal/coder:dev-7.x-2.x
-  - squizlabs/php_codesniffer=1.5.6
-
 git_repos:
   - branch: master
     repo: http://git.drupal.org/sandbox/coltrane/1921926.git
