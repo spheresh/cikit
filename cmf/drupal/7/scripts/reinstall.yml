@@ -9,14 +9,14 @@
     - vars/main.yml
 
   tasks:
-    - include_vars: "vars/environments/{{ env }}.yml"
+    - include: tasks/environment/configuration.yml
 
     - name: Remove databases
       include: tasks/database/database.yml
       args:
         state: absent
 
-    - include: tasks/prepare-environment.yml
+    - include: tasks/environment/prepare.yml
 
     - include: tasks/drush/si.yml
       when: not sql_workflow

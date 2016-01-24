@@ -9,7 +9,7 @@
     - vars/main.yml
 
   tasks:
-    - include_vars: "vars/environments/{{ env }}.yml"
+    - include: tasks/environment/configuration.yml
 
     - name: Remove database
       include: tasks/database/database.yml
@@ -38,5 +38,4 @@
 
     # Enable/disable configured plugins.
     - include: tasks/wp-cli/plugins.yml
-
     - include: tasks/wp-cli/commands.yml
