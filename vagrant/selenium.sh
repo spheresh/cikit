@@ -28,7 +28,7 @@ if [ -f ${PIDFILE} ]; then
   PID=$(cat ${PIDFILE})
 
   if [ -n ${PID} ]; then
-    kill ${PID}
+    kill ${PID} > /dev/null 2>&1
   fi
 fi
 
