@@ -15,9 +15,18 @@
     path: "{{ composer_dir }}"
     state: directory
 
+- name: Install system packages
+  include: packages.yml
+  args:
+    composer_packages: "{{ composer_packages_system }}"
+
+- name: Create Composer config
+  template:
+    src: config.json.j2
+    dest: "{{ user_home.stdout }}/.config/composer/config.json"
+
 - name: Install packages
-  shell: "cd {{ composer_dir }} && composer require {{ item.key }}:{{ item.value }} --prefer-dist --no-interaction --no-ansi"
-  with_dict: composer_packages
+  include: packages.yml
 
 - name: Determine Composer packages
   shell: ls -A {{ composer_dir }}/vendor/bin/ | grep -v '\..*'

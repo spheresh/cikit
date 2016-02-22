@@ -1,0 +1,3 @@
+---
+- shell: "cd {{ composer_dir }} && composer require {{ item.key }}:{{ item.value }} --prefer-dist --no-interaction --no-ansi"
+  with_dict: composer_packages
