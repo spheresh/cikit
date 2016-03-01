@@ -20,6 +20,12 @@
   args:
     composer_packages: "{{ composer_packages_system }}"
 
+- name: Create .config directory
+  file:
+    path: "{{ user_home.stdout }}/.config/composer"
+    state: directory
+    recurse: yes
+
 - name: Create Composer config
   template:
     src: config.json.j2
