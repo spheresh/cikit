@@ -1,5 +1,5 @@
 ---
 cibox_protected_folders:
-  user: root
-  pass: r0Ot_p4assw0Rd
-  list: []
+  - path: /var/www/html
+    user: root
+    pass: r0Ot_p4assw0Rd

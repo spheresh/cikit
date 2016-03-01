@@ -1,21 +1,21 @@
 ---
 - name: Create protected folders
   file:
-    path: "{{ item }}"
+    path: "{{ item.path }}"
     owner: www-data
     group: adm
     state: directory
-  with_items: cibox_protected_folders.list
+  with_items: cibox_protected_folders
 
 - name: Copy .htaccess to the protected folders
   template:
-    src: htaccess-protect.j2
-    dest: "{{ item }}/.htaccess"
-  with_items: cibox_protected_folders.list
+    src: htaccess.j2
+    dest: "{{ item.path }}/.htaccess"
+  with_items: cibox_protected_folders
 
 - name: Generate .htpasswd in protected folders
   htpasswd:
-    path: "{{ item }}/.htpasswd"
-    name: "{{ cibox_protected_folders.user }}"
-    password: "{{ cibox_protected_folders.pass }}"
-  with_items: cibox_protected_folders.list
+    path: "{{ item.path }}/.htpasswd"
+    name: "{{ item.user }}"
+    password: "{{ item.pass }}"
+  with_items: cibox_protected_folders
