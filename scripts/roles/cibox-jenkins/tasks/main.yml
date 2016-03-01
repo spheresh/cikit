@@ -3,6 +3,13 @@
   set_fact:
     jenkins_job: "{{ jenkins_job | upper }}"
 
+- name: Stop service which could affect on 8080 port
+  service:
+    name: "{{ item }}"
+    state: stopped
+  ignore_errors: yes
+  with_items: ["nginx", "apache2"]
+
 - include: repo.yml
 
 - name: Download Jenkins
@@ -16,6 +23,13 @@
 
 - include: cli.yml
 - include: plugins.yml
+
+- name: Restore service
+  service:
+    name: "{{ item }}"
+    state: stopped
+  ignore_errors: yes
+  with_items: ["nginx", "apache2"]
 
 - name: Adding Jenkins user to permitted groups
   user:
