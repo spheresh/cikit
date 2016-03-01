@@ -4,8 +4,26 @@ VAGRANTFILE_API_VERSION = "2"
 
 require "yaml"
 
+playbook = "provisioning/test.yml"
 isWindows = Vagrant::Util::Platform.windows?
 configValues = YAML::load_file("config.yml")
+playbookValues = YAML::load_file(playbook)
+promptValues = []
+
+if playbookValues[0].include?("vars_prompt")
+  for var_prompt in playbookValues[0]["vars_prompt"];
+    if "not vagrant" == var_prompt["when"] && var_prompt["default"]
+      promptValues.push("--#{var_prompt["name"]}=#{var_prompt["default"]}")
+    else
+      puts var_prompt["prompt"] + (var_prompt["default"] ? " [#{var_prompt["default"]}]" : "") + ":"
+
+      value = $stdin.gets.chomp
+      value = value.empty? ? var_prompt["default"] : value
+
+      promptValues.push("--#{var_prompt["name"]}=#{value}")
+    end
+  end
+end
 
 ENV["VAGRANT_DEFAULT_PROVIDER"] = ENV.has_key?("VAGRANT_CI") && ENV["VAGRANT_CI"].include?("lxc") ? "lxc" : "virtualbox"
 
@@ -84,7 +102,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :cibox,
     :controller => "./cibox",
-    :playbook => "provisioning/provision"
+    :playbook => "#{playbook} #{promptValues.join(" ")}"
 
   if ENV["REINSTALL"]
     config.vm.provision :shell,
