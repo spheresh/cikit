@@ -1,9 +1,9 @@
 ---
 nginx_configs:
   upstream:
-    - upstream app_server {
-        server 127.0.0.1:8079 fail_timeout=0;
-      }
+    - "upstream app_server {
+        server 127.0.0.1:{{ jenkins_port }} fail_timeout=0;
+      }"
 
 nginx_sites:
   jenkins:
