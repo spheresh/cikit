@@ -13,15 +13,15 @@ promptValues = []
 if playbookValues[0].include?("vars_prompt")
   for var_prompt in playbookValues[0]["vars_prompt"];
     if "not vagrant" == var_prompt["when"] && var_prompt["default"]
-      promptValues.push("--#{var_prompt["name"]}=#{var_prompt["default"]}")
+      value = var_prompt["default"]
     else
       puts var_prompt["prompt"] + (var_prompt["default"] ? " [#{var_prompt["default"]}]" : "") + ":"
 
       value = $stdin.gets.chomp
       value = value.empty? ? var_prompt["default"] : value
-
-      promptValues.push("--#{var_prompt["name"]}=#{value}")
     end
+
+    promptValues.push("--#{var_prompt["name"]}=#{value}")
   end
 end
 
