@@ -46,6 +46,27 @@ module VagrantPlugins::CIBox
       ansible_args << "--limit=#{@machine.name}"
       ansible_args << ENV["ANSIBLE_ARGS"]
 
+      playbook = config.playbook.chomp(File.extname(config.playbook)) + ".yml"
+
+      if File.exist?(playbook)
+        playbook = YAML::load_file(playbook)
+
+        if playbook[0].include?("vars_prompt")
+          for var_prompt in playbook[0]["vars_prompt"];
+            if "not vagrant" == var_prompt["when"] && var_prompt["default"]
+              value = var_prompt["default"]
+            else
+              puts var_prompt["prompt"] + (var_prompt["default"] ? " [#{var_prompt["default"]}]" : "") + ":"
+
+              value = $stdin.gets.chomp
+              value = value.empty? ? var_prompt["default"] : value
+            end
+
+            ansible_args << "--#{var_prompt["name"]}=#{value}"
+          end
+        end
+      end
+
       return ansible_args.join(' ')
     end
 
