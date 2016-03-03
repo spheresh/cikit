@@ -1,14 +1,8 @@
 ---
-# This could be in "commands" variable but has a separate logic.
-modules:
-  en:
-    - stage_file_proxy
-    - security_review
-    - dblog
-    - devel
-    - diff
-
-commands: {}
+commands:
+  pre:
+    - en: [stage_file_proxy, security_review, dblog, devel, diff]
+  post: []
 
 drupal:
   # Values for $conf in settings.php.

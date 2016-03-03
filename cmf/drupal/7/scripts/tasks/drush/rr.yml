@@ -2,5 +2,5 @@
 - name: Rebuild Drupal registry
   become: no
   include: drush.yml
-  with_dict:
-    rr: ~
+  with_items:
+    - rr: ~

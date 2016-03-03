@@ -24,10 +24,10 @@
   lineinfile:
     dest: "../docroot/sites/default/settings.php"
     line: "${{ item.key }} = '{{ item.value }}';"
-  with_dict: drupal.settings
+  with_dict: "{{ drupal.settings }}"
 
 - name: Adding $conf values to settings.php
   lineinfile:
     dest: "../docroot/sites/default/settings.php"
     line: "$conf['{{ item.key }}'] = '{{ item.value }}';"
-  with_dict: drupal.conf
+  with_dict: "{{ drupal.conf }}"

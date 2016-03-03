@@ -1,18 +1,13 @@
 ---
-modules:
-  en:
-    - dblog
-  dis:
-    - stage_file_proxy
-    - security_review
-    - devel
-    - diff
-
 commands:
-  search-api-clear: ~
-  search-api-index: ~
-  solr-mark-all: ~
-  solr-index: ~
+  pre:
+    - en: [dblog]
+    - dis: [stage_file_proxy, security_review, devel, diff]
+  post:
+    - search-api-clear: ~
+    - search-api-index: ~
+    - solr-mark-all: ~
+    - solr-index: ~
 
 drupal:
   # Values for $conf in settings.php.

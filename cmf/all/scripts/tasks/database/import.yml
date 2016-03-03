@@ -11,6 +11,6 @@
     target: "{{ webroot }}/backup/{{ env }}/{{ item.value }}.sql.gz"
     login_user: "{{ mysql.user }}"
     login_password: "{{ mysql.pass }}"
-  with_dict: databases
+  with_dict: "{{ databases }}"
 
 # @TODO Make import from remote!

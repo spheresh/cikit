@@ -2,4 +2,4 @@
 - name: Set Drupal variables
   shell: "cd ../docroot && drush vset {{ item.key }} {{ item.value }} -y"
   environment: "{{ env_vars }}"
-  with_dict: drupal.variables
+  with_dict: "{{ drupal.variables }}"

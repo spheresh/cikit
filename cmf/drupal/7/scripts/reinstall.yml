@@ -43,14 +43,13 @@
     # Enable/disable configured modules.
     - name: Managing modules
       include: tasks/drush/drush.yml
-      with_dict: modules
+      with_items: "{{ commands.pre }}"
 
     - include: tasks/drush/updb.yml
       when: sql_workflow
 
     - name: Execute Drush commands
       include: tasks/drush/drush.yml
-      with_dict: commands
-      ignore_errors: yes
+      with_items: "{{ commands.post }}"
 
     - include: tasks/compass-compile.yml

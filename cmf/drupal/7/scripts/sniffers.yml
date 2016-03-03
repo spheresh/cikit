@@ -26,33 +26,33 @@
 
     - name: Run CodeSniffer
       shell: "phpcs --standard={{ item }} --extensions={{ phpcs_extensions }} -n {{ scan_dirs | join(' ') }} --report-file={{ reports_dir }}/phpcs.{{ item }}.txt"
-      with_items: phpcs_standards
+      with_items: "{{ phpcs_standards }}"
       # Needed for ignoring PHP notices in packages with sniffers.
       ignore_errors: yes
 
     - name: Create CodeSniffer report
       shell: 'if grep "FOUND\|error" {{ reports_dir }}/phpcs.{{ item }}.txt; then echo "<a href=\"{{ reports_url }}/phpcs.{{ item }}.txt\" target=\"_blank\">CodeSniffer {{ item }}</a>" >> {{ artifacts_file }}; fi;'
-      with_items: phpcs_standards
+      with_items: "{{ phpcs_standards }}"
 
     - name: Run JSHint
       shell: 'find {{ item }} ! -path "*mute*" -type f \( -iname "*.js" ! -iname "*min.js" \) -print0 | sudo xargs -0 jshint > {{ reports_dir }}/jshint.txt'
-      with_items: scan_dirs
+      with_items: "{{ scan_dirs }}"
       # Needed for ignoring exit status codes.
       ignore_errors: yes
 
     - name: Create JSHint report
       shell: 'if [ -s {{ reports_dir }}/jshint.txt ]; then echo "<a href=\"{{ reports_url }}/jshint.txt\" target=\"_blank\">JS Hint</a>" >> {{ artifacts_file }}; fi'
-      with_items: scan_dirs
+      with_items: "{{ scan_dirs }}"
 
     - name: Run SCSSLint
       shell: 'find {{ item }} -name "*.scss" -print0 | xargs -0 -r scss-lint -c configs/scss-lint.yml > {{ reports_dir }}/scsslint.txt'
-      with_items: scan_dirs
+      with_items: "{{ scan_dirs }}"
       # Needed for ignoring exit status codes.
       ignore_errors: yes
 
     - name: Create SCSSLint report
       shell: 'if [ -s {{ reports_dir }}/scsslint.txt ]; then echo "<a href=\"{{ reports_url }}/scsslint.txt\" target=\"_blank\">SCSS Lint</a>" >> {{ artifacts_file }}; fi'
-      with_items: scan_dirs
+      with_items: "{{ scan_dirs }}"
 
     - name: Website credentials
       lineinfile:

@@ -2,4 +2,4 @@
 - mysql_db:
     name: "{{ item.value }}"
     state: "{{ state }}"
-  with_dict: databases
+  with_dict: "{{ databases }}"
