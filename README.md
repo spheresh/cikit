@@ -17,7 +17,7 @@ The power of the system - simplicity. All provisioning is the same for local and
 
 ## Main possibilities
 
-- Create matrix of virtual servers (droplets)
+- [Create matrix of virtual servers (droplets).](matrix)
 - Automated builds for every commit in a pull request on GitHub (private repositories supported).
 - Multi CMS/CMF support. To add support of a new one, you just need to put pre-configurations to `cmf/<NAME>/<MAJOR_VERSION>` and ensure that core files can be downloaded via Git.
 - Opportunity to keep multiple projects on the same CI server.
