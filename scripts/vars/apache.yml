@@ -14,5 +14,5 @@ apache_vhosts:
 apache_vhosts_ssl:
   - servername: "{{ site_url if site_url is defined and vagrant else 'JenkinsCI' }}"
     documentroot: "{{ webroot }}/{{ 'docroot' if site_url is defined and vagrant else '' }}"
-    certificate_file: "{{ cibox_ssl_folder }}/apache.crt"
-    certificate_key_file: "{{ cibox_ssl_folder }}/apache.key"
+    certificate_file: "{{ cibox_ssl_folder }}/ssl.crt"
+    certificate_key_file: "{{ cibox_ssl_folder }}/ssl.key"

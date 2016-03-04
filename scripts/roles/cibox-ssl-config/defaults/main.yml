@@ -1,2 +1,2 @@
 ---
-cibox_ssl_folder: /etc/apache2/ssl
+cibox_ssl_folder: /etc/ssl/private
