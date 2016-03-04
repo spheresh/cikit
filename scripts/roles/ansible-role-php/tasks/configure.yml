@@ -4,18 +4,22 @@
     path: "{{ item }}"
     state: directory
   with_items:
-    - "{{ php_conf_path }}"
+    - "{{ __php_conf_path }}"
+    - "{{ __php_cli_conf_path }}"
     - "{{ php_extension_conf_path }}"
 
 - name: Place PHP configuration file in place.
   template:
-    src: php.ini.j2
-    dest: "{{ php_conf_path }}/php.ini"
+    src: "{{ item.key }}.ini.j2"
+    dest: "{{ item.value }}/php.ini"
     owner: root
     group: root
     mode: 0644
   notify: restart webserver
   when: php_use_managed_ini
+  with_dict:
+    php: "{{ __php_conf_path }}"
+    cli: "{{ __php_cli_conf_path }}"
 
 - name: Place APC configuration file in place.
   template:
