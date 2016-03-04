@@ -55,12 +55,12 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/usr/bin/env bash
+      <command>#!/usr/bin/env bash -e
 
 export PYTHONUNBUFFERED=1
-export PROJECT=$(echo ${JOB_NAME//_BUILDER/} | tr &apos;[:upper:]&apos; &apos;[:lower:]&apos;)
+export PROJECT=$(echo ${JOB_NAME//_BUILDER/} | tr '[:upper:]' '[:lower:]')
 export BUILD_NAME=${PROJECT}_${BUILD_ENV}
-export SITE_URL=${JOB_URL%:*}/${BUILD_NAME}/docroot
+export SITE_URL=http://$(php -r "echo parse_url('${JOB_URL}')['host'];")/${BUILD_NAME}
 
 ./cibox reinstall \
 --env=${BUILD_ENV} \
@@ -82,11 +82,11 @@ if [ $? -gt 0 ]; then
 fi
 
 # Move project from workspace to directory available in web.
-sudo rsync --delete -ra . /var/www/${BUILD_NAME}
+sudo rsync --delete -ra ./docroot/ /var/www/${BUILD_NAME}/
 # Go to project directory.
 cd $_
 # Set group and owner only for directory with an application.
-sudo chown -R www-data:jenkins ${SITE_URL##*/}
+sudo chown -R www-data:jenkins $(pwd)
 </command>
     </hudson.tasks.Shell>
   </builders>

@@ -1,5 +1,5 @@
 ---
 - name: Install/update plugins
-  action: command java -jar {{ jenkins.cli_dest }} -s http://localhost:8080 install-plugin {{ item }}
-  with_items: plugins
+  shell: "java -jar {{ jenkins.cli_dest }} -s http://localhost:{{ jenkins_port }} install-plugin {{ item }}"
+  with_items: "{{ plugins }}"
   notify: Restart Jenkins

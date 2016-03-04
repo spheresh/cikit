@@ -27,7 +27,7 @@
 - name: Restore service
   service:
     name: "{{ item }}"
-    state: stopped
+    state: started
   ignore_errors: yes
   with_items: ["nginx", "apache2"]
 
