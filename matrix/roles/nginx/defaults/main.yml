@@ -1,0 +1,9 @@
+---
+nginx:
+  httpauth: yes
+  htpasswd:
+    path: /etc/nginx/.htpasswd
+    user: admin
+    pass: admin
+
+  allowed_ip: []

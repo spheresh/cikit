@@ -1,0 +1,23 @@
+# {{ ansible_managed }}
+
+server {
+        listen 80;
+        server_name "~^.*{{ application }}(?P<port_id>\d{2})\.{{ domain | replace(".", "\\.") }}$";
+
+        {% set port=80 %}
+        {% set scheme="http" %}
+        {% include "templates/nginx/location-slash.j2" with context %}
+}
+
+server {
+        listen 443 ssl;
+        server_name "~^.*{{ application }}(?P<port_id>\d{2})\.{{ domain | replace(".", "\\.") }}$";
+
+        {% set port=88 %}
+        {% set scheme="https" %}
+        {% include "templates/nginx/location-slash.j2" with context %}
+
+        include ssl;
+        ssl_certificate      {{ ssl.path }}/ssl.crt;
+        ssl_certificate_key  {{ ssl.path }}/ssl.key;
+}

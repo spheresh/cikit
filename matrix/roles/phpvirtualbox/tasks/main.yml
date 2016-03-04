@@ -1,0 +1,19 @@
+---
+- name: Ensure directory for phpVirtualBox exists
+  file:
+    path: "{{ phpvirtualbox.path }}"
+    state: directory
+
+- name: Check if phpVirtualBox already installed
+  stat:
+    path: "{{ phpvirtualbox.path }}/vboxinit"
+  register: _phpvirtualbox
+
+- include: install.yml
+  when: not _phpvirtualbox.stat.exists
+
+- name: Restart VBoxWeb service
+  service:
+    name: vboxweb-service
+    state: restarted
+    enabled: yes

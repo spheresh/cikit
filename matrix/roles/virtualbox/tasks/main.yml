@@ -1,0 +1,17 @@
+---
+- name: Install driver
+  shell: service vboxdrv setup
+
+- name: Check if extension pack is already installed
+  shell: VBoxManage list extpacks | head -n 1 | awk '{print $3}'
+  register: extpack_list
+
+- include: extensions.yml
+  when: "{{ extpack_list.stdout }} == 0"
+
+#- name: Check host betwork
+#  shell: cat /proc/net/dev | grep vboxnet0 | cut -c1-8
+#  register: vboxnet0
+#
+#- include: network.yml
+#  when: "{{ vboxnet0.stdout }} != 'vboxnet0'"

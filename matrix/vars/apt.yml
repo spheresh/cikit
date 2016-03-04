@@ -1,0 +1,23 @@
+---
+apt:
+  repositories:
+    - "deb http://download.virtualbox.org/virtualbox/debian trusty contrib"
+
+  keys:
+    - "https://www.virtualbox.org/download/oracle_vbox.asc"
+
+  packages:
+    - "dkms"
+    - "build-essential"
+    - "linux-headers-generic"
+    # {{ ansible_kernel }} is the same as result of "uname -r".
+    - "linux-headers-{{ ansible_kernel }}"
+    - "virtualbox-5.0"
+    - "nginx"
+    - "php5"
+    - "php5-common"
+    - "php-soap"
+    - "php5-gd"
+    - "php5-fpm"
+    - "unzip"
+    - "python-passlib"

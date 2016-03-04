@@ -1,0 +1,9 @@
+---
+- name: Ensure directory for SSL certificates exists
+  file:
+    path: "{{ ssl.path }}"
+    state: directory
+    recurse: yes
+
+- name: Create self-signed SSL certificate
+  command: "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=US' -keyout {{ ssl.path }}/ssl.key -out {{ ssl.path }}/ssl.crt"

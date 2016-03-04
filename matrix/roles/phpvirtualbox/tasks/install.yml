@@ -1,0 +1,11 @@
+---
+- name: Install phpVirtualBox
+  unarchive:
+    src: "{{ phpvirtualbox.package }}"
+    dest: "{{ phpvirtualbox.path }}"
+    copy: no
+
+- name: Rename directory
+  shell: "mv {{ phpvirtualbox.path }}/{{ phpvirtualbox.package | basename | splitext | first }} {{ phpvirtualbox.path }}"
+
+- include: configure.yml

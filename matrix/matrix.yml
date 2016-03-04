@@ -1,0 +1,43 @@
+---
+- hosts: all
+
+  vars:
+    domain: m2.propeople.com.ua
+    application: cibox
+
+  vars_files:
+    - vars/apt.yml
+    - vars/virtualbox.yml
+    - vars/ssl.yml
+    - vars/php-fpm.yml
+    - vars/nginx.yml
+    - vars/phpvirtualbox.yml
+    - vars/virtualmachine.yml
+
+  pre_tasks:
+    - name: Check Ansible compatibility
+      fail:
+        msg: "You need Ansible {{ ansible_version.major }} or better on your host machine!"
+      when: "{{ ansible_version.major }} < 2"
+
+  roles:
+    - role: apt
+      tags: ["apt"]
+
+    - role: virtualbox
+      tags: ["vb"]
+
+    - role: ssl
+      tags: ["ssl"]
+
+    - role: php-fpm
+      tags: ["php-fpm"]
+
+    - role: nginx
+      tags: ["nginx"]
+
+    - role: phpvirtualbox
+      tags: ["phpvb"]
+
+    - role: virtualmachine
+      tags: ["vm"]

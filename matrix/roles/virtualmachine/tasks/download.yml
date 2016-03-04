@@ -1,0 +1,16 @@
+---
+- name: Create directory for VM
+  file:
+    path: "{{ virtualmachine.path }}"
+    state: directory
+    owner: "{{ phpvirtualbox.user.user }}"
+    recurse: yes
+
+- name: Download and unarchive VM
+  unarchive:
+    src: "{{ virtualmachine.package }}"
+    dest: "{{ virtualmachine.path }}"
+    copy: no
+    owner: "{{ phpvirtualbox.user.user }}"
+
+- include: check.yml

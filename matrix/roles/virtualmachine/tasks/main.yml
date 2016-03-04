@@ -1,0 +1,17 @@
+---
+- include: check.yml
+
+- include: download.yml
+  when: vm_path == ""
+
+- name: Register Virtual Machine
+  shell: "VBoxManage registervm {{ vm_path }}"
+  become: yes
+  become_user: "{{ phpvirtualbox.user.user }}"
+  ignore_errors: yes
+  register: vm_registration_status
+
+- name: Check VM registration status
+  fail:
+    msg: "{{ vm_registration_status.stderr }}"
+  when: "{{ vm_registration_status.stderr.find('has the same UUID as an existing virtual machine') < 0 }}"

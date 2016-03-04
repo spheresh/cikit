@@ -4,6 +4,7 @@
 !.gitmodules
 
 !cmf/
+!matrix/
 !roles/
 !scripts/
 !vagrant/

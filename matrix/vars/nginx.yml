@@ -1,0 +1,11 @@
+---
+nginx:
+  httpauth: no
+  htpasswd:
+    path: /etc/nginx/.htpasswd
+    user: admin
+    pass: admin
+
+  allowed_ip:
+    - 195.182.195.117
+    - 159.224.193.142
