@@ -1,0 +1,30 @@
+# {{ ansible_managed }}
+
+server {
+    listen                          80;
+    server_name                     cibox.default;
+    rewrite                         ^ https://$server_name$request_uri? permanent;
+}
+
+server {
+    listen                          443 ssl;
+    server_name                     cibox.ssl;
+
+    auth_basic                      "Restricted area";
+    auth_basic_user_file            /var/www/.htpasswd;
+
+    {% for location, port in {"/": apache_listen_port, "/jenkins": jenkins_port, "/solr": jetty_solr_port}.iteritems() %}
+        {% include "templates/cibox.nginx.proxy.j2" with context %}
+    {% endfor %}
+
+    ssl                             on;
+    ssl_ciphers                     HIGH:!aNULL:!MD5:!kEDH;
+    ssl_session_cache               shared:SSL:10m;
+    ssl_prefer_server_ciphers       on;
+    ssl_session_timeout             5m;
+    ssl_protocols                   TLSv1 TLSv1.1 TLSv1.2;
+    add_header                      Strict-Transport-Security 'max-age=31536000';
+
+    ssl_certificate                 {{ cibox_ssl_folder }}/ssl.crt;
+    ssl_certificate_key             {{ cibox_ssl_folder }}/ssl.key;
+}

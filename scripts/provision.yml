@@ -40,6 +40,7 @@
     vagrant: no
     # Use this secret in your client (Varnish module) in order to connect to Varnish.
     varnish_secret: "14bac2e6-1e34-4770-8078-974373b76c90"
+    cibox_ssl_folder: /etc/ssl/private
     composer_packages:
       drush/drush: 7.*
       drupal/coder: dev-7.x-2.x
@@ -219,6 +220,14 @@
     - name: Starting random rnd-tools service
       shell: rngd -r /dev/urandom
       when: not vagrant and ansible_virtualization_type != "openvz"
+
+    - name: Create global config for NGINX
+      template:
+        src: cibox.nginx.j2
+        dest: "/etc/nginx/sites-{{ item }}/cibox"
+      when: not vagrant
+      with_items: ["enabled", "available"]
+      tags: ["nginx"]
 
     # @todo Doesn't work using Ansible "gem" module.
     - name: Install Compass
