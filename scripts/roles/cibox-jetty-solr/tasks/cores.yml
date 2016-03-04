@@ -1,5 +1,4 @@
 ---
-
 - name: Clone solr index cores from default collection1
   shell: rsync -ra /opt/solr/solr/collection1/ /opt/solr/solr/{{ item.value.name }}/
   with_dict: jetty_solr_cores

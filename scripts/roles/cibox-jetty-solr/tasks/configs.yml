@@ -1,5 +1,4 @@
 ---
-
 - name: If module is downloaded already
   stat: path=~/{{ jetty_solr_module }}
   register: drupal_solr_module
