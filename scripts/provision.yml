@@ -6,6 +6,7 @@
   vars_files:
     - ../config.yml
     - vars/php.yml
+    - vars/ports.yml
     - vars/mysql.yml
     - vars/nginx.yml
     - vars/apache.yml
@@ -38,7 +39,6 @@
   vars:
     vagrant: no
     # Use this secret in your client (Varnish module) in order to connect to Varnish.
-    jenkins_port: 8079
     varnish_secret: "14bac2e6-1e34-4770-8078-974373b76c90"
     composer_packages:
       drush/drush: 7.*
@@ -161,7 +161,7 @@
       tags: ["apache", "php-stack"]
 
     - role: ansible-role-php
-      tags: ["php-stack"]
+      tags: ["php", "php-stack"]
 
     - role: ansible-php-pear
       tags: ["pear", "php-stack"]
