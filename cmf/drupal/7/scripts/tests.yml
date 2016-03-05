@@ -57,6 +57,7 @@
         port: 4444
         host: 127.0.0.1
         delay: 10
+      when: run
 
     - include: tasks/reports.yml
       when: run
