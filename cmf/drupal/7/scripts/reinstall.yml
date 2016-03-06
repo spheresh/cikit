@@ -40,8 +40,7 @@
 
     - include: tasks/drush/vset.yml
 
-    # Enable/disable configured modules.
-    - name: Managing modules
+    - name: Execute Drush commands
       include: tasks/drush/drush.yml
       with_items: "{{ commands.pre }}"
 
