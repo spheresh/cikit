@@ -1,0 +1,28 @@
+---
+- name: Get the name of original VM
+  include: ../vboxmanage.yml
+  args:
+    command: "list vms | awk '{print $1}'"
+
+- name: Determine a number of a new VM
+  set_fact:
+    vm_num: "{{ '%02d' | format(vboxmanage_result.stdout_lines | count) }}"
+
+- name: Set name for a new VM
+  set_fact:
+    vm_name: "{{ application }}{{ vm_num }}"
+
+- include: clone.yml
+  args:
+    # The first VM - is an initial.
+    name: "{{ vboxmanage_result.stdout_lines | first }}"
+    new: "{{ vm_name }}"
+
+# Depends on variables: "vm_name" and "vm_num".
+- include: nat.yml
+  with_dict: "{{ virtualmachine.port_forwarding }}"
+
+- name: Run newly created VM
+  include: ../vboxmanage.yml
+  args:
+    command: "startvm {{ vm_name }} --type headless"

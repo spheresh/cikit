@@ -5,13 +5,15 @@
   when: vm_path == ""
 
 - name: Register Virtual Machine
-  shell: "VBoxManage registervm {{ vm_path }}"
-  become: yes
-  become_user: "{{ phpvirtualbox.user.user }}"
-  ignore_errors: yes
-  register: vm_registration_status
+  include: vboxmanage.yml
+  args:
+    command: "registervm {{ vm_path }}"
+    ignore_errors: yes
 
 - name: Check VM registration status
   fail:
-    msg: "{{ vm_registration_status.stderr }}"
-  when: "{{ vm_registration_status.stderr.find('has the same UUID as an existing virtual machine') < 0 }}"
+    msg: "{{ vboxmanage_result.stderr }}"
+  when: "{{ vboxmanage_result.stderr.find('has the same UUID as an existing virtual machine') < 0 }}"
+
+- include: droplet/add.yml
+  when: "{{ droplet_add }}"
