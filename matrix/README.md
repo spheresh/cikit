@@ -55,6 +55,6 @@ Why `cibox<NN>`? [Look there](matrix.yml#L6) for the answer.
 
 ## To do
 
-- Allow to use not self-signed SSL certificates
-- Use OS image from ubuntu servers and configure it programmatically
-- Allow to add SSH keys to a droplet on creation stage
+- Use OS image from Ubuntu servers and configure it programmatically
+- Allow to add SSH keys to a droplet on creation phase
+- Allow to use not self-signed SSL certificates for host machine
