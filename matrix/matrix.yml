@@ -20,6 +20,10 @@
         msg: "You need Ansible {{ ansible_version.major }} or better on your host machine!"
       when: "{{ ansible_version.major }} < 2"
 
+    - name: Configure hostname
+      hostname:
+        name: "{{ domain }}"
+
   roles:
     - role: apt
       tags: ["apt"]
