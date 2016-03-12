@@ -1,23 +1,41 @@
 # {{ ansible_managed }}
 
-server {
-        listen 80;
-        server_name "~^.*{{ application }}(?P<port_id>\d{2})\.{{ domain | replace(".", "\\.") }}$";
+{% for scheme, item in virtualmachine.port_forwarding.iteritems() %}
+    {% set natpf=item.split(':') %}
+    {% set host=natpf | first %}
+    {% set port=natpf | last %}
 
-        {% set port=80 %}
-        {% set scheme="http" %}
-        {% include "templates/nginx/location-slash.j2" with context %}
-}
+    {% if scheme != "ssh" or host != "" %}
+        server {
+            server_name "~^.*{{ application }}(?P<port_id>\d{2})\.{{ domain | replace(".", "\\.") }}$";
 
-server {
-        listen 443 ssl;
-        server_name "~^.*{{ application }}(?P<port_id>\d{2})\.{{ domain | replace(".", "\\.") }}$";
+            {% if scheme == "https" %}
+                listen {{ port }} ssl;
+                include ssl;
+                ssl_certificate      {{ ssl.path }}/ssl.crt;
+                ssl_certificate_key  {{ ssl.path }}/ssl.key;
+            {% else %}
+                listen {{ port }};
+            {% endif %}
 
-        {% set port=88 %}
-        {% set scheme="https" %}
-        {% include "templates/nginx/location-slash.j2" with context %}
+            location / {
+                proxy_pass              {{ scheme }}://{{ host }}:{{ port }}$port_id;
+                proxy_set_header        Host $host;
+                proxy_set_header        X-Real-IP $remote_addr;
+                proxy_set_header        X-Forwarded-For $remote_addr;
 
-        include ssl;
-        ssl_certificate      {{ ssl.path }}/ssl.crt;
-        ssl_certificate_key  {{ ssl.path }}/ssl.key;
-}
+                proxy_connect_timeout   9000;
+                proxy_send_timeout      9000;
+                proxy_read_timeout      9000;
+                send_timeout            9000;
+
+                {% if nginx.httpauth %}
+                    include auth;
+                {% endif %}
+            }
+
+            access_log /var/log/nginx/{{ domain.split('.') | first }}.access.log;
+            error_log /var/log/nginx/{{ domain.split('.') | first }}.error.log;
+        }
+    {% endif %}
+{% endfor %}
