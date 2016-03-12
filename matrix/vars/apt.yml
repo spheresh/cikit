@@ -2,11 +2,13 @@
 apt:
   repositories:
     - "deb http://download.virtualbox.org/virtualbox/debian trusty contrib"
+    - "ppa:nginx/stable"
 
   keys:
     - "https://www.virtualbox.org/download/oracle_vbox.asc"
 
   packages:
+    - "python-software-properties"
     - "dkms"
     - "build-essential"
     - "linux-headers-generic"

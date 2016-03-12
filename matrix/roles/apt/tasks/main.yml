@@ -19,4 +19,6 @@
     state: latest
     update_cache: yes
     cache_valid_time: 600
+  # Ignoring errors could prevent an error when installed packages are running and cannot be processed.
+  ignore_errors: yes
   with_items: "{{ apt.packages }}"
