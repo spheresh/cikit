@@ -1,15 +1,11 @@
 # {{ ansible_managed }}
 
-{% for scheme, item in virtualmachine.port_forwarding.iteritems() %}
-    {% set natpf=item.split(':') %}
-    {% set host=natpf | first %}
-    {% set port=natpf | last %}
-
-    {% if scheme != "ssh" or host != "" %}
+{% for port, data in virtualmachine.port_forwarding.iteritems() %}
+    {% if data.vhost %}
         server {
             server_name "~^.*{{ application }}(?P<port_id>\d{2})\.{{ domain | replace(".", "\\.") }}$";
 
-            {% if scheme == "https" %}
+            {% if data.ssl %}
                 listen {{ port }} ssl;
                 include ssl;
                 ssl_certificate      {{ ssl.path }}/ssl.crt;
@@ -19,7 +15,7 @@
             {% endif %}
 
             location / {
-                proxy_pass              {{ scheme }}://{{ host }}:{{ port }}$port_id;
+                proxy_pass              {{ "https" if data.ssl else "http" }}://127.0.0.1:{{ port }}$port_id;
                 proxy_set_header        Host $host;
                 proxy_set_header        X-Real-IP $remote_addr;
                 proxy_set_header        X-Forwarded-For $remote_addr;
@@ -34,8 +30,9 @@
                 {% endif %}
             }
 
-            access_log /var/log/nginx/{{ domain.split('.') | first }}.access.log;
-            error_log /var/log/nginx/{{ domain.split('.') | first }}.error.log;
+            {% for logType in ["access", "error"] %}
+                {{ logType }}_log /var/log/nginx/{{ domain.split('.') | first }}.{{ logType }}.log;
+            {% endfor %}
         }
     {% endif %}
 {% endfor %}

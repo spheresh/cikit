@@ -4,4 +4,4 @@ phpvirtualbox:
   package: http://netassist.dl.sourceforge.net/project/phpvirtualbox/phpvirtualbox-5.0-5.zip
   user:
     user: vbox
-    pass: vbox
+    pass: unprotected

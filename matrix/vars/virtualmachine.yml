@@ -2,8 +2,14 @@
 droplet_add: no
 virtualmachine:
   path: "/home/{{ phpvirtualbox.user.user }}/VirtualBox\\ VMs/initvm"
-  package: "http://propeople.com.ua/ffw_ubuntu_14.04_minimal.tar.gz"
+  package: "http://propeople.com.ua/ffw_ubuntu_14.04LTS_minimal.tar.gz"
   port_forwarding:
-    ssh: :22
-    http: 127.0.0.1:80
-    https: 127.0.0.1:443
+    22:
+      vhost: no
+      ssl: no
+    80:
+      vhost: yes
+      ssl: no
+    443:
+      vhost: yes
+      ssl: yes
