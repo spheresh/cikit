@@ -1,0 +1,9 @@
+---
+- name: Get list of all droplets
+  include: ../vboxmanage.yml
+  args:
+    command: "list vms | grep {{ application }}"
+
+- name: Print list of all droplets
+  debug:
+    msg: "{{ vboxmanage_result.stdout_lines }}"
