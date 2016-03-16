@@ -20,6 +20,10 @@
       prompt: Do you want to install Varnish? (yes/NO)
       private: no
 
+    - name: pcntl
+      prompt: Do you want to install PCNTL extension for PHP? (yes/NO)
+      private: no
+
     - name: http_auth_user
       prompt: Username for HTTP authentication
       default: admin
@@ -98,6 +102,7 @@
       set_fact:
         extras:
           solr: "{{ solr | bool }}"
+          pcntl: "{{ pcntl | bool }}"
           varnish: "{{ varnish | bool }}"
       tags: ["always"]
 
@@ -172,6 +177,10 @@
 
     - role: ansible-role-php-xdebug
       tags: ["xdebug", "php-stack"]
+
+    - role: php-pcntl
+      when: extras.pcntl
+      tags: ["pcntl", "php-stack"]
 
     - role: ansible-composer
       tags: ["composer", "php-stack"]
