@@ -1,4 +1,4 @@
-# Droplets management
+# Droplets management using Ansible
 
 Control a situation on a physical server using `Ansible`.
 

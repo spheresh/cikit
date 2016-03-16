@@ -1,4 +1,4 @@
-# Droplets management
+# Droplets management using UI
 
 Control a situation on a physical server using `PHP Virtual Box`.
 
