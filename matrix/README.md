@@ -28,30 +28,9 @@ Add your own host inside of `inventory` file and run the following command:
 ./cibox matrix/matrix.yml --limit=<HOSTNAME>
 ```
 
-## Create new droplet
+## Management
 
-New droplets can be created using two ways: [Ansible provisioning](#using-ansible) or [UI of phpVirtualBox](#using-ui).
-
-### Using Ansible
-
-```shell
-./cibox matrix/matrix.yml --limit=<HOSTNAME> --tags=vm --droplet-add
-```
-
-### Using UI
-
-![Clone original VM](docs/screenshots/new-droplet/vbox1.png)
-![Set an unique name and network reinitialization](docs/screenshots/new-droplet/vbox2.png)
-![Finish cloning](docs/screenshots/new-droplet/vbox3.png)
-![Click on the Network](docs/screenshots/port-forwarding/vbox1.png)
-![Click on the Port forwarding](docs/screenshots/port-forwarding/vbox2.png)
-![Configure ports](docs/screenshots/port-forwarding/vbox3.png)
-
-When described above steps are done, then just power on a virtual machine, create a record at [inventory](../inventory#L7-L8) and provision new virtual server with main `cibox` tool.
-
-`phpVirtualBox` will be available on the domain which you have to [configure](matrix.yml#L5). Imagine that it is: `m2.propeople.com.ua`. As you can see on the screenshots, every port ends by `01`. This means that domain for VM will be `cibox01.propeople.com.ua`.
-
-Why `cibox<NN>`? [Look there](matrix.yml#L6) for the answer.
+You able to choose two ways to manage your virtual machines: using [Ansible](docs/droplet/ANSIBLE.md) or [UI of PHP Virtual Box](docs/droplet/UI.md).
 
 ## To do
 
