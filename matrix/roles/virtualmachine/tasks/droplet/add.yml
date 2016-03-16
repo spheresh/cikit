@@ -38,7 +38,6 @@
     command: "modifyvm {{ vm_name }} --natpf1 '{{ item.key }},tcp,{{ '127.0.0.1' if item.value.vhost else '' }},{{ item.key }}{{ vm_num }},,{{ item.key }}'"
   with_dict: "{{ virtualmachine.port_forwarding }}"
 
-- name: Run newly created VM
-  include: ../vboxmanage.yml
+- include: startvm.yml
   args:
-    command: "startvm {{ vm_name }} --type headless"
+    droplet_name: "{{ vm_name }}"

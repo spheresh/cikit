@@ -21,5 +21,8 @@
 - include: droplet/add.yml
   when: "{{ droplet_add }}"
 
+- include: droplet/edit.yml
+  when: "{{ droplet_edit != '' }}"
+
 - include: droplet/delete.yml
   when: "{{ droplet_delete != '' }}"

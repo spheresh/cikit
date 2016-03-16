@@ -34,6 +34,5 @@ You able to choose two ways to manage your virtual machines: using [Ansible](doc
 
 ## To do
 
-- Use OS image from Ubuntu servers and configure it programmatically
 - Allow to add SSH keys to a droplet on creation phase
 - Allow to use not self-signed SSL certificates for host machine
