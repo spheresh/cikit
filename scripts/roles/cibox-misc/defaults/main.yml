@@ -2,6 +2,7 @@
 apt_repos:
   - ppa:ansible/ansible
   - ppa:chris-lea/node.js
+  - ppa:nginx/stable
 
 apt_packages:
   - imagemagick
