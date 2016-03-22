@@ -1,9 +1,4 @@
 ---
-- name: Create default config
-  template:
-    src: jenkins.j2
-    dest: /etc/default/jenkins
-
 - name: Create folders for jobs
   file:
     path: "{{ jenkins_lib }}/jobs/{{ item.name }}"

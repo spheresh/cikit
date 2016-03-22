@@ -1,6 +1,7 @@
 ---
 jenkins_job: default
 jenkins_port: 8080
+jenkins_prefix: jenkins
 jenkins_data:
   user: jenkins
   group: jenkins

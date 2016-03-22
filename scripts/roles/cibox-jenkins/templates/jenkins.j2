@@ -63,7 +63,7 @@ HTTP_PORT={{ jenkins_port }}
 AJP_PORT=-1
 
 # servlet context, important if you want to use apache proxying
-PREFIX=/$NAME
+PREFIX=/{{ jenkins_prefix }}
 
 # arguments to pass to jenkins.
 # --javahome=$JAVA_HOME
@@ -75,4 +75,4 @@ PREFIX=/$NAME
 # --webroot=~/.jenkins/war
 # --prefix=$PREFIX
 
-JENKINS_ARGS="--webroot=/var/cache/$NAME/war --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT --httpListenAddress=$HTTP_HOST"
+JENKINS_ARGS="--webroot=/var/cache/$NAME/war --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT --httpListenAddress=$HTTP_HOST {{ '--prefix=$PREFIX' if jenkins_prefix else '' }}"
