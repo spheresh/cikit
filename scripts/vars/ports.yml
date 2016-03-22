@@ -1,4 +1,5 @@
 ---
 apache_listen_port: "{{ 80 if vagrant else 8080 }}"
+apache_listen_port_ssl: "{{ 443 if vagrant else 44344 }}"
 jenkins_port: 8079
 jetty_solr_port: 8078
