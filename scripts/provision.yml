@@ -15,14 +15,17 @@
     - name: solr
       prompt: Do you want to install Solr? (yes/NO)
       private: no
+      tags: ["solr"]
 
     - name: varnish
       prompt: Do you want to install Varnish? (yes/NO)
       private: no
+      tags: ["varnish"]
 
     - name: pcntl
       prompt: Do you want to install PCNTL extension for PHP? (yes/NO)
       private: no
+      tags: ["pcntl"]
 
     - name: http_auth_user
       prompt: Username for HTTP authentication
@@ -31,14 +34,16 @@
       # WARNING!!! This condition will be processed only inside of Vagrantfile! The "vagrant"
       # variable is undefined here and "when" construction aren't processed by Ansible for prompts.
       when: not vagrant
+      tags: ["security"]
 
     - name: http_auth_pass
       prompt: Passowrd for HTTP authentication
       default: r3str1cteDHere
-      private: no
+      private: yes
       # WARNING!!! This condition will be processed only inside of Vagrantfile! The "vagrant"
       # variable is undefined here and "when" construction aren't processed by Ansible for prompts.
       when: not vagrant
+      tags: ["security"]
 
   vars:
     vagrant: no
@@ -138,9 +143,7 @@
         name: "{{ item }}"
         state: stopped
       ignore_errors: yes
-      with_items:
-        - varnish
-        - apache2
+      with_items: ["varnish", "apache2"]
 
     - name: Create CIBox command line utility
       file:
@@ -158,6 +161,9 @@
   roles:
     - role: cibox-misc
       tags: ["misc"]
+
+    - role: cibox-ssl-config
+      tags: ["ssl"]
 
     - role: ansible-role-nginx
       tags: ["nginx", "php-stack"]
@@ -201,9 +207,6 @@
     - role: cibox-mysql-config
       tags: ["mysql", "php-stack"]
 
-    - role: cibox-ssl-config
-      tags: ["ssl-config"]
-
     - role: cibox-varnish
       when: extras.varnish
       tags: ["varnish"]
@@ -215,20 +218,22 @@
       when: not vagrant and ansible_virtualization_type != "openvz"
       tags: ["swap"]
 
-    - role: cibox-jenkins
-      when: not vagrant
-      tags: ["jenkins"]
-
     - role: cibox-selenium
       tags: ["selenium"]
 
     - role: cibox-protected-folders
+      tags: ["security"]
       when: not vagrant
+
+    - role: cibox-jenkins
+      when: not vagrant
+      tags: ["jenkins"]
 
   tasks:
     - name: Starting random rnd-tools service
       shell: rngd -r /dev/urandom
       when: not vagrant and ansible_virtualization_type != "openvz"
+      tags: ["always"]
 
     - name: Create global config for NGINX
       template:
@@ -241,11 +246,12 @@
     # @todo Doesn't work using Ansible "gem" module.
     - name: Install Compass
       shell: gem install compass
+      tags: ["sass"]
 
-    - name: Restart services
+    - name: Restart service
       service:
         name: "{{ item }}"
         state: restarted
       ignore_errors: yes
-      with_items:
-        - apache2
+      with_items: ["apache2", "nginx"]
+      tags: ["always"]
