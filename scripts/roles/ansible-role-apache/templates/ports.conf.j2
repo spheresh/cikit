@@ -1,0 +1,14 @@
+{% if apache_vhosts_version == "2.2" %}
+    NameVirtualHost *:{{ apache_listen_port }}
+    NameVirtualHost *:{{ apache_listen_port_ssl }}
+{% endif %}
+
+Listen {{ apache_listen_port }}
+
+<IfModule ssl_module>
+    Listen {{ apache_listen_port_ssl }}
+</IfModule>
+
+<IfModule mod_gnutls.c>
+    Listen {{ apache_listen_port_ssl }}
+</IfModule>
