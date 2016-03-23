@@ -40,7 +40,8 @@ expose_php = On
 ; max_input_time = 60
 ; max_input_nesting_level = 64
 ; max_input_vars = 1000
-; memory_limit = {{ php_memory_limit }}
+; Need to set this parameter because CL scripts will have only 128M for execution.
+memory_limit = {{ php_memory_limit }}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Error handling and logging ;
