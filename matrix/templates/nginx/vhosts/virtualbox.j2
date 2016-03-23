@@ -6,10 +6,8 @@
             server_name "~^.*{{ application }}(?P<port_id>\d{2})\.{{ domain | replace(".", "\\.") }}$";
 
             {% if data.ssl %}
-                listen {{ port }} ssl;
+                listen {{ port }} ssl spdy;
                 include ssl;
-                ssl_certificate      {{ ssl.path }}/ssl.crt;
-                ssl_certificate_key  {{ ssl.path }}/ssl.key;
             {% else %}
                 listen {{ port }};
             {% endif %}
