@@ -27,7 +27,7 @@ The power of the system - simplicity. All provisioning is the same for local and
 ## Quick Start
 
 - Add your host credentials to the `inventory` file.
-- `./cibox repository --project=<NAME> [--cmf=drupal] [--version=7.41] [--host=https://github.com] [--vendor=drupal]`
+- `./cibox repository --project=<NAME> [--cmf=drupal] [--version=7.43] [--host=https://github.com] [--vendor=drupal]`
 - `./cibox provision --project=<NAME> [--limit=<HOST>]`
 
 ### Examples
@@ -41,7 +41,7 @@ The power of the system - simplicity. All provisioning is the same for local and
 **WordPress 4** (supported system):
 
 ```shell
-./cibox repository --project=test --cmf=wordpress --version=4.3.1
+./cibox repository --project=test --cmf=wordpress --version=4.4.2
 ```
 
 ## WIKI
