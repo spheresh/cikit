@@ -28,6 +28,14 @@ Add your own host inside of `inventory` file and run the following command:
 ./cibox matrix/matrix.yml --limit=<HOSTNAME>
 ```
 
+### Add trusted SSL certificate
+
+Inside of the `/path/to/directory/` two files must be located: `*.crt` and `*.key`. They are will be copied and NGINX start to use them immediately.
+
+```shell
+./cibox matrix/matrix.yml --limit=<HOSTNAME> --tags=ssl --ssl-src=/path/to/directory/
+```
+
 ## Management
 
 You able to choose two ways to manage your virtual machines: using [Ansible](docs/droplet/ANSIBLE.md) or [UI of PHP Virtual Box](docs/droplet/UI.md).
@@ -35,4 +43,4 @@ You able to choose two ways to manage your virtual machines: using [Ansible](doc
 ## To do
 
 - Allow to add SSH keys to a droplet on creation phase
-- Allow to use not self-signed SSL certificates for host machine
+- Reuse roles from Matrix in CIBox (`nginx`, `ssl`)
