@@ -4,6 +4,8 @@
   vars:
     domain: m2.propeople.com.ua
     application: cibox
+    # Allow to pass "--restart=nginx,jenkins,apache" to this script and restart necessary services.
+    restart: ""
 
   pre_tasks:
     - include_vars: "{{ item }}"
@@ -39,3 +41,12 @@
 
     - role: virtualmachine
       tags: ["vm"]
+
+  tasks:
+    - name: Restart service
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items: "{{ restart.split(',') }}"
+      when: "{{ restart | length > 0 }}"
+      tags: ["always"]

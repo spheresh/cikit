@@ -33,7 +33,7 @@ Add your own host inside of `inventory` file and run the following command:
 Inside of the `/path/to/directory/` two files must be located: `*.crt` and `*.key`. They are will be copied and NGINX start to use them immediately.
 
 ```shell
-./cibox matrix/matrix.yml --limit=<HOSTNAME> --tags=ssl --ssl-src=/path/to/directory/
+./cibox matrix/matrix.yml --limit=<HOSTNAME> --tags=ssl --ssl-src=/path/to/directory/ --restart=nginx
 ```
 
 ## Management
