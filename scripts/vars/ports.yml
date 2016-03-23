@@ -3,3 +3,29 @@ apache_listen_port: "{{ 80 if vagrant else 8080 }}"
 apache_listen_port_ssl: "{{ 443 if vagrant else 44344 }}"
 jenkins_port: 8079
 jetty_solr_port: 8078
+
+# See "templates/cibox.nginx.j2".
+nginx_proxies:
+  - location: "/"
+    port: "{{ apache_listen_port_ssl }}"
+    # Proxy map:
+    # - NGINX: http://example.com:80
+    # - NGINX: https://example.com:443
+    # - Apache: https://127.0.0.1:<APACHE_PORT_SSL>
+    ssl: yes
+
+  - location: "/jenkins"
+    port: "{{ jenkins_port }}"
+    # Proxy map:
+    # - NGINX: http://example.com:80
+    # - NGINX: https://example.com:443
+    # - Jenkins: http://127.0.0.1:<JENKINS_PORT>
+    ssl: no
+
+  - location: "/solr"
+    port: "{{ jetty_solr_port }}"
+    # Proxy map:
+    # - NGINX: http://example.com:80
+    # - NGINX: https://example.com:443
+    # - Solr: http://127.0.0.1:<SOLR_PORT>
+    ssl: no
