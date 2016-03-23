@@ -18,7 +18,7 @@
 
     - name: Configure hostname
       hostname:
-        name: "{{ domain }}"
+        name: "{{ domain | replace('.', '-') }}"
 
   roles:
     - role: apt
