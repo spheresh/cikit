@@ -1,3 +1,5 @@
 ---
+ssl_src: ~
 ssl:
-  path: /etc/ssl/private
+  dest: /etc/ssl/private
+  bits: 2048
