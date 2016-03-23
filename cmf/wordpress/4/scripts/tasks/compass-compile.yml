@@ -1,0 +1,16 @@
+---
+- name: Detect active theme
+  shell: "echo $(wp theme path --allow-root)/$(wp theme list --field=name --status=active --network=4 --allow-root)"
+  args:
+    chdir: ../docroot
+  register: theme_path
+
+- name: Check for SCSS
+  stat:
+    path: "{{ theme_path.stdout }}/config.rb"
+  register: config_rb
+
+- name: Compile SCSS
+  become: no
+  shell: "compass compile {{ theme_path.stdout }} --force"
+  when: config_rb.stat.exists

@@ -5,6 +5,8 @@ env: default
 profile: pp
 
 sql_workflow: no
+# By default can be "pull" or "full". Additional modes can be added.
+reinstall_mode: full
 
 # Environment variables for each shell task.
 env_vars:

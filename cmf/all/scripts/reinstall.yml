@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  gather_facts: yes
+  connection: local
+  become: yes
+
+  vars_files:
+    - ../config.yml
+    - vars/main.yml
+
+  tasks:
+    - include: tasks/environment/configuration.yml
+    - include: tasks/reinstall.yml
+    - include: tasks/compass-compile.yml
