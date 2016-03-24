@@ -50,12 +50,12 @@
         archive: no
         recursive: yes
       with_items:
+        - src: "../cmf/all/"
         - src: "{{ cmf_configs.stat.path }}/"
         - src: "../cibox"
         - src: "../config.yml"
         - src: "../inventory"
         - src: "../vagrant/"
-        - src: "../cmf/all/"
 
         - src: "../scripts/"
           dest: "provisioning"
@@ -79,5 +79,5 @@
     - name: Update config.yml
       lineinfile:
         dest: "../{{ project }}/config.yml"
-        line: "cmf: {{ cmf }}\nproject: {{ project }}\nsite_url: http://{{ project }}.dev"
+        line: "cmf: {{ cmf }}\nproject: {{ project }}\nsite_url: https://{{ project }}.dev"
         insertafter: "^---$"
