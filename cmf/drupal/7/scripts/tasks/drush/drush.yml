@@ -1,3 +1,5 @@
 ---
 - shell: "cd ../docroot && drush {{ item | join(' ') }} {{ (item[item | join(' ')] or []) | join(' ') }} -y"
+  register: drush_result
   environment: "{{ env_vars }}"
+  ignore_errors: "{{ ignore_errors | default('no') }}"
