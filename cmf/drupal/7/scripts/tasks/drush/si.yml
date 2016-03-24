@@ -2,6 +2,6 @@
 - name: Installing Drupal
   include: drush.yml
   with_items:
-    - si: ["{{ profile }} --db-url=mysql://{{ mysql.user }}:{{ mysql.pass }}@{{ mysql.host | default('127.0.0.1') }}:{{ mysql.port | default('3306') }}/{{ databases.default }}"]
+    - si: ["{{ profile }} --db-url=mysql://{{ mysql.user }}:{{ mysql.pass }}@{{ mysql.host | default('127.0.0.1') }}:{{ mysql.port | default('3306') }}/{{ databases.default }} --uri={{ site_url }}"]
 
 - include: ../environment/prepare.yml
