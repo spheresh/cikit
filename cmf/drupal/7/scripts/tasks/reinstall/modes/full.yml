@@ -1,0 +1,40 @@
+---
+- name: Remove databases
+  include: ../../database/database.yml
+  args:
+    state: absent
+
+- include: ../../environment/prepare.yml
+
+- include: ../../drush/si.yml
+  when: not sql_workflow
+
+- name: Create databases
+  include: ../../database/database.yml
+  args:
+    state: present
+
+- include: ../../drupal-settings.yml
+
+# Download and import databases.
+- include: ../../database/import.yml
+  when: sql_workflow
+
+# Unique way for both workflows.
+- include: ../../super-admin.yml
+
+- include: ../../drush/rr.yml
+  when: sql_workflow
+
+- include: ../../drush/vset.yml
+
+- name: Execute Drush commands
+  include: ../../drush/drush.yml
+  with_items: "{{ commands.pre }}"
+
+- include: ../../drush/updb.yml
+  when: sql_workflow
+
+- name: Execute Drush commands
+  include: ../../drush/drush.yml
+  with_items: "{{ commands.post }}"

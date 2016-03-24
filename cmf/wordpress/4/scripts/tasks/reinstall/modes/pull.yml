@@ -1,5 +1,5 @@
 ---
-- name: Make a copy of settings.php
+- name: Make a copy of wp-config.php
   copy:
     src: "/var/www/{{ build_id | default }}/docroot/wp-config.php"
     dest: "../docroot/wp-config.php"

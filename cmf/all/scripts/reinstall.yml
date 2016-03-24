@@ -11,7 +11,7 @@
   tasks:
     - name: Check existence of installation mode
       stat:
-        path: "tasks/reinstall/{{ reinstall_mode }}.yml"
+        path: "tasks/reinstall/modes/{{ reinstall_mode }}.yml"
       register: is_reinstall_mode
 
     - name: Check existence of environment configuration
@@ -20,5 +20,5 @@
       register: is_env
 
     - include_vars: "vars/environments/{{ env if is_env.stat.exists else 'default' }}.yml"
-    - include: "tasks/reinstall/{{ reinstall_mode if is_reinstall_mode.stat.exists else 'full' }}.yml"
-    - include: "tasks/compass-compile.yml"
+    - include: "tasks/reinstall/modes/{{ reinstall_mode if is_reinstall_mode.stat.exists else 'full' }}.yml"
+    - include: "tasks/reinstall/main.yml"

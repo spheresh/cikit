@@ -1,6 +1,6 @@
 ---
 - name: Remove database
-  include: ../database/database.yml
+  include: ../../database/database.yml
   args:
     state: absent
 
@@ -10,20 +10,20 @@
     dest: ../docroot/wp-config.php
 
 - name: Create database
-  include: ../database/database.yml
+  include: ../../database/database.yml
   args:
     state: present
 
-- include: ../wp-cli/core-install.yml
+- include: ../../wp-cli/core-install.yml
   when: not sql_workflow
 
 # Download and import databases.
-- include: ../database/import.yml
+- include: ../../database/import.yml
   when: sql_workflow
 
 # Unique way for both workflows.
-- include: ../super-admin.yml
+- include: ../../super-admin.yml
 
 # Enable/disable configured plugins.
-- include: ../wp-cli/plugins.yml
-- include: ../wp-cli/commands.yml
+- include: ../../wp-cli/plugins.yml
+- include: ../../wp-cli/commands.yml
