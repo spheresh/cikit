@@ -17,7 +17,7 @@ mysql:
   pass: root
 
 databases:
-  default: "{{ build_id | default(env) }}_{{ cmf }}"
+  default: "{{ cmf }}_{{ project | default('EMPTY') }}_{{ build_id | default(env) }}"
 
 # URL to the source database. Can be overridden by CI server.
 # @todo
