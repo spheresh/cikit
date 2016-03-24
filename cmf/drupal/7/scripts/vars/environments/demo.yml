@@ -10,6 +10,10 @@ commands:
     - solr-index: ~
 
 drupal:
+  # Settings of "Domain Access" module.
+  domain:
+    # Needed to use it's settings.inc inside of settings.php.
+    path: "profiles/{{ profile }}/modules/contrib/domain"
   # Values for $conf in settings.php.
   conf:
     environment: "{{ env }}"

@@ -1,0 +1,24 @@
+{% for name, db in databases.iteritems() %}
+$databases['{{ name }}'] = [
+  'default' => [
+    'port' => '',
+    'host' => 'localhost',
+    'driver' => 'mysql',
+    'prefix' => '',
+    'database' => '{{ db }}',
+    'username' => '{{ mysql.user }}',
+    'password' => '{{ mysql.pass }}',
+  ],
+];
+{% endfor %}
+
+// Settings of the "Domain Access" module.
+$domain_access_settings = DRUPAL_ROOT . '/{{ drupal.domain.path }}/settings.inc';
+
+if (file_exists($domain_access_settings)) {
+  require_once $domain_access_settings;
+}
+
+// Search API overrides.
+$conf['search_api_override_mode'] = 'default';
+$conf['search_api_override_servers']['default_solr']['options']['path'] = '/solr/{{ env }}';

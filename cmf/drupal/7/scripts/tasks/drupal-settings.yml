@@ -1,23 +1,25 @@
 ---
 - name: settings.php
-  shell: "cd ../docroot/sites/default && cp default.settings.php settings.php"
+  shell: "cp default.settings.php settings.php"
+  args:
+    chdir: ../docroot/sites/default
 
-- name: Generating databases config
+- name: Generating settings
   become: no
   template:
-    src: templates/databases.j2
-    dest: ./databases.settings.php
+    src: templates/settings.php.j2
+    dest: ./settings.php
     mode: 0644
 
-- name: Write databases config to settings.php
+- name: Write settings.php
   lineinfile:
     dest: "../docroot/sites/default/settings.php"
-    line: "{{ lookup('file', 'databases.settings.php') }}"
+    line: "{{ lookup('file', 'settings.php') }}"
 
-- name: Remove temporary file
+- name: Remove temporary settings
   become: no
   file:
-    path: databases.settings.php
+    path: settings.php
     state: absent
 
 - name: Adding variables to settings.php
