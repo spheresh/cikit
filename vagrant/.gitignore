@@ -22,6 +22,8 @@ behat.yml
 # Ignore hidden files.
 .*
 ~*
+# Ignore Ansible-generated data.
+*.retry
 
 !*.md
 commentinfo.md
