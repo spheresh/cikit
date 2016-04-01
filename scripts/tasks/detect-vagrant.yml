@@ -2,4 +2,4 @@
 - name: Is Vagrant machine will be provisioned?
   set_fact:
     vagrant: yes
-  when: ansible_user is defined and ansible_user == "127.0.0.1"
+  when: ansible_host is defined and ansible_host == "127.0.0.1"
