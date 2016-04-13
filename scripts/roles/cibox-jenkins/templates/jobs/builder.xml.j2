@@ -61,6 +61,7 @@ export PYTHONUNBUFFERED=1
 export PROJECT=$(echo ${JOB_NAME//_BUILDER/} | tr '[:upper:]' '[:lower:]')
 export BUILD_NAME=${PROJECT}_${BUILD_ENV}
 export SITE_URL=http://$(php -r "echo parse_url('${JOB_URL}')['host'];")/${BUILD_NAME}
+export ANSIBLE_ARGS="-vvvv"
 
 ./cibox reinstall \
 --env=${BUILD_ENV} \
@@ -83,10 +84,8 @@ fi
 
 # Move project from workspace to directory available in web.
 sudo rsync --delete -ra ./docroot/ /var/www/${BUILD_NAME}/
-# Go to project directory.
-cd $_
 # Set group and owner only for directory with an application.
-sudo chown -R www-data:jenkins $(pwd)
+sudo chown -R www-data:jenkins $_
 </command>
     </hudson.tasks.Shell>
   </builders>

@@ -57,6 +57,7 @@ export ARTIFACTS=$_
 export PROJECT=$(echo ${JOB_NAME//_PR_BUILDER/} | tr '[:upper:]' '[:lower:]')
 export BUILD_NAME=${PROJECT}_build_${BUILD_NUMBER}
 export SITE_URL=https://$(php -r "echo parse_url('${JOB_URL}')['host'];")/${BUILD_NAME}
+export ANSIBLE_ARGS="-vvvv"
 
 ./cibox reinstall \
 --build-id=${BUILD_NAME} \
@@ -70,10 +71,8 @@ export SITE_URL=https://$(php -r "echo parse_url('${JOB_URL}')['host'];")/${BUIL
 sudo chown -R jenkins:jenkins ${WORKSPACE}
 # Move project from workspace to directory available in web.
 sudo rsync --delete -ra ./docroot/ /var/www/${BUILD_NAME}/
-# Go to project directory.
-cd $_
 # Set group and owner only for directory with an application.
-sudo chown -R www-data:jenkins $(pwd)
+sudo chown -R www-data:jenkins $_
 </command>
         </hudson.tasks.Shell>
     </builders>
