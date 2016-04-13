@@ -1,8 +1,0 @@
----
-- name: Install dependencies via Composer Manager
-  include: drush/drush.yml
-  args:
-    ignore_errors: yes
-  with_items:
-    - composer-rebuild: ~
-    - composer-manager: ~

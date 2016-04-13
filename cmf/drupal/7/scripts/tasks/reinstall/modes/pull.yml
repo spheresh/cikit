@@ -1,5 +1,0 @@
----
-- name: Make a copy of settings.php
-  copy:
-    src: "/var/www/{{ build_id | default }}/docroot/sites/default/settings.php"
-    dest: "../docroot/sites/default/settings.php"
