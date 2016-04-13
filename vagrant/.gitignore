@@ -7,7 +7,7 @@ docroot/sites/*/files/
 # Ignore any custom settings.
 docroot/sites/*/settings*.php
 # Build reports.
-docroot/build_reports/
+docroot/reports/
 # Behat configuration file.
 behat.yml
 
