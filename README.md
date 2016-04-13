@@ -41,7 +41,7 @@ The power of the system - simplicity. All provisioning is the same for local and
 **WordPress 4** (supported system):
 
 ```shell
-./cibox repository --project=test --cmf=wordpress --version=4.4.2
+./cibox repository --project=test --cmf=wordpress --version=4.5
 ```
 
 ## WIKI
