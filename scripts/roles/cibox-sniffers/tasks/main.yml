@@ -1,17 +1,16 @@
 ---
 - name: Clone Git repos
   git:
-    repo: "{{ item.repo }}"
-    dest: "{{ composer_dir }}/vendor/podarok/{{ item.name }}"
-    version: "{{ item.branch }}"
-  with_items: "{{ git_repos }}"
+    repo: "{{ item.value.repo }}"
+    dest: "{{ composer_dir }}/vendor/conding-standards/{{ item.key }}"
+    version: "{{ item.value.branch }}"
+  with_dict: "{{ git_repos }}"
+
+- name: Remove all registered PHP Conde Sniffer standards
+  shell: "phpcs --config-delete installed_paths"
 
 - name: Install PHP CodeSniffer standards
-  file:
-    src: "{{ composer_dir }}/{{ item }}"
-    dest: "{{ composer_dir }}/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/{{ item | basename }}"
-    state: link
-  with_items: "{{ phpcs_standards }}"
+  shell: "phpcs --config-set installed_paths {{ composer_dir }}/vendor/conding-standards/{{ git_repos.keys() | join(',' + composer_dir + '/vendor/conding-standards/') }}"
 
 - name: Install Node.js packages
   npm:

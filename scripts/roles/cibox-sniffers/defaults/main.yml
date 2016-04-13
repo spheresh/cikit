@@ -1,26 +1,28 @@
 ---
 git_repos:
-  - branch: master
+  Drupal:
+    branch: 7.x-2.x
+    repo: https://github.com/klausi/coder.git
+
+  DrupalSecure:
+    branch: master
     repo: http://git.drupal.org/sandbox/coltrane/1921926.git
-    name: DrupalSecure
 
-  - branch: 7.x-1.x
+  DrupalPractice:
+    branch: 7.x-1.x
     repo: https://github.com/klausi/drupalpractice.git
-    name: DrupalPractice
 
-  - branch: master
+  Security:
+    branch: master
     repo: https://github.com/podarok/phpcs-security-audit.git
-    name: Security
 
-  - branch: master
+  Symfony2:
+    branch: master
     repo: https://github.com/podarok/Symfony2-coding-standard.git
-    name: Symfony2
 
-phpcs_standards:
-  - vendor/drupal/coder/coder_sniffer/Drupal
-  - vendor/podarok/DrupalSecure/DrupalSecure
-  - vendor/podarok/Security/Security
-  - vendor/podarok/DrupalPractice/DrupalPractice
+  WordPress:
+    branch: master
+    repo: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git
 
 npm_packages:
   - jshint
