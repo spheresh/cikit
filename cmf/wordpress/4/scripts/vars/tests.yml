@@ -1,0 +1,8 @@
+---
+phpcs:
+  standards: ["WordPress", "Security"]
+  extensions: ["php"]
+
+scan_dirs:
+  - "wp-content/plugins"
+  - "wp-content/themes"

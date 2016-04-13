@@ -2,7 +2,7 @@
 - name: Set path to project directory
   set_fact:
     # Path where project accessible from web.
-    project_webroot: "{{ webroot + '/' + build_id if build_id is defined else '../docroot' }}"
+    project_webroot: "{{ webroot + '/' + build_id if build_id is defined else ('../docroot' | realpath) }}"
 
 - name: Set path to project workspace
   set_fact:
@@ -27,3 +27,17 @@
   copy:
     dest: "{{ reports.comment }}"
     content: "Site installed at: <a href=\"{{ site_url }}\" target=\"_blank\">{{ site_url }}</a>"
+
+- name: Ensure Composer packages are already installed
+  stat:
+    path: ../vendor/
+  register: is_vendor
+
+- name: Check for composer.json
+  stat:
+    path: ../composer.json
+  register: is_composer_json
+
+- name: Install Composer packages
+  shell: "cd ../ && composer install"
+  when: not is_vendor.stat.exists and is_composer_json.stat.exists

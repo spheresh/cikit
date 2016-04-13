@@ -6,7 +6,7 @@
 default:
   formatters:
     html:
-      output_path: {{ reports_dir | realpath }}/behat
+      output_path: {{ reports.dir }}/behat
   suites:
     default:
       contexts:
@@ -48,9 +48,9 @@ default:
       blackbox: ~
       api_driver: drupal
       drush:
-        root: {{ webroot }}/{{ build_id | default }}/docroot
+        root: {{ project_webroot }}
       drupal:
-        drupal_root: {{ webroot }}/{{ build_id | default }}/docroot
+        drupal_root: {{ project_webroot }}
       text:
         log_in: Log in
         log_out: Log out

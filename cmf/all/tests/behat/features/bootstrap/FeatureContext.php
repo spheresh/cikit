@@ -5,7 +5,7 @@
  */
 
 // Contexts.
-use Drupal\TqExtension\Context\RawTqContext;
+use Behat\MinkExtension\Context\RawMinkContext;
 
 // Helpers.
 use Behat\Gherkin\Node\PyStringNode;
@@ -14,6 +14,6 @@ use Behat\Gherkin\Node\TableNode;
 /**
  * Class FeatureContext.
  */
-class FeatureContext extends RawTqContext {
+class FeatureContext extends RawMinkContext {
 
 }

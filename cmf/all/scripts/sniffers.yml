@@ -19,18 +19,6 @@
         state: "{{ item }}"
       with_items: ["absent", "directory"]
 
-    - name: Run security review
-      shell: "drush en security_review -y && drush secrev 2>&1 | grep error | awk '{$NF=\"\"}1' > {{ reports.dir }}/security_review.txt && drush dis security_review -y"
-      args:
-        chdir: "{{ project_workspace }}"
-      environment: "{{ env_vars }}"
-
-    - include: tasks/misc/report-link.yml
-      args:
-        data:
-          type: "security_review"
-          title: "Security review"
-
     - name: Run CodeSniffer
       shell: "phpcs --standard={{ item }} --extensions={{ phpcs.extensions | join(',') }} -n {{ scan_dirs | join(' ') }} > {{ reports.dir }}/phpcs.{{ item }}.txt"
       args:
@@ -73,3 +61,11 @@
         data:
           type: "scsslint"
           title: "SCSS Lint"
+
+    - name: "Check existence of custom sniffers for {{ cmf | capitalize }}"
+      stat:
+        path: tasks/sniffers/main.yml
+      register: is_custom_sniffers
+
+    - include: tasks/sniffers/main.yml
+      when: "{{ is_custom_sniffers.stat.exists }}"

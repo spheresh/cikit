@@ -21,24 +21,9 @@
     run: no
     headless: no
 
-  pre_tasks:
-    - include: "tasks/environment/initialize.yml"
-
-    - name: Check if Behat is already installed
-      stat:
-        path: ../vendor/behat/behat/
-      register: is_vendor
-
-    - name: Check for composer.json
-      stat:
-        path: ../composer.json
-      register: is_composer_json
-
-    - name: Install Behat
-      shell: cd ../ && composer install
-      when: not is_vendor.stat.exists and is_composer_json.stat.exists
-
   tasks:
+    - include: tasks/environment/initialize.yml
+
     - name: Ensure Xvfb service started
       service:
         name: xvfb
