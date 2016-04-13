@@ -126,6 +126,8 @@ if [ -z "${ANSIBLE_INVENTORY}" ]; then
   cp ${SELF_PATH}/inventory ~/.inventory
   chmod a-x ~/.inventory
   params+=" -i ~/.inventory"
+elif [ $(uname -o) == "Cygwin" ]; then
+  ANSIBLE_INVENTORY=$(cygpath ${ANSIBLE_INVENTORY})
 fi
 
 # Pass any extra arguments for "ansible-playbook". Most useful
