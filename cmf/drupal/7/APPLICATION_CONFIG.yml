@@ -1,2 +1,5 @@
 profile: pp
 settings: sites/default/settings.php
+composer_packages:
+  drush/drush: 7.*
+  squizlabs/php_codesniffer: 1.5.6

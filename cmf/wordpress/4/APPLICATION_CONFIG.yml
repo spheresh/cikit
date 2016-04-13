@@ -1,1 +1,4 @@
 settings: wp-config.php
+composer_packages:
+  wp-cli/wp-cli: 0.*
+  squizlabs/php_codesniffer: ~2.2

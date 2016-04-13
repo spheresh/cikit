@@ -83,8 +83,8 @@
         line: "cmf: {{ cmf }}\nproject: {{ project }}\nsite_url: https://{{ project }}.dev"
         insertafter: "^---$"
 
-    - name: Update main.yml
+    - name: Update config.yml
       replace:
-        dest: "../{{ project }}/scripts/vars/main.yml"
+        dest: "../{{ project }}/config.yml"
         regexp: "APPLICATION_CONFIG"
         replace: "{{ lookup('file', cmf_configs.stat.path + '/APPLICATION_CONFIG.yml') }}"

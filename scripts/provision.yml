@@ -50,10 +50,6 @@
     # Use this secret in your client (Varnish module) in order to connect to Varnish.
     varnish_secret: "14bac2e6-1e34-4770-8078-974373b76c90"
     cibox_ssl_folder: /etc/ssl/private
-    composer_packages:
-      drush/drush: 7.*
-      drupal/coder: dev-7.x-2.x
-      squizlabs/php_codesniffer: 1.5.6
 
     cibox_protected_folders:
       - path: "{{ webroot }}"
@@ -190,9 +186,6 @@
 
     - role: ansible-composer
       tags: ["composer", "php-stack"]
-
-    - role: cibox-wp-cli
-      tags: ["wp-cli", "php-stack"]
 
     - role: ansible-role-mysql
       tags: ["mysql", "php-stack"]
