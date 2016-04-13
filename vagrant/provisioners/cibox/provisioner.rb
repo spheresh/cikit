@@ -88,7 +88,7 @@ module VagrantPlugins::CIBox
           m = @machine.env.machine(*active_machine)
 
           if !m.ssh_info.nil?
-            inventory_content += "#{m.name} ansible_ssh_host=#{m.ssh_info[:host]} ansible_ssh_port=#{m.ssh_info[:port]} ansible_user=#{m.ssh_info[:username]} ansible_ssh_private_key_file=#{m.ssh_info[:private_key_path][0].gsub(ENV["HOME"], "~")}\n"
+            inventory_content += "#{m.name} ansible_host=#{m.ssh_info[:host]} ansible_port=#{m.ssh_info[:port]} ansible_user=#{m.ssh_info[:username]} ansible_ssh_private_key_file=#{m.ssh_info[:private_key_path][0].gsub(ENV["HOME"], "~")}\n"
           else
             @logger.error("Auto-generated inventory: Impossible to get SSH information for machine '#{m.name} (#{m.provider_name})'. This machine should be recreated.")
             # Let a note about this missing machine
