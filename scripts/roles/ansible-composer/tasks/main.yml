@@ -43,7 +43,7 @@
     src: "{{ composer_dir }}/vendor/bin/{{ item }}"
     dest: "{{ composer_bin }}/{{ item }}"
     state: link
-  with_items: packages.stdout_lines
+  with_items: "{{ packages.stdout_lines }}"
 
 - name: Mark role as executed
   set_fact:

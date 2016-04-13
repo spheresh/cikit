@@ -17,7 +17,7 @@
   apt_repository:
     repo: "{{ item }}"
     validate_certs: no
-  with_items: apt_repos
+  with_items: "{{ apt_repos }}"
 
 - name: Update apt
   apt:
@@ -27,4 +27,4 @@
   apt:
     pkg: "{{ item }}"
     state: latest
-  with_items: apt_packages
+  with_items: "{{ apt_packages }}"

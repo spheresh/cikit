@@ -40,5 +40,5 @@
     value: "{{ item.value }}"
     option: "{{ item.option }}"
     section: "{{ item.section }}"
-  with_items: my_cnf
+  with_items: "{{ my_cnf }}"
   notify: restart mysql

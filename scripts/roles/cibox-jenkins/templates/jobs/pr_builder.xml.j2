@@ -56,7 +56,7 @@ touch ${WORKSPACE}/commentinfo.md
 export ARTIFACTS=$_
 export PROJECT=$(echo ${JOB_NAME//_PR_BUILDER/} | tr '[:upper:]' '[:lower:]')
 export BUILD_NAME=${PROJECT}_build_${BUILD_NUMBER}
-export SITE_URL=http://$(php -r "echo parse_url('${JOB_URL}')['host'];")/${BUILD_NAME}
+export SITE_URL=https://$(php -r "echo parse_url('${JOB_URL}')['host'];")/${BUILD_NAME}
 
 ./cibox reinstall \
 --build-id=${BUILD_NAME} \

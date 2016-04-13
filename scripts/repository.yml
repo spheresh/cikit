@@ -68,6 +68,7 @@
         - provisioning/repository.yml
         - docroot/.gitignore
         - docroot/.git
+        - APPLICATION_CONFIG.yml
 
     - name: Setting permissions for project tree
       file:
@@ -81,3 +82,9 @@
         dest: "../{{ project }}/config.yml"
         line: "cmf: {{ cmf }}\nproject: {{ project }}\nsite_url: https://{{ project }}.dev"
         insertafter: "^---$"
+
+    - name: Update main.yml
+      replace:
+        dest: "../{{ project }}/scripts/vars/main.yml"
+        regexp: "APPLICATION_CONFIG"
+        replace: "{{ lookup('file', cmf_configs.stat.path + '/APPLICATION_CONFIG.yml') }}"

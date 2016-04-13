@@ -3,27 +3,27 @@
   stat:
     path: "{{ item.dest }}"
   register: selenium_dependencies_statuses
-  with_items: selenium_dependencies
+  with_items: "{{ selenium_dependencies }}"
 
 - name: Create directory for item
   file:
     path: "{{ item.item.dest | dirname }}"
     state: directory
-  when: not item.stat.exists
-  with_items: selenium_dependencies_statuses.results
+  when: "{{ not item.stat.exists }}"
+  with_items: "{{ selenium_dependencies_statuses.results }}"
 
 - name: Download item
   get_url:
     url: "{{ item.item.src }}"
     dest: "{{ item.item.dest }}"
     force: yes
-  when: not item.stat.exists
-  with_items: selenium_dependencies_statuses.results
+  when: "{{ not item.stat.exists }}"
+  with_items: "{{ selenium_dependencies_statuses.results }}"
 
 - name: Unarchive item
   shell: "cd {{ item.item.dest | dirname }} && unzip {{ item.item.dest | basename }}"
-  when: not item.stat.exists and item.item.unzip
-  with_items: selenium_dependencies_statuses.results
+  when: "{{ not item.stat.exists and item.item.unzip }}"
+  with_items: "{{ selenium_dependencies_statuses.results }}"
 
 - name: Create service
   template:

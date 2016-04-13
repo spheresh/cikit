@@ -17,7 +17,7 @@
   apt:
     name: "{{ item }}"
     state: installed
-  with_items: selenium_packages
+  with_items: "{{ selenium_packages }}"
 
 - include: dependencies.yml
 

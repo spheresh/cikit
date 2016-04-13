@@ -10,6 +10,10 @@ server {
     listen                          443 ssl;
     server_name                     {{ inventory_hostname }};
 
+    satisfy                         any;
+    allow                           127.0.0.1;
+    deny                            all;
+
     auth_basic                      "Restricted area";
     auth_basic_user_file            /var/www/.htpasswd;
 

@@ -17,7 +17,7 @@
 
 - name: Install Apache packages
   shell: "apt-get install {{ item }}={{ apache_version }} -y --force-yes"
-  with_items: apache_packages
+  with_items: "{{ apache_packages }}"
 
 - name: Ensure that necessary ports free and processes stopped
   shell: "kill $(sudo lsof -t -i:{{ item }}) > /dev/null 2>&1"
