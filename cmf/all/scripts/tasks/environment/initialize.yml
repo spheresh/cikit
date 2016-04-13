@@ -1,43 +1,41 @@
 ---
-- name: Set path to project directory
+- name: Set path to directory, where project accessible from web
   set_fact:
-    # Path where project accessible from web.
     project_webroot: "{{ webroot + '/' + build_id if build_id is defined else ('../docroot' | realpath) }}"
 
-- name: Set path to project workspace
+- name: Set path to directory, where project codebase located
   set_fact:
-    # Path where codebase located.
     project_workspace: "{{ workspace + '/docroot' if workspace is defined else project_webroot }}"
 
-- name: Set reports directory and URL
+- name: Set path to reports directory and URL by which they will be accessible
   set_fact:
     reports:
       comment: "{{ project_webroot }}/commentinfo.md"
       dir: "{{ project_webroot }}/reports"
       url: "{{ site_url }}/reports"
 
-- name: Create project directory
+- name: Ensure that project directory has correct permissions
   file:
     path: "{{ project_webroot }}"
     mode: 0755
     state: directory
     recurse: yes
 
-- name: Initialize an empty report
+- name: Initialize an empty build report
   copy:
     dest: "{{ reports.comment }}"
     content: "Site installed at: <a href=\"{{ site_url }}\" target=\"_blank\">{{ site_url }}</a>"
 
-- name: Ensure Composer packages are already installed
+- name: Check installation of Composer packages
   stat:
     path: ../vendor/
-  register: is_vendor
+  register: is_vendor_dir
 
-- name: Check for composer.json
+- name: Check for composer.json existence
   stat:
     path: ../composer.json
   register: is_composer_json
 
 - name: Install Composer packages
   shell: "cd ../ && composer install"
-  when: not is_vendor.stat.exists and is_composer_json.stat.exists
+  when: not is_vendor_dir.stat.exists and is_composer_json.stat.exists
