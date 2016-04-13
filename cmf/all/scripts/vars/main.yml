@@ -1,11 +1,11 @@
 ---
 # Do not modify this variables set if you are not sure what you are doing!
 env: default
-# Only for Drupal.
-profile: pp
+
+APPLICATION_CONFIG
 
 sql_workflow: no
-# By default can be "pull" or "full". Additional modes can be added.
+# Can be "pull" or "full". Additional modes can be added.
 reinstall_mode: full
 
 # Environment variables for each shell task.
@@ -17,8 +17,20 @@ mysql:
   pass: root
 
 databases:
-  default: "{{ cmf }}_{{ project | default('EMPTY') }}_{{ build_id | default(env) }}"
-
-# URL to the source database. Can be overridden by CI server.
-# @todo
-source_database: http://propeople:givemebackup@192.168.56.132/backup/latest_prod.sql.gz
+  default:
+    name: "{{ cmf }}_{{ project | default('EMPTY') }}_{{ build_id | default(env) }}"
+#    source:
+#      # Database name on remote host.
+#      db: ""
+#      # The directory for database dump on remote host.
+#      dir: ""
+#      # Host name, from the inventory file, where make a dump.
+#      from: ""
+#      # MySQL port on remote host.
+#      port: ""
+#      # MySQL user on remote host.
+#      user: ""
+#      # MySQL host on remote host.
+#      host: ""
+#      # MySQL password on remote host.
+#      pass: ""

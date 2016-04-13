@@ -1,3 +1,7 @@
 ---
-- include: ../compass-compile.yml
-- include: ../composer-manager.yml
+- include: tasks/compass-compile.yml
+
+- include: tasks/drush.yml name="Install dependencies via Composer Manager" ignore_errors=yes
+  with_dict:
+    composer-rebuild: ~
+    composer-manager: ~

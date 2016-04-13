@@ -22,6 +22,8 @@
     headless: no
 
   pre_tasks:
+    - include: "tasks/environment/initialize.yml"
+
     - name: Check if Behat is already installed
       stat:
         path: ../vendor/behat/behat/
@@ -40,14 +42,14 @@
     - name: Ensure Xvfb service started
       service:
         name: xvfb
-        state: started
+        state: restarted
         args: :99 -ac -screen 0 1024x768x24
       when: run and headless
 
     - name: Ensure Selenium service started
       service:
         name: selenium
-        state: started
+        state: restarted
         args: "{{ '' if headless else '-role hub' }} -log selenium.log"
       environment:
         DISPLAY: "{{ ':99' if headless else '' }}"
@@ -57,9 +59,6 @@
         port: 4444
         host: 127.0.0.1
         delay: 10
-      when: run
-
-    - include: tasks/reports.yml
       when: run
 
     - name: Create behat.yml
@@ -73,5 +72,7 @@
       when: run
 
     - name: Create Behat report
-      shell: 'if [ -s {{ reports_dir }}/behat/index.html ]; then echo "<a href=\"{{ reports_url }}/behat/index.html\" target=\"_blank\">Behat report</a>" >> {{ artifacts_file }}; fi'
+      shell: 'echo "<a href=\"{{ reports.url }}/behat/index.html\" target=\"_blank\">Behat</a>" >> {{ reports.comment }}'
+      args:
+        removes: "{{ reports.dir }}/behat/*.html"
       when: run

@@ -1,0 +1,3 @@
+---
+- name: "Create {{ data.title }} report"
+  shell: 'if [ -s {{ reports.dir }}/{{ data.type }}.txt ]; then echo "<a href=\"{{ reports.url }}/{{ data.type }}.txt\" target=\"_blank\">{{ data.title }}</a>" >> {{ reports.comment }}; fi'

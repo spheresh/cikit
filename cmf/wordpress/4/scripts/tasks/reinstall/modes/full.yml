@@ -1,29 +1,53 @@
 ---
-- name: Remove database
-  include: ../../database/database.yml
-  args:
-    state: absent
+- include: tasks/database/database.yml name="Remove database" state="absent"
 
 - name: Create config
   template:
     src: templates/wp-config.j2
-    dest: ../docroot/wp-config.php
+    dest: "{{ project_workspace }}/{{ settings }}"
 
-- name: Create database
-  include: ../../database/database.yml
-  args:
-    state: present
+- include: tasks/database/database.yml name="Create database" state="present"
 
-- include: ../../wp-cli/core-install.yml
-  when: not sql_workflow
+- name: Set site domain
+  set_fact:
+    site_domain: "{{ site_url.split('//') | last }}"
+
+- include: tasks/wp.yml name="Installing WordPress" command="core"
+  with_items:
+    - install:
+      - "--url={{ site_url }}"
+      - "--title={{ project | capitalize }}"
+      - "--admin_user={{ wordpress.user.name }}"
+      - "--admin_email={{ wordpress.user.name }}@{{ site_domain }}"
+      - "--admin_password={{ wordpress.user.pass }}"
+  when: "{{ not sql_workflow }}"
 
 # Download and import databases.
-- include: ../../database/import.yml
-  when: sql_workflow
+- include: tasks/database/import.yml
+  when: "{{ sql_workflow and 'source' in item.value }}"
+  with_dict: "{{ databases }}"
 
 # Unique way for both workflows.
-- include: ../../super-admin.yml
+- include: tasks/wp.yml name="Set credentials for super user" command="user"
+  with_items:
+    - update:
+      # User ID.
+      - "1"
+      - "--user_login={{ wordpress.user.name }}"
+      - "--user_pass={{ wordpress.user.pass }}"
 
-# Enable/disable configured plugins.
-- include: ../../wp-cli/plugins.yml
-- include: ../../wp-cli/commands.yml
+- include: tasks/wp.yml name="Set site URL" command="option update"
+  with_items:
+    - home: ["{{ site_url }}"]
+    - siteurl: ["{{ site_url }}"]
+
+- include: tasks/wp.yml name="Update site domain" command="db"
+  with_items:
+    - query: ["'update wp_site s, wp_blogs b set s.domain = \"{{ site_domain }}\", b.domain = s.domain'"]
+  when: "{{ sql_workflow }}"
+
+- include: tasks/wp.yml name="Manage plugins" command="plugin"
+  with_items: "{{ plugins }}"
+
+- include: tasks/wp.yml name="Execute command"
+  with_items: "{{ commands }}"

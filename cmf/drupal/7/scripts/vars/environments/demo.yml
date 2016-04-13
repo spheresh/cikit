@@ -1,13 +1,9 @@
 ---
 commands:
   pre:
-    - en: [dblog]
-    - dis: [stage_file_proxy, security_review, devel, diff]
-  post:
-    - search-api-clear: ~
-    - search-api-index: ~
-    - solr-mark-all: ~
-    - solr-index: ~
+    - en: ["dblog"]
+    - dis: ["update"]
+  post: []
 
 drupal:
   # Settings of "Domain Access" module.
@@ -16,10 +12,8 @@ drupal:
     path: "profiles/{{ profile }}/modules/contrib/domain"
   # Values for $conf in settings.php.
   conf:
+    https: "TRUE"
     environment: "{{ env }}"
-  # Variables in settings.php.
-  settings:
-    base_url: "{{ site_url }}"
   # Variables in database.
   variables:
     file_temporary_path: "{{ tmproot }}"

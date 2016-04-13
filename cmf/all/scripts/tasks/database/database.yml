@@ -1,5 +1,6 @@
 ---
-- mysql_db:
-    name: "{{ item.value }}"
+- name: "{{ name | default('command') }}"
+  mysql_db:
+    name: "{{ item.value.name }}"
     state: "{{ state }}"
   with_dict: "{{ databases }}"

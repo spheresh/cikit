@@ -1,2 +1,2 @@
 ---
-- include: ../compass-compile.yml
+- include: tasks/compass-compile.yml

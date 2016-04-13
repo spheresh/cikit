@@ -1,0 +1,29 @@
+---
+- name: Set path to project directory
+  set_fact:
+    # Path where project accessible from web.
+    project_webroot: "{{ webroot + '/' + build_id if build_id is defined else '../docroot' }}"
+
+- name: Set path to project workspace
+  set_fact:
+    # Path where codebase located.
+    project_workspace: "{{ workspace + '/docroot' if workspace is defined else project_webroot }}"
+
+- name: Set reports directory and URL
+  set_fact:
+    reports:
+      comment: "{{ project_webroot }}/commentinfo.md"
+      dir: "{{ project_webroot }}/reports"
+      url: "{{ site_url }}/reports"
+
+- name: Create project directory
+  file:
+    path: "{{ project_webroot }}"
+    mode: 0755
+    state: directory
+    recurse: yes
+
+- name: Initialize an empty report
+  copy:
+    dest: "{{ reports.comment }}"
+    content: "Site installed at: <a href=\"{{ site_url }}\" target=\"_blank\">{{ site_url }}</a>"

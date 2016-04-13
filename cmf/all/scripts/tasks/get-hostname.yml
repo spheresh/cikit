@@ -1,0 +1,18 @@
+# This list of tasks depends on variables:
+# - name: the name of group from inventory file.
+# Used built-in variables:
+# - groups: list of groups from inventory file.
+---
+- name: "Check for {{ name }} hostname"
+  fail:
+    msg: "{{ name }} hostname is undefined. Configure it inside of inventory file in [{{ name }}] group."
+  when: "{{ name not in groups }}"
+
+- name: "Set the {{ name }} hostname"
+  set_fact:
+    hostname: "{{ groups[name] | join }}"
+
+- name: "Register the {{ name }} hostname"
+  shell: "echo '{{ hostname }}'"
+  register: "{{ name }}"
+  delegate_to: localhost

@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 # WARNING! This file is managed by Ansible and MUST NOT be edited directly.
 # If you familiar with Behat configs then edit "/var/www/scripts/templates/behat.j2"
 # and run "cibox tests" to apply changes.
@@ -24,12 +26,14 @@ default:
     Behat\MinkExtension:
       goutte:
         guzzle_parameters:
+          # Ignore cURL error about self-signed SSL certificates.
+          verify: false
           config:
             curl:
               CURLOPT_TIMEOUT: 300
               CURLOPT_CONNECTTIMEOUT: 0
       selenium2: ~
-      base_url: {{ site_url }}
+      base_url: {{ "http://localhost:8080/" + build_id if build_id is defined else site_url }}
       files_path: resources
     Drupal\TqExtension:
       wait_for_email: 10

@@ -10,52 +10,66 @@
     - vars/tests.yml
 
   tasks:
-    - include: tasks/reports.yml
+    - include: tasks/environment/initialize.yml
 
-    - name: Creating SecurityReview report file
+    - name: Create directory for reports
       file:
-        path: "{{ reports_dir }}/security_review.txt"
-        state: touch
+        path: "{{ reports.dir }}"
+        mode: 0755
+        state: "{{ item }}"
+      with_items: ["absent", "directory"]
 
     - name: Run security review
-      shell: "cd ../docroot && drush secrev 2>&1 | grep error | tee -a {{ reports_dir }}/security_review.txt"
+      shell: "drush en security_review -y && drush secrev 2>&1 | grep error | awk '{$NF=\"\"}1' > {{ reports.dir }}/security_review.txt && drush dis security_review -y"
+      args:
+        chdir: "{{ project_workspace }}"
       environment: "{{ env_vars }}"
 
-    - name: Create SecurityReview report
-      shell: 'if [ -s {{ reports_dir }}/security_review.txt ]; then echo "<a href=\"{{ reports_url }}/security_review.txt\" target=\"_blank\">SecurityReview</a>" >> {{ artifacts_file }}; fi'
+    - include: tasks/misc/report-link.yml
+      args:
+        data:
+          type: "security_review"
+          title: "Security review"
 
     - name: Run CodeSniffer
-      shell: "phpcs --standard={{ item }} --extensions={{ phpcs_extensions }} -n {{ scan_dirs | join(' ') }} --report-file={{ reports_dir }}/phpcs.{{ item }}.txt"
-      with_items: "{{ phpcs_standards }}"
+      shell: "phpcs --standard={{ item }} --extensions={{ phpcs.extensions | join(',') }} -n {{ scan_dirs | join(' ') }} > {{ reports.dir }}/phpcs.{{ item }}.txt"
+      args:
+        chdir: "{{ project_workspace }}"
+      with_items: "{{ phpcs.standards }}"
       # Needed for ignoring PHP notices in packages with sniffers.
       ignore_errors: yes
 
-    - name: Create CodeSniffer report
-      shell: 'if grep "FOUND\|error" {{ reports_dir }}/phpcs.{{ item }}.txt; then echo "<a href=\"{{ reports_url }}/phpcs.{{ item }}.txt\" target=\"_blank\">CodeSniffer {{ item }}</a>" >> {{ artifacts_file }}; fi;'
-      with_items: "{{ phpcs_standards }}"
+    - include: tasks/misc/report-link.yml
+      args:
+        data:
+          type: "phpcs.{{ item }}"
+          title: "CodeSniffer {{ item }}"
+      with_items: "{{ phpcs.standards }}"
 
     - name: Run JSHint
-      shell: 'find {{ item }} ! -path "*mute*" -type f \( -iname "*.js" ! -iname "*min.js" \) -print0 | sudo xargs -0 jshint > {{ reports_dir }}/jshint.txt'
+      shell: 'find {{ item }} ! -path "*mute*" -type f \( -iname "*.js" ! -iname "*min.js" \) -print0 | sudo xargs -0 jshint > {{ reports.dir }}/jshint.txt'
+      args:
+        chdir: "{{ project_workspace }}"
       with_items: "{{ scan_dirs }}"
       # Needed for ignoring exit status codes.
       ignore_errors: yes
 
-    - name: Create JSHint report
-      shell: 'if [ -s {{ reports_dir }}/jshint.txt ]; then echo "<a href=\"{{ reports_url }}/jshint.txt\" target=\"_blank\">JS Hint</a>" >> {{ artifacts_file }}; fi'
-      with_items: "{{ scan_dirs }}"
+    - include: tasks/misc/report-link.yml
+      args:
+        data:
+          type: "jshint"
+          title: "JS Hint"
 
     - name: Run SCSSLint
-      shell: 'find {{ item }} -name "*.scss" -print0 | xargs -0 -r scss-lint -c configs/scss-lint.yml > {{ reports_dir }}/scsslint.txt'
+      shell: 'find {{ item }} -name "*.scss" -print0 | xargs -0 -r scss-lint -c ../scripts/configs/scss-lint.yml > {{ reports.dir }}/scsslint.txt'
+      args:
+        chdir: "{{ project_workspace }}"
       with_items: "{{ scan_dirs }}"
       # Needed for ignoring exit status codes.
       ignore_errors: yes
 
-    - name: Create SCSSLint report
-      shell: 'if [ -s {{ reports_dir }}/scsslint.txt ]; then echo "<a href=\"{{ reports_url }}/scsslint.txt\" target=\"_blank\">SCSS Lint</a>" >> {{ artifacts_file }}; fi'
-      with_items: "{{ scan_dirs }}"
-
-    - name: Website credentials
-      lineinfile:
-        dest: "{{ artifacts_file }}"
-        line: "Site installed at <a href=\"{{ site_url }}\" target=\"_blank\">{{ site_url }}</a>"
-        state: present
+    - include: tasks/misc/report-link.yml
+      args:
+        data:
+          type: "scsslint"
+          title: "SCSS Lint"

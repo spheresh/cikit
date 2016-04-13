@@ -1,7 +1,7 @@
 ---
 commands:
   pre:
-    - en: [stage_file_proxy, security_review, dblog, devel, diff]
+    - en: ["dblog", "field_ui"]
   post: []
 
 drupal:
@@ -11,10 +11,8 @@ drupal:
     path: "profiles/{{ profile }}/modules/contrib/domain"
   # Values for $conf in settings.php.
   conf:
+    https: "TRUE"
     environment: "{{ env }}"
-  # Variables in settings.php.
-  settings:
-    base_url: "{{ site_url }}"
   # Variables in database.
   variables:
     file_temporary_path: "{{ tmproot }}"

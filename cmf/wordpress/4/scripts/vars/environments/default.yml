@@ -1,11 +1,11 @@
 ---
 plugins:
-  install:
-    - propeople-google-news-sitemap
-  uninstall: []
+  - install:
+      - propeople-google-news-sitemap
+  - uninstall: []
 
 commands:
-  theme: status
+  - theme: ["status"]
 
 wordpress:
   user:

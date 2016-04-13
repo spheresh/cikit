@@ -1,9 +1,9 @@
 ---
 plugins:
-  install: []
-  uninstall: []
+  - install: []
+  - uninstall: []
 
-commands: {}
+commands: []
 
 wordpress:
   user:

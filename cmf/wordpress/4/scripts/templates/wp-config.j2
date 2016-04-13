@@ -20,7 +20,7 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', '{{ databases.default }}');
+define('DB_NAME', '{{ databases.default.name }}');
 
 /** MySQL database username */
 define('DB_USER', '{{ mysql.user }}');
@@ -46,14 +46,9 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         '{{ databases.default | password_hash('sha512') }}');
-define('SECURE_AUTH_KEY',  '{{ databases.default | password_hash('sha512') }}');
-define('LOGGED_IN_KEY',    '{{ databases.default | password_hash('sha512') }}');
-define('NONCE_KEY',        '{{ databases.default | password_hash('sha512') }}');
-define('AUTH_SALT',        '{{ databases.default | password_hash('sha512') }}');
-define('SECURE_AUTH_SALT', '{{ databases.default | password_hash('sha512') }}');
-define('LOGGED_IN_SALT',   '{{ databases.default | password_hash('sha512') }}');
-define('NONCE_SALT',       '{{ databases.default | password_hash('sha512') }}');
+{% for constant in ["AUTH_KEY", "SECURE_AUTH_KEY", "LOGGED_IN_KEY", "NONCE_KEY", "AUTH_SALT", "SECURE_AUTH_SALT", "LOGGED_IN_SALT", "NONCE_SALT"] %}
+define('{{ constant }}', '{{ databases.default.name | password_hash('sha512') }}');
+{% endfor %}
 
 /**#@-*/
 

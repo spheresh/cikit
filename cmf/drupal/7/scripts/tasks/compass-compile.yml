@@ -1,14 +1,18 @@
 ---
 - name: Detect active theme
-  shell: 'cd ../docroot && drush ev "print path_to_theme();"'
+  shell: "drush ev 'print path_to_theme();'"
+  args:
+    chdir: "{{ project_workspace }}"
   register: theme_path
 
 - name: Check for SCSS
   stat:
-    path: "../docroot/{{ theme_path.stdout }}/config.rb"
+    path: "{{ project_workspace }}/{{ theme_path.stdout }}/config.rb"
   register: config_rb
 
 - name: Compile SCSS
   become: no
-  shell: "cd ../docroot && compass compile {{ theme_path.stdout }} --force"
+  shell: "compass compile {{ theme_path.stdout }} --force"
+  args:
+    chdir: "{{ project_workspace }}"
   when: config_rb.stat.exists
