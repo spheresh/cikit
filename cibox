@@ -126,7 +126,8 @@ if [ -z "${ANSIBLE_INVENTORY}" ]; then
   cp ${SELF_PATH}/inventory ~/.inventory
   chmod a-x ~/.inventory
   params+=" -i ~/.inventory"
-elif [ $(uname -o) == "Cygwin" ]; then
+# The "uname -o" cannot be used due to "-o" option is not supported on OS X.
+elif [[ "$(uname -s)" =~ "CYGWIN" ]]; then
   ANSIBLE_INVENTORY=$(cygpath ${ANSIBLE_INVENTORY})
 fi
 
