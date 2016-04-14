@@ -2,8 +2,6 @@
 # Do not modify this variables set if you are not sure what you are doing!
 env: default
 
-APPLICATION_CONFIG
-
 sql_workflow: no
 # Can be "pull" or "full". Additional modes can be added.
 reinstall_mode: full

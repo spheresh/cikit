@@ -86,5 +86,5 @@
     - name: Update config.yml
       replace:
         dest: "../{{ project }}/config.yml"
-        regexp: "APPLICATION_CONFIG"
+        regexp: "APPLICATION_CONFIG: ~"
         replace: "{{ lookup('file', cmf_configs.stat.path + '/APPLICATION_CONFIG.yml') }}"
