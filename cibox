@@ -24,10 +24,9 @@ locate_path()
     local PATH=$(cd -P -- $(dirname -- ${1}) && pwd -P)
 
     while [ -h "${PATH}" ]; do
-      # 1) cd to directory of the symlink
-      # 2) cd to the directory of where the symlink points
-      # 3) Get the pwd
-      # 4) Append the basename
+      # 1) Go to the directory with a symlink.
+      # 2) Go to the directory to which the symlink points.
+      # 3) Get the path.
       PATH=$(cd $(dirname -- ${PATH}) && cd $(dirname -- $(readlink ${PATH})) && pwd)
     done
 
@@ -54,10 +53,10 @@ exit_with_help()
   exit
 }
 
-SELF_PATH=$(locate_path "${0}")
+SELF_PATH=$(locate_path "$0")
 SCRIPTS_PATH=${SELF_PATH}/scripts
 
-if [ -z ${1} ]; then
+if [ -z $1 ]; then
   cd ${SCRIPTS_PATH}
   exit_with_help
 fi
@@ -71,8 +70,8 @@ for playbook in ${SCRIPTS_PATH}/${PLAYBOOK} ${SELF_PATH}/${PLAYBOOK} ${PLAYBOOK}
 done
 
 if [ ! -f ${playbook} ]; then
-  if [ -d ${1} ]; then
-    cd ${1}
+  if [ -d $1 ]; then
+    cd $1
     exit_with_help
   fi
 
