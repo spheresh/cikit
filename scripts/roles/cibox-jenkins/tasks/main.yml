@@ -4,46 +4,7 @@
     jenkins_job: "{{ jenkins_job | upper }}"
     jenkins_host: "http://localhost:{{ jenkins_port }}/{{ jenkins_prefix }}"
 
-- include: repo.yml
-
-- name: Download Jenkins
-  get_url:
-    url: "{{ jenkins_pkg_version }}"
-    dest: ~/jenkins.deb
-    mode: 440
-
-- name: Install Jenkins
-  shell: "dpkg -i ~/jenkins.deb"
-
-- name: Create default config
-  template:
-    src: jenkins.j2
-    dest: /etc/default/jenkins
-
-- name: Restart service
-  service:
-    name: jenkins
-    state: restarted
-
-- include: cli.yml
-- include: plugins.yml
-
-- name: Restore service
-  service:
-    name: "{{ item }}"
-    state: started
-  ignore_errors: yes
-  with_items: ["nginx", "apache2"]
-
-- name: Adding Jenkins user to permitted groups
-  user:
-    name: "{{ jenkins_data.user }}"
-    groups: shadow,adm
-    append: yes
-
-- name: Adding Jenkins user to nopasswd sudoers
-  lineinfile:
-    dest: /etc/sudoers
-    line: "{{ jenkins_data.user }} ALL=(ALL) NOPASSWD:ALL"
+- include: install.yml
+  when: "{{ jenkins_install }}"
 
 - include: jobs.yml

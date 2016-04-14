@@ -20,4 +20,4 @@
   apt:
     pkg: "{{ item }}"
     state: installed
-  with_items: jenkins.deb.dependencies
+  with_items: "{{ jenkins.deb.dependencies }}"

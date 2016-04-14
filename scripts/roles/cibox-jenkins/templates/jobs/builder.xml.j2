@@ -1,23 +1,43 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Build stable instances.</description>
+  <description>Manually build project instances.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.14.0">
+      <projectUrl>https://github.com/VENDOR/PROJECT/</projectUrl>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>BUILD_MODE</name>
+          <description>Full - fully rebuild the project.
+Pull - do not reinstall an application and just grab latest changes from repository and compile SCSS.</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>full</string>
+              <string>pull</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>BUILD_ENV</name>
           <description></description>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>demo</string>
+              <string>default</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
           <name>RUN_TESTS</name>
           <description>Run Behat tests?</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RUN_SNIFFERS</name>
+          <description>Test project with PHP/JS/SCSS and security sniffers?</description>
           <defaultValue>false</defaultValue>
         </hudson.model.BooleanParameterDefinition>
       </parameterDefinitions>
@@ -27,25 +47,18 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <name>origin</name>
         <url>git@github.com:VENDOR/PROJECT.git</url>
-        <credentialsId>78705d77-2e16-4e10-b820-25b5d99df02e</credentialsId>
+        <credentialsId>00793e48-3d61-4891-9f43-e27701dffafd</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>master</name>
+        <name>*/master</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
-    <extensions>
-      <hudson.plugins.git.extensions.impl.SubmoduleOption>
-        <disableSubmodules>false</disableSubmodules>
-        <recursiveSubmodules>true</recursiveSubmodules>
-        <trackingSubmodules>false</trackingSubmodules>
-      </hudson.plugins.git.extensions.impl.SubmoduleOption>
-    </extensions>
+    <extensions/>
   </scm>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
@@ -60,13 +73,27 @@
 export PYTHONUNBUFFERED=1
 export PROJECT=$(echo ${JOB_NAME//_BUILDER/} | tr '[:upper:]' '[:lower:]')
 export BUILD_NAME=${PROJECT}_${BUILD_ENV}
-export SITE_URL=http://$(php -r "echo parse_url('${JOB_URL}')['host'];")/${BUILD_NAME}
+export SITE_URL=https://$(php -r "echo parse_url('${JOB_URL}')['host'];")/${BUILD_NAME}
 export ANSIBLE_ARGS="-vvvv"
 
 ./cibox reinstall \
 --env=${BUILD_ENV} \
 --build-id=${BUILD_NAME} \
---site-url=${SITE_URL}
+--site-url=${SITE_URL} \
+--workspace=${WORKSPACE} \
+--reinstall-mode=${BUILD_MODE}
+
+if ${RUN_SNIFFERS}; then
+  ./cibox sniffers \
+  --workspace=${WORKSPACE} \
+  --site-url=${SITE_URL} \
+  --build-id=${BUILD_NAME}
+fi
+
+# Move project from workspace to directory available in web.
+sudo rsync --delete -ra ./docroot/ /var/www/${BUILD_NAME}/
+# Set group and owner only for directory with an application.
+sudo chown -R www-data:jenkins $_
 
 if ${RUN_TESTS}; then
   ./cibox tests \
@@ -77,20 +104,11 @@ if ${RUN_TESTS}; then
   --site-url=${SITE_URL} \
   --artifacts-file=${ARTIFACTS}
 fi
-
-if [ $? -gt 0 ]; then
-  exit 1
-fi
-
-# Move project from workspace to directory available in web.
-sudo rsync --delete -ra ./docroot/ /var/www/${BUILD_NAME}/
-# Set group and owner only for directory with an application.
-sudo chown -R www-data:jenkins $_
 </command>
     </hudson.tasks.Shell>
   </builders>
   <buildWrappers>
-    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.1">
+    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.2">
       <colorMapName>xterm</colorMapName>
     </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
   </buildWrappers>

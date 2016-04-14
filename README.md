@@ -35,14 +35,22 @@ The power of the system - simplicity. All provisioning is the same for local and
 **Drupal 7** (standard system):
 
 ```shell
-./cibox repository --project=test
+./cibox repository --project=test [--limit=<HOST>]
 ```
 
 **WordPress 4** (supported system):
 
 ```shell
-./cibox repository --project=test --cmf=wordpress --version=4.5
+./cibox repository --project=test --cmf=wordpress --version=4.5 [--limit=<HOST>]
 ```
+
+**Add Jenkins project to existing CI server**:
+
+```shell
+./cibox jenkins-job --project=test [--limit=<HOST>]
+```
+
+**Note**: this command should be executed on your host, not inside of virtual machine!
 
 ## WIKI
 

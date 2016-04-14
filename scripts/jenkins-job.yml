@@ -1,0 +1,26 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+
+  vars_files:
+    - ../config.yml
+    - vars/php.yml
+    - vars/ports.yml
+    - vars/mysql.yml
+    - vars/nginx.yml
+    - vars/apache.yml
+
+  vars:
+    install: no
+
+  pre_tasks:
+    - include: tasks/project-variable.yml
+
+    - name: Set name for Jenkins job
+      set_fact:
+        jenkins_job: "{{ project }}"
+        jenkins_install: "{{ install | bool }}"
+
+  roles:
+    - role: cibox-jenkins

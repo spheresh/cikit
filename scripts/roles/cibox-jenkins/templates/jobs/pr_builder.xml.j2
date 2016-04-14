@@ -4,18 +4,17 @@
     <description>Create build on every commit to pull request on GitHub.</description>
     <keepDependencies>false</keepDependencies>
     <properties>
-        <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.9.1">
+        <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.14.0">
             <projectUrl>https://github.com/VENDOR/PROJECT/</projectUrl>
         </com.coravy.hudson.plugins.github.GithubProjectProperty>
     </properties>
-    <scm class="hudson.plugins.git.GitSCM" plugin="git@2.2.5">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.0">
         <configVersion>2</configVersion>
         <userRemoteConfigs>
             <hudson.plugins.git.UserRemoteConfig>
-                <name>origin</name>
                 <refspec>+refs/pull/*:refs/remotes/origin/pr/*</refspec>
                 <url>git@github.com:VENDOR/PROJECT.git</url>
-                <credentialsId>c55a496e-7717-4f51-88d5-1a50b478ba55</credentialsId>
+                <credentialsId>00793e48-3d61-4891-9f43-e27701dffafd</credentialsId>
             </hudson.plugins.git.UserRemoteConfig>
         </userRemoteConfigs>
         <branches>
@@ -25,25 +24,47 @@
         </branches>
         <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
         <submoduleCfg class="list"/>
-    <extensions>
-      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
-      <hudson.plugins.git.extensions.impl.CloneOption>
-        <shallow>true</shallow>
-        <reference></reference>
-        <timeout>5</timeout>
-      </hudson.plugins.git.extensions.impl.CloneOption>
-      <hudson.plugins.git.extensions.impl.SubmoduleOption>
-        <disableSubmodules>false</disableSubmodules>
-        <recursiveSubmodules>true</recursiveSubmodules>
-        <trackingSubmodules>false</trackingSubmodules>
-        <timeout>5</timeout>
-      </hudson.plugins.git.extensions.impl.SubmoduleOption>
-    </extensions>
+        <extensions>
+            <hudson.plugins.git.extensions.impl.CloneOption>
+                <shallow>true</shallow>
+                <reference></reference>
+            </hudson.plugins.git.extensions.impl.CloneOption>
+            <hudson.plugins.git.extensions.impl.SubmoduleOption>
+                <disableSubmodules>true</disableSubmodules>
+                <recursiveSubmodules>false</recursiveSubmodules>
+                <trackingSubmodules>false</trackingSubmodules>
+                <timeout>5</timeout>
+            </hudson.plugins.git.extensions.impl.SubmoduleOption>
+            <hudson.plugins.git.extensions.impl.CleanCheckout/>
+            <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+        </extensions>
     </scm>
     <canRoam>true</canRoam>
     <disabled>false</disabled>
     <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
     <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <triggers>
+        <org.jenkinsci.plugins.ghprb.GhprbTrigger plugin="ghprb@1.15-0">
+            <spec>* * * * *</spec>
+            <adminlist>BR0kEN-</adminlist>
+            <allowMembersOfWhitelistedOrgsAsAdmin>false</allowMembersOfWhitelistedOrgsAsAdmin>
+            <orgslist>propeopleua</orgslist>
+            <cron>* * * * *</cron>
+            <triggerPhrase></triggerPhrase>
+            <onlyTriggerPhrase>false</onlyTriggerPhrase>
+            <useGitHubHooks>false</useGitHubHooks>
+            <permitAll>false</permitAll>
+            <commentFilePath></commentFilePath>
+            <whitelist></whitelist>
+            <autoCloseFailedPullRequests>false</autoCloseFailedPullRequests>
+            <whiteListTargetBranches>
+                <org.jenkinsci.plugins.ghprb.GhprbBranch>
+                    <branch></branch>
+                </org.jenkinsci.plugins.ghprb.GhprbBranch>
+            </whiteListTargetBranches>
+            <project>{{ item.name }}</project>
+        </org.jenkinsci.plugins.ghprb.GhprbTrigger>
+    </triggers>
     <concurrentBuild>false</concurrentBuild>
     <builders>
         <hudson.tasks.Shell>
@@ -60,13 +81,14 @@ export SITE_URL=https://$(php -r "echo parse_url('${JOB_URL}')['host'];")/${BUIL
 export ANSIBLE_ARGS="-vvvv"
 
 ./cibox reinstall \
+--site-url=${SITE_URL} \
 --build-id=${BUILD_NAME} \
---site-url=${SITE_URL}
+--workspace=${WORKSPACE}
 
 ./cibox sniffers \
---build-id=${BUILD_NAME} \
+--workspace=${WORKSPACE} \
 --site-url=${SITE_URL} \
---artifacts-file=${ARTIFACTS}
+--build-id=${BUILD_NAME}
 
 sudo chown -R jenkins:jenkins ${WORKSPACE}
 # Move project from workspace to directory available in web.
@@ -77,7 +99,7 @@ sudo chown -R www-data:jenkins $_
         </hudson.tasks.Shell>
     </builders>
     <buildWrappers>
-        <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.0">
+        <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.2">
             <colorMapName>xterm</colorMapName>
         </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
     </buildWrappers>
