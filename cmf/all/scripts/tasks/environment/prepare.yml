@@ -8,9 +8,4 @@
   with_items:
     - "{{ tmproot }}"
     - "{{ webroot }}/backup"
-    - "{{ project_workspace }}/sites/default"
-
-- name: Remove settings.php
-  file:
-    path: "{{ project_workspace }}/{{ settings }}"
-    state: absent
+    - "{{ project_workspace }}/{{ filesystem }}"

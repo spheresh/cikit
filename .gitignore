@@ -5,9 +5,7 @@
 
 !cmf/
 !matrix/
-!roles/
 !scripts/
-!vagrant/
 
 !cibox
 !config.yml

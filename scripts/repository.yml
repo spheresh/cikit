@@ -81,7 +81,7 @@
     - name: Update config.yml
       lineinfile:
         dest: "../{{ project }}/config.yml"
-        line: "cmf: {{ cmf }}\nproject: {{ project }}\nsite_url: https://{{ project }}.dev"
+        line: "cmf: {{ cmf }}\ncore: {{ major }}\nproject: {{ project }}\nsite_url: https://{{ project }}.dev"
         insertafter: "^---$"
 
     - name: Update config.yml

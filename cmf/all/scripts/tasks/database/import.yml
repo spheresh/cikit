@@ -33,7 +33,7 @@
 
 # The "mysql_db" module isn't used because the "mysqldb" module for Python might not be installed on remote.
 - name: Create dump
-  shell: "mysqldump -P{{ item.value.source.port | default('3306') }} -h{{ item.value.source.host | default('localhost') }} -u{{ item.value.source.user }} -p{{ item.value.source.pass }} {{ item.value.source.db }} | gzip -c > {{ dump_dest.remote }}"
+  shell: "mysqldump -P{{ item.value.source.port | default('3306') }} -h{{ item.value.source.host | default('localhost') }} -u{{ item.value.source.user | default(mysql.user) }} -p{{ item.value.source.pass | default(mysql.pass) }} {{ item.value.source.db }} | gzip -c > {{ dump_dest.remote }}"
   become_user: root
   delegate_to: "{{ dump_from }}"
   when: "{{ remote_dump is defined and not remote_dump.stat.exists }}"
@@ -43,7 +43,7 @@
 # this as often as possible, because Ansible is pretty fast developing.
 - name: Fetch dump
   become_user: "{{ become_name }}"
-  shell: "rsync --delay-updates -F --compress --archive --rsh 'ssh {{ '-i ' + hostvars[hostname].ansible_ssh_private_key_file.replace('~', become_home) if 'ansible_ssh_private_key_file' in hostvars[hostname] else '' }} -S none -o StrictHostKeyChecking=no' {{ '-P ' + hostvars[hostname].ansible_port if 'ansible_port' in hostvars[hostname] else '' }} {{ hostvars[hostname].ansible_user + '@' if 'ansible_user' in hostvars[hostname] else '' }}{{ hostname }}:{{ dump_dest.remote }} {{ dump_dest.local }}"
+  shell: "rsync --delay-updates -F --compress --archive --rsh 'ssh {{ '-i ' + hostvars[hostname].ansible_ssh_private_key_file.replace('~', become_home) if 'ansible_ssh_private_key_file' in hostvars[hostname] else '' }} -S none -o StrictHostKeyChecking=no {{ '-p ' + hostvars[hostname].ansible_port | string if 'ansible_port' in hostvars[hostname] else '' }} ' {{ hostvars[hostname].ansible_user + '@' if 'ansible_user' in hostvars[hostname] else '' }}{{ hostname }}:{{ dump_dest.remote }} {{ dump_dest.local }}"
 #  synchronize:
 #    src: "{{ dump_dest.remote }}"
 #    dest: "{{ dump_dest.local }}"

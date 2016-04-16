@@ -1,9 +1,13 @@
 ---
 commands:
-  pre:
+  pre: []
+  post:
+#    - vset: ["file_temporary_path", "{{ tmproot }}"]
+#    - vset: ["error_level", "0"]
+#    - cset: ["system.file", "path.temporary", "{{ tmproot }}"]
+#    - cset: ["system.logging", "error_level", "none"]
     - en: ["dblog"]
     - dis: ["update"]
-  post: []
 
 drupal:
   # Settings of "Domain Access" module.
@@ -14,10 +18,6 @@ drupal:
   conf:
     https: "TRUE"
     environment: "{{ env }}"
-  # Variables in database.
-  variables:
-    file_temporary_path: "{{ tmproot }}"
-    error_level: 0
   # Data for super-admin (UID 1).
   user:
     name: admin

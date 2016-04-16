@@ -11,7 +11,7 @@
     arguments: "{{ item.value if 'key' in item else (item[item | join(' ')] or []) | join(' ') }}"
   when: "{{ item is defined }}"
 
-- name: "{{ name | default('command') }}"
+- name: "{{ name | default('drush ' + utility + ' ' + subcommand + ' ' + arguments) }}"
   shell: "drush {{ utility }} {{ subcommand }} {{ arguments }} -y"
   args:
     chdir: "{{ project_workspace }}"
