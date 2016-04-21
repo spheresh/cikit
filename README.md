@@ -54,10 +54,6 @@ The `--without-sources` option for `repository` task affected on downloading CMF
 
 **Note**: this command should be executed on your host, not inside of virtual machine!
 
-## WIKI
-
-https://github.com/propeoplemd/cibox/wiki
-
 ## TIP
 
 Don't forget to setup all http://ci_hostname:8080/configure settings with `CHANGE_ME` placeholders to be able meet project requirements. Also you should change all `CHANGE_ME` for all Jenkins jobs.
