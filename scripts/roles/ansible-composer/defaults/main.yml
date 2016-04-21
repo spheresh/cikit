@@ -1,4 +1,8 @@
 composer_bin: /usr/local/bin
 composer_dir: /usr/share/composer
 composer_packages:
+  wp-cli/wp-cli: 0.*
+  # WARNING! For Drupal 8+ MUST be changed to 8.*!
   drush/drush: 7.*
+  # WARNING! For Drupal 8+ MUST be changed to 2.*!
+  squizlabs/php_codesniffer: 1.5.6
