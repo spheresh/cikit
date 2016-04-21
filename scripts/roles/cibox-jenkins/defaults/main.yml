@@ -48,4 +48,4 @@ plugins:
   - http://mirrors.jenkins-ci.org/plugins/scripttrigger/0.31/scripttrigger.hpi
   - http://mirrors.jenkins-ci.org/plugins/parameterized-trigger/2.28/parameterized-trigger.hpi
 
-jenkins_pkg_version: http://pkg.jenkins-ci.org/debian/binary/jenkins_1.638_all.deb
+jenkins_pkg_version: http://pkg.jenkins-ci.org/debian/binary/jenkins_1.656_all.deb
