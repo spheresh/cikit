@@ -47,6 +47,7 @@
     src: "{{ composer_dir }}/vendor/bin/{{ item }}"
     dest: "{{ composer_bin }}/{{ item }}"
     state: link
+  when: "{{ item != 'composer' }}"
   with_items: "{{ packages.stdout_lines }}"
 
 - name: Mark role as executed
