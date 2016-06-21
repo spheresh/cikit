@@ -70,6 +70,9 @@
       - bsdutils
       - software-properties-common
       - python-software-properties
+      - build-essential
+      - libffi-dev
+      - libssl-dev
 
     pip_packages:
       - setuptools
