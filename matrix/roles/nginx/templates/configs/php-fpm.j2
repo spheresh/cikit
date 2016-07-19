@@ -1,0 +1,4 @@
+upstream php-fpm
+{
+    server                          unix:{{ php_fpm.socket if php_fpm is defined and "socket" in php_fpm else "/run/php-fpm.sock" }};
+}

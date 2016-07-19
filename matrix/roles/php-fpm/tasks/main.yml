@@ -1,9 +1,9 @@
 ---
-- name: Configure php-fpm to work via TCP
+- name: Configure PHP-FPM to work via UNIX socket
   replace:
     dest: /etc/php5/fpm/pool.d/www.conf
     regexp: "^listen.*sock$"
-    replace: "listen=127.0.0.1:{{ php_fpm.port }}"
+    replace: "listen={{ php_fpm.socket }}"
 
 - name: Start service and enable it on a boot
   service:
