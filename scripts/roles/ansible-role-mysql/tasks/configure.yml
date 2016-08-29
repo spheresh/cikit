@@ -9,7 +9,9 @@
   notify: restart mysql
 
 - name: Clear cache files
-  shell: "rm -f {{ mysql_datadir }}/ib*"
+  file:
+    path: "{{ mysql_datadir }}/ib*"
+    state: absent
 
 - name: Ensure MySQL is started and enabled on boot.
   service: "name={{ mysql_daemon }} state=started enabled={{ mysql_enabled_on_startup }}"
