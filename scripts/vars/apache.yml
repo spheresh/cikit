@@ -1,6 +1,5 @@
 ---
 apache_version: 2.4.7-1ubuntu4.13
-apache_create_vhosts: no
 apache_remove_default_vhost: yes
 apache_mods_enabled:
   - rewrite.load
