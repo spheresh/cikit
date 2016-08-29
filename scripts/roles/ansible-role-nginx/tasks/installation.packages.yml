@@ -6,11 +6,11 @@
 
 - name: Install the epel packages
   yum: name=epel-release state=present
-  when: nginx_is_el|bool
+  when: nginx_is_el|bool and nginx_install_epel_repo|bool
   tags: [packages,nginx]
 
 - name: Install the nginx packages
-  yum: name={{ item }} state=present disablerepo='*' enablerepo={{ "nginx," if nginx_official_repo else "" }}{{ yum_epel_repo }},{{ yum_base_repo }}
+  yum: name={{ item }} state=present enablerepo={{ "nginx" if nginx_official_repo else "" }}
   with_items: "{{ nginx_redhat_pkg }}"
   when:  nginx_is_el|bool
   tags: [packages,nginx]
