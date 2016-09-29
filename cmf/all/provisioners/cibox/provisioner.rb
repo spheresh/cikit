@@ -87,8 +87,6 @@ module VagrantPlugins::CIBox
         begin
           m = @machine.env.machine(*active_machine)
 
-          puts m.ssh_info[:private_key_path]
-
           if !m.ssh_info.nil?
             inventory_item = []
             inventory_item << "#{m.name} ansible_host=#{m.ssh_info[:host]}"
@@ -98,7 +96,7 @@ module VagrantPlugins::CIBox
             if m.ssh_info[:private_key_path].any?
               inventory_item << "ansible_ssh_private_key_file=#{m.ssh_info[:private_key_path][0].gsub(ENV["HOME"], "~")}"
             else
-              inventory_item << "ansible_ssh_pass=#{m.ssh_info[:password]}"
+              inventory_item << "ansible_password=#{m.ssh_info[:password]}"
             end
 
             inventory_content << inventory_item.join(" ")
