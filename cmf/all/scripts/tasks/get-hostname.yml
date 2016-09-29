@@ -12,6 +12,12 @@
   set_fact:
     hostname: "{{ groups[name] | join }}"
 
+- name: "Build SSH aguments for the {{ hostname }} host"
+  set_fact:
+    hostname_ssh:
+      host: "{{ hostvars[hostname].ansible_user + '@' if 'ansible_user' in hostvars[hostname] else '' }}{{ hostname }}"
+      args: "{{ '-i ' + hostvars[hostname].ansible_ssh_private_key_file.replace('~', become_home) if 'ansible_ssh_private_key_file' in hostvars[hostname] else '' }} -S none -o StrictHostKeyChecking=no {{ '-p ' + hostvars[hostname].ansible_port | string if 'ansible_port' in hostvars[hostname] else '' }}"
+
 - name: "Register the {{ name }} hostname"
   shell: "echo '{{ hostname }}'"
   register: "{{ name }}"
