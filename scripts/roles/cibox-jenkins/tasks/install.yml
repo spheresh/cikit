@@ -7,13 +7,13 @@
     dest: ~/jenkins.deb
     mode: 440
 
-- name: Install Jenkins
-  shell: "dpkg -i ~/jenkins.deb"
-
 - name: Create default config
   template:
     src: jenkins.j2
     dest: /etc/default/jenkins
+
+- name: Install Jenkins
+  shell: "dpkg -i ~/jenkins.deb"
 
 - name: Restart service
   service:
