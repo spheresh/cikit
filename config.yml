@@ -14,7 +14,7 @@ vm:
     - host: 4444
       guest: 4444
   virtualbox:
-    box: http://128.199.55.125/ubuntu14.04LTS_cibox.box
+    box: http://cici.ffwua.com/ubuntu14.04LTS_cibox.box
     modifyvm:
       cpus: 2
       memory: 2048
