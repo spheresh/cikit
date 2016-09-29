@@ -20,7 +20,7 @@ vm:
       memory: 2048
       natdnshostresolver1: "on"
   lxc:
-    box: https://atlas.hashicorp.com/fgrehm/boxes/precise64-lxc/versions/1.2.0/providers/lxc.box
+    box: http://cici.ffwua.com/ubuntu14.04provisionedCIBox.lxc.box
   synced_folder:
     - source: ./
       target: /var/www
