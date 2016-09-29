@@ -14,13 +14,10 @@ vm:
     - host: 4444
       guest: 4444
   virtualbox:
-    box: http://cici.ffwua.com/ubuntu14.04LTS_cibox.box
     modifyvm:
       cpus: 2
       memory: 2048
       natdnshostresolver1: "on"
-  lxc:
-    box: http://cici.ffwua.com/ubuntu14.04provisionedCIBox.lxc.box
   synced_folder:
     - source: ./
       target: /var/www
