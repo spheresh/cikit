@@ -48,7 +48,7 @@
     dest: "{{ composer_bin }}/{{ item }}"
     state: link
   when: "{{ item != 'composer' }}"
-  with_items: "{{ packages.stdout_lines }}"
+  with_items: "{{ packages.stdout_lines if 'stdout_lines' in packages else [] }}"
 
 - name: Mark role as executed
   set_fact:
