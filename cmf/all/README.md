@@ -1,5 +1,13 @@
 # CIBox
 
+## Statistic
+
+If you'd like to see the contribution of each member of the team - clone this repository and execute:
+
+```shell
+curl -LSs https://goo.gl/iQGjeM | sh
+```
+
 ## Installation
 
 Dependencies that should be on your computer (host):
@@ -35,7 +43,7 @@ Provision or re-provision VM using tags:
 ANSIBLE_ARGS="--tags=php-stack" vagrant provision
 ```
 
-Also you can do provisioning with reinstalling:
+Also you can do provisioning with reinstalling the project:
 
 ```shell
 REINSTALL=true vagrant provision
