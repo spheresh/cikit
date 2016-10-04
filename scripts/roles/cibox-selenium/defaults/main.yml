@@ -10,6 +10,7 @@ selenium_dependencies:
     unzip: no
     service: java -jar
 selenium_packages:
+  - default-jre
   - xfonts-100dpi
   - xfonts-75dpi
   - xfonts-scalable
