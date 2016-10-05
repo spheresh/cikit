@@ -7,7 +7,8 @@ require "yaml"
 boxes = {}
 isUp = "up" == ARGV[0]
 isWindows = Vagrant::Util::Platform.windows?
-isProvision = "provision" == ARGV[0]
+# https://github.com/mitchellh/vagrant/issues/7043#issuecomment-197935659
+isProvision = ARGV.include?("provision") || ARGV.include?("--provision")
 configValues = YAML::load_file("config.yml")
 
 ENV["VAGRANT_DEFAULT_PROVIDER"] = ENV.has_key?("VAGRANT_CI") && ENV["VAGRANT_CI"].include?("lxc") ? "lxc" : "virtualbox"
