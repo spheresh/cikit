@@ -166,7 +166,7 @@
       tags: ["ssl"]
 
     - role: cibox-nginx
-      tags: ["nginx", "php-stack"]
+      tags: ["nginx", "php-stack", "security"]
       when: not vagrant
 
     - role: ansible-role-apache
