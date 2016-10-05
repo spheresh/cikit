@@ -5,6 +5,7 @@
 
   vars_files:
     - ../config.yml
+    - vars/ip.yml
     - vars/php.yml
     - vars/ports.yml
     - vars/mysql.yml
@@ -164,7 +165,7 @@
     - role: cibox-ssl-config
       tags: ["ssl"]
 
-    - role: ansible-role-nginx
+    - role: cibox-nginx
       tags: ["nginx", "php-stack"]
       when: not vagrant
 
@@ -230,14 +231,6 @@
       shell: rngd -r /dev/urandom
       when: not vagrant and ansible_virtualization_type != "openvz"
       tags: ["always"]
-
-    - name: Create global config for NGINX
-      template:
-        src: cibox.nginx.j2
-        dest: "/etc/nginx/sites-{{ item }}/cibox"
-      when: not vagrant
-      with_items: ["enabled", "available"]
-      tags: ["nginx"]
 
     # @todo Doesn't work using Ansible "gem" module.
     - name: Install Compass

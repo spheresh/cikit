@@ -1,4 +1,5 @@
 ---
+allowed_ips: []
 cibox_protected_folders:
   - path: /var/www/html
     user: root

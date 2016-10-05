@@ -6,7 +6,9 @@ server {
     server_name                     {{ inventory_hostname }};
 
     satisfy                         any;
-    allow                           127.0.0.1;
+    {% for allowed_ip in allowed_ips %}
+    allow                           {{ allowed_ip }};
+    {% endfor %}
     deny                            all;
 
     auth_basic                      "Restricted area";
