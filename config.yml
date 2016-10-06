@@ -1,4 +1,4 @@
-# WARNING! This file is not managed by Ansible and should not contain any usage of it features.
+# WARNING! This file is not managed by Ansible and should not contain any usage of its features.
 ---
 tmproot: /tmp
 webroot: /var/www
