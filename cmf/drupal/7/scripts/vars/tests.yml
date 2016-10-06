@@ -1,6 +1,6 @@
 ---
 phpcs:
-  standards: ["Drupal", "DrupalSecure", "Security", "DrupalPractice"]
+  standards: ["Drupal", "DrupalSecure", "Security"]
   extensions: ["php", "inc", "install", "module"]
 
 scan_dirs:
