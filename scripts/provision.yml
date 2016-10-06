@@ -13,15 +13,23 @@
     - vars/apache.yml
 
   vars_prompt:
-    - name: solr
+    - name: setup_solr
       prompt: Do you want to install Solr? (yes/NO)
       private: no
       tags: ["solr"]
 
-    - name: pcntl
+    - name: setup_pcntl
       prompt: Do you want to install PCNTL extension for PHP? (yes/NO)
       private: no
       tags: ["pcntl"]
+
+    - name: setup_swap
+      prompt: Do you want to setup swap? (yes/NO)
+      private: no
+      # WARNING!!! This condition will be processed only inside of Vagrantfile! The "vagrant"
+      # variable is undefined here and "when" construction aren't processed by Ansible for prompts.
+      when: not vagrant
+      tags: ["swap"]
 
     - name: http_auth_user
       prompt: Username for HTTP authentication
@@ -99,8 +107,9 @@
     - name: Process facts
       set_fact:
         extras:
-          solr: "{{ solr | bool }}"
-          pcntl: "{{ pcntl | bool }}"
+          swap: "{{ setup_swap | bool }}"
+          solr: "{{ setup_solr | bool }}"
+          pcntl: "{{ setup_pcntl | bool }}"
       tags: ["always"]
 
     - name: Update APT cache
@@ -193,7 +202,7 @@
       tags: ["memcache", "php-stack"]
 
     - role: cibox-swap
-      when: not vagrant and ansible_virtualization_type != "openvz"
+      when: not vagrant and extras.swap and ansible_virtualization_type != "openvz"
       tags: ["swap"]
 
     - role: cibox-selenium
