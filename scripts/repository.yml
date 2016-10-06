@@ -22,15 +22,9 @@
       set_fact:
         major: "{{ version.split('.') | first }}"
 
-    # Part of namespace on a host (vendor name).
-    - name: Set vendor name
-      set_fact:
-        vendor: "{{ cmf }}"
-      when: vendor is undefined
-
     - name: Check for CMF configuration
       stat:
-        path: "../cmf/{{ cmf }}/{{ major }}/"
+        path: "../cmf/{{ cmf }}/{{ major | int }}"
       register: cmf_configs
 
     - name: CMF is not available
@@ -41,7 +35,7 @@
     - name: Downloading CMF
       git:
         dest: "../{{ project }}/docroot"
-        repo: "{{ host }}/{{ vendor }}/{{ cmf }}.git"
+        repo: "{{ host }}/{{ vendor if vendor is defined else cmf }}/{{ cmf }}.git"
         version: "{{ version }}"
       when: "{{ not without_sources }}"
 
@@ -53,6 +47,7 @@
         recursive: yes
       with_items:
         - src: "../cmf/all/"
+        - src: "../cmf/{{ cmf }}/all/"
         - src: "{{ cmf_configs.stat.path }}/"
         - src: "../cibox"
         - src: "../config.yml"
