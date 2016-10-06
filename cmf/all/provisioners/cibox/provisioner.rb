@@ -50,16 +50,30 @@ module VagrantPlugins::CIBox
 
       if File.exist?(playbook)
         playbook = YAML::load_file(playbook)
+        taglist = []
+
+        ENV.has_key?("ANSIBLE_ARGS") && ENV["ANSIBLE_ARGS"].split(" ").each do |option|
+          group = option.split("=")
+
+          if "--tags" == group.first
+            taglist = group.last.split(",")
+            break
+          end
+        end
 
         if playbook[0].include?("vars_prompt")
           for var_prompt in playbook[0]["vars_prompt"];
-            if "not vagrant" == var_prompt["when"] && var_prompt["default"]
-              value = var_prompt["default"]
+            default_value = var_prompt["default"] ? var_prompt["default"] : ""
+
+            # Use default value if condition intended for not Vagrant or script
+            # was run with tags and current prompt have one of them.
+            if (taglist.any? && (var_prompt["tags"] & taglist).none?) || "not vagrant" == var_prompt["when"]
+              value = default_value
             else
-              puts var_prompt["prompt"] + (var_prompt["default"] ? " [#{var_prompt["default"]}]" : "") + ":"
+              puts var_prompt["prompt"] + (default_value.empty? ? "" : " [#{default_value}]") + ":"
 
               value = $stdin.gets.chomp
-              value = value.empty? ? var_prompt["default"] : value
+              value = value.empty? ? default_value : value
             end
 
             ansible_args << "--#{var_prompt["name"]}=#{value}"
