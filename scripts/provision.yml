@@ -18,11 +18,6 @@
       private: no
       tags: ["solr"]
 
-    - name: varnish
-      prompt: Do you want to install Varnish? (yes/NO)
-      private: no
-      tags: ["varnish"]
-
     - name: pcntl
       prompt: Do you want to install PCNTL extension for PHP? (yes/NO)
       private: no
@@ -48,8 +43,6 @@
 
   vars:
     vagrant: no
-    # Use this secret in your client (Varnish module) in order to connect to Varnish.
-    varnish_secret: "14bac2e6-1e34-4770-8078-974373b76c90"
     cibox_ssl_folder: /etc/ssl/private
 
     cibox_protected_folders:
@@ -108,7 +101,6 @@
         extras:
           solr: "{{ solr | bool }}"
           pcntl: "{{ pcntl | bool }}"
-          varnish: "{{ varnish | bool }}"
       tags: ["always"]
 
     - name: Update APT cache
@@ -137,13 +129,6 @@
         name: "{{ item }}"
         state: latest
       with_items: "{{ pip_packages }}"
-
-    - name: Stop services
-      service:
-        name: "{{ item }}"
-        state: stopped
-      ignore_errors: yes
-      with_items: ["varnish", "apache2"]
 
     - name: Create CIBox command line utility
       file:
@@ -203,10 +188,6 @@
 
     - role: cibox-mysql-config
       tags: ["mysql", "php-stack"]
-
-    - role: cibox-varnish
-      when: extras.varnish
-      tags: ["varnish"]
 
     - role: ansible-role-memcached
       tags: ["memcache", "php-stack"]
