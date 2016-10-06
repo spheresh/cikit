@@ -6,10 +6,6 @@
 
 /**
  * Implements hook_install().
- *
- * Performs actions to set up the site for this profile.
- *
- * @see system_install()
  */
 function pp_install() {
   db_insert('block')
