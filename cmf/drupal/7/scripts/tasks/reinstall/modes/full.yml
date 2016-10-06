@@ -6,7 +6,7 @@
 - name: Create settings.php
   shell: "cp default.settings.php settings.php"
   args:
-    chdir: "{{ project_workspace }}/sites/default"
+    chdir: "{{ settings | dirname }}"
 
 - name: Update settings.php
   lineinfile:
