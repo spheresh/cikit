@@ -1,0 +1,8 @@
+name: PP
+description: Start with only a few modules enabled.
+type: profile
+core: 7.x
+
+dependencies:
+  - block
+  - dblog
