@@ -27,7 +27,7 @@ The power of the system - simplicity. All provisioning is the same for local and
 ## Quick Start
 
 - Add your host credentials to the `inventory` file.
-- `./cibox repository --project=<NAME> [--cmf=drupal] [--version=7.50] [--host=https://github.com] [--vendor=drupal] [--without-sources]`
+- `./cibox repository --project=<NAME> [--cmf=drupal] [--version=7.51] [--host=https://github.com] [--vendor=drupal] [--without-sources]`
 - `./cibox provision --project=<NAME> [--limit=<HOST>]`
 
 The `--without-sources` option for `repository` task affected on downloading CMF sources. If you want to create an empty project - use it.
@@ -43,7 +43,7 @@ The `--without-sources` option for `repository` task affected on downloading CMF
 **WordPress 4** (supported system):
 
 ```shell
-./cibox repository --project=test --cmf=wordpress --version=4.5
+./cibox repository --project=test --cmf=wordpress --version=4.6.1
 ```
 
 **Add Jenkins project to existing CI server**:

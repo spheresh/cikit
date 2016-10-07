@@ -7,7 +7,7 @@
     # As name of folder inside of "cmf/".
     cmf: "drupal"
     # As name of folder inside of "cmf/<NAME>/"
-    version: "7.50"
+    version: "7.51"
     # Host for cloning repository from.
     host: "https://github.com"
     without_sources: no
