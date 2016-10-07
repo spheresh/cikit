@@ -56,16 +56,6 @@
         - src: "../scripts/"
           dest: "provisioning"
 
-    - name: Clear created repository
-      file:
-        path: "../{{ project }}/{{ item }}"
-        state: absent
-      with_items:
-        - provisioning/repository.yml
-        - docroot/.gitignore
-        - docroot/.git
-        - APPLICATION_CONFIG.yml
-
     - name: Setting permissions for project tree
       file:
         mode: 0777
@@ -83,4 +73,14 @@
       replace:
         dest: "../{{ project }}/config.yml"
         regexp: "APPLICATION_CONFIG: ~"
-        replace: "{{ lookup('file', cmf_configs.stat.path + '/APPLICATION_CONFIG.yml') }}"
+        replace: "{{ lookup('file', '../' + project + '/APPLICATION_CONFIG.yml') }}"
+
+    - name: Clear created repository
+      file:
+        path: "../{{ project }}/{{ item }}"
+        state: absent
+      with_items:
+        - provisioning/repository.yml
+        - docroot/.gitignore
+        - docroot/.git
+        - APPLICATION_CONFIG.yml
