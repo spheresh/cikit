@@ -63,7 +63,7 @@ module VagrantPlugins::CIBox
 
         if playbook[0].include?("vars_prompt")
           for var_prompt in playbook[0]["vars_prompt"];
-            default_value = var_prompt["default"] ? var_prompt["default"] : ""
+            default_value = var_prompt["default"] ? var_prompt["default"].to_s : ""
 
             # Use default value if condition intended for not Vagrant or script
             # was run with tags and current prompt have one of them.
