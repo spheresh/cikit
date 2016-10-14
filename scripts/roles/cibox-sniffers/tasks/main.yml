@@ -2,13 +2,13 @@
 - name: Clone Git repos
   git:
     repo: "{{ item.value.repo }}"
-    dest: "{{ composer_dir }}/vendor/conding-standards/{{ item.key }}"
+    dest: "{{ composer_dir }}/vendor/coding-standards/{{ item.key }}"
     version: "{{ item.value.branch }}"
   with_dict: "{{ git_repos }}"
 
 - name: Find all installed standards
   find:
-    path: "/usr/share/composer/vendor/conding-standards/"
+    path: "{{ composer_dir }}/vendor/coding-standards/"
     pattern: "ruleset.xml"
     recurse: yes
   register: rulesets
