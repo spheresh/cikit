@@ -45,7 +45,6 @@
 - name: "Set credentials for super user: ({{ drupal.user.name }}/{{ drupal.user.pass }})"
   include: tasks/drush.yml
   with_dict:
-    # @todo Find a way to do the same for Drupal 8.
     sqlq: "'UPDATE users SET name=\"{{ drupal.user.name }}\" WHERE uid=1'"
     upwd: "{{ drupal.user.name }} --password={{ drupal.user.pass }}"
 
