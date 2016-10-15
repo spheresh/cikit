@@ -156,7 +156,7 @@
       tags: ["misc"]
 
     - role: cibox-ssl-config
-      tags: ["ssl"]
+      tags: ["ssl", "security"]
 
     - role: cibox-nginx
       tags: ["nginx", "php-stack", "security"]

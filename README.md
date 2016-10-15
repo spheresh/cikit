@@ -68,18 +68,21 @@ Currently `provision.yml` playbook powered with tags, so you can run only part o
 ./cibox provision --tags=TAGNAME
 ```
 
+- php
+- misc
+- security
+- nginx
+- selenium
+- memcache
 - php-stack
 - solr
 - jenkins
 - composer
-- pear
-- drush
-- xhprof
 - sniffers
 - apache
 - mysql
 - swap
-- ssl-config
+- ssl
 
 For provisioning Vagrant you also able to specify tags:
 
