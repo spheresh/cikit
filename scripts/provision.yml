@@ -194,7 +194,7 @@
     - role: cibox-selenium
       tags: ["selenium"]
 
-    - role: cibox-protected-folders
+    - role: cibox-security
       tags: ["security"]
       when: not vagrant
 
