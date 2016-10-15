@@ -1,0 +1,4 @@
+---
+- name: Get name of default theme
+  shell: "drush vget theme_default --format=string"
+  register: theme_default

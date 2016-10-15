@@ -1,6 +1,8 @@
 ---
-- name: Detect active theme
-  shell: "drush ev 'print path_to_theme();'"
+- include: theme-default.yml
+
+- name: Get path to active theme
+  shell: "drush dd {{ theme_default.stdout }}"
   args:
     chdir: "{{ project_workspace }}"
   register: theme_path
