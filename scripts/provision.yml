@@ -6,22 +6,22 @@
   vars_files:
     - ../config.yml
     - vars/ip.yml
-    - vars/php.yml
     - vars/ports.yml
     - vars/mysql.yml
     - vars/nginx.yml
     - vars/apache.yml
 
   vars_prompt:
+    - name: cibox_php_version
+      prompt: Which version of PHP you'd want to install? (5.6/7.0)
+      default: 5.6
+      private: no
+      tags: ["php", "php-stack"]
+
     - name: setup_solr
       prompt: Do you want to install Solr? (yes/NO)
       private: no
       tags: ["solr"]
-
-    - name: setup_pcntl
-      prompt: Do you want to install PCNTL extension for PHP? (yes/NO)
-      private: no
-      tags: ["pcntl"]
 
     - name: setup_swap
       prompt: Do you want to setup swap? (yes/NO)
@@ -109,7 +109,6 @@
         extras:
           swap: "{{ setup_swap | bool }}"
           solr: "{{ setup_solr | bool }}"
-          pcntl: "{{ setup_pcntl | bool }}"
       tags: ["always"]
 
     - name: Update APT cache
@@ -166,21 +165,8 @@
     - role: ansible-role-apache
       tags: ["apache", "php-stack"]
 
-    - role: ansible-role-php
+    - role: cibox-php
       tags: ["php", "php-stack"]
-
-    - role: ansible-php-pear
-      tags: ["pear", "php-stack"]
-
-    - role: ansible-role-php-xhprof
-      tags: ["xhprof", "php-stack"]
-
-    - role: ansible-role-php-xdebug
-      tags: ["xdebug", "php-stack"]
-
-    - role: php-pcntl
-      when: extras.pcntl
-      tags: ["pcntl", "php-stack"]
 
     - role: ansible-composer
       tags: ["composer", "php-stack"]
