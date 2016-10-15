@@ -40,6 +40,12 @@ The `--without-sources` option for `repository` task affected on downloading CMF
 ./cibox repository --project=test
 ```
 
+**Drupal 8** (supported system):
+
+```shell
+./cibox repository --project=test --version=8.3.x-dev
+```
+
 **WordPress 4** (supported system):
 
 ```shell
