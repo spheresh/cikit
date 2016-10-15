@@ -34,31 +34,31 @@ The `--without-sources` option for `repository` task affected on downloading CMF
 
 ### Examples
 
-**Drupal 7** (standard system):
+#### Drupal 7
 
 ```shell
 ./cibox repository --project=test
 ```
 
-**Drupal 8** (supported system):
+#### Drupal 8
 
 ```shell
 ./cibox repository --project=test --version=8.3.x-dev
 ```
 
-**WordPress 4** (supported system):
+#### WordPress 4
 
 ```shell
 ./cibox repository --project=test --cmf=wordpress --version=4.6.1
 ```
 
-**Add Jenkins project to existing CI server**:
+#### Add Jenkins project to existing CI server
 
 ```shell
 ./cibox jenkins-job --project=test [--limit=<HOST>]
 ```
 
-**Note**: this command should be executed on your host, not inside of virtual machine!
+**Note**: these commands should be executed on your host, not inside of virtual machine!
 
 ## Variations
 
