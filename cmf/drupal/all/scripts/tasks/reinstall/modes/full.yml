@@ -13,12 +13,6 @@
     dest: "{{ project_workspace }}/{{ settings }}"
     line: "{{ lookup('template', 'templates/settings.php.j2') }}"
 
-- name: Adding $conf values to settings.php
-  lineinfile:
-    dest: "{{ project_workspace }}/{{ settings }}"
-    line: "$conf['{{ item.key }}'] = '{{ item.value }}';"
-  with_dict: "{{ drupal.conf }}"
-
 - include: tasks/drush.yml name="Installing Drupal"
   with_dict:
     si: "{{ profile }} --db-url=mysql://{{ mysql.user }}:{{ mysql.pass }}@{{ mysql.host | default('127.0.0.1') }}:{{ mysql.port | default('3306') }}/{{ databases.default.name }} --uri={{ site_url }}"
@@ -45,7 +39,7 @@
 - name: "Set credentials for super user: ({{ drupal.user.name }}/{{ drupal.user.pass }})"
   include: tasks/drush.yml
   with_dict:
-    sqlq: "'UPDATE users SET name=\"{{ drupal.user.name }}\" WHERE uid=1'"
+    sqlq: "'UPDATE <USERS_INFO_TABLE> SET name=\"{{ drupal.user.name }}\" WHERE uid=1'"
     upwd: "{{ drupal.user.name }} --password={{ drupal.user.pass }}"
 
 - include: tasks/drush.yml

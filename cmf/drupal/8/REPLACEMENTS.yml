@@ -1,0 +1,4 @@
+---
+replacements:
+  USERS_INFO_TABLE: "users_field_data"
+  THEME_DEFAULT_COMMAND: "cget system.theme default"

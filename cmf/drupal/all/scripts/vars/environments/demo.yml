@@ -10,14 +10,6 @@ commands:
     - dis: ["update"]
 
 drupal:
-  # Settings of "Domain Access" module.
-  domain:
-    # Needed to use it's settings.inc inside of settings.php.
-    path: "profiles/{{ profile }}/modules/contrib/domain"
-  # Values for $conf in settings.php.
-  conf:
-    https: "TRUE"
-    environment: "{{ env }}"
   # Data for super-admin (UID 1).
   user:
     name: admin

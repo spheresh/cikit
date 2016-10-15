@@ -1,7 +1,6 @@
 ---
 - hosts: localhost
   connection: local
-  gather_facts: no
 
   vars:
     # As name of folder inside of "cmf/".
@@ -102,6 +101,14 @@
         regexp: "APPLICATION_CONFIG: ~"
         replace: "{{ lookup('file', '../' + project + '/APPLICATION_CONFIG.yml') }}"
 
+    - include_vars: "../{{ project }}/REPLACEMENTS.yml"
+
+    - name: Seeking the placeholders
+      shell: "find ../{{ project }}/scripts/ -type f -exec sed -i {{ \"''\" if ansible_os_family == 'Darwin' else '' }} 's/<{{ item.key }}>/{{ item.value }}/g' {} \\;"
+      environment:
+        LC_ALL: C
+      with_dict: "{{ replacements }}"
+
     - name: Clear created repository
       file:
         path: "../{{ project }}/{{ item }}"
@@ -111,3 +118,4 @@
         - docroot/.gitignore
         - docroot/.git
         - APPLICATION_CONFIG.yml
+        - REPLACEMENTS.yml

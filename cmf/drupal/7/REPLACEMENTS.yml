@@ -1,0 +1,4 @@
+---
+replacements:
+  USERS_INFO_TABLE: "users"
+  THEME_DEFAULT_COMMAND: "vget theme_default"
