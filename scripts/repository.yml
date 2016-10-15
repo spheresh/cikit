@@ -71,6 +71,7 @@
         dest: "../{{ project }}/{{ item.dest | default('') }}"
         archive: no
         recursive: yes
+        rsync_opts: ["--exclude=*.retry"]
       with_items:
         - src: "../cmf/all/"
         - src: "../cmf/{{ cmf }}/all/"
