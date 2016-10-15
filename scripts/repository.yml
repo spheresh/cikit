@@ -6,17 +6,26 @@
   vars:
     # As name of folder inside of "cmf/".
     cmf: "drupal"
-    # As name of folder inside of "cmf/<NAME>/"
-    version: "7.51"
-    # Host for cloning repository from.
-    host: "https://github.com"
     without_sources: no
+    # Every "download_url" will be prefixed with "https://" and ended by "-{{ version }}.tar.gz".
+    cmfs:
+      drupal:
+        download_url: "www.drupal.org/files/projects/drupal"
+        default_version: "7.51"
+      wordpress:
+        download_url: "wordpress.org/wordpress"
+        default_version: "4.6.1"
 
   vars_files:
     - ../config.yml
 
   tasks:
     - include: tasks/project-variable.yml
+
+    - name: Set default version of CMF
+      set_fact:
+        version: "{{ cmfs[cmf].default_version }}"
+      when: "{{ version is undefined }}"
 
     - name: Determine major version of CMF
       set_fact:
@@ -30,14 +39,32 @@
     - name: CMF is not available
       fail:
         msg: "You are not allowed to install {{ cmf | capitalize }} {{ version }} because it isn't pre-configured."
-      when: not cmf_configs.stat.exists
+      when: "{{ not cmf_configs.stat.exists }}"
 
-    - name: Downloading CMF
-      git:
-        dest: "../{{ project }}/docroot"
-        repo: "{{ host }}/{{ vendor if vendor is defined else cmf }}/{{ cmf }}.git"
-        version: "{{ version }}"
-      when: "{{ not without_sources }}"
+    - name: Checking for existing project
+      stat:
+        path: "../{{ project }}/docroot"
+      register: project_path
+
+    - name: Create project directory
+      file:
+        mode: 0755
+        path: "../{{ project }}/docroot"
+        state: directory
+      when: "{{ not project_path.stat.exists }}"
+
+    - name: Download CMF
+      get_url:
+        url: "https://{{ cmfs[cmf].download_url }}-{{ version }}.tar.gz"
+        dest: "../{{ project }}/cmf.tar.gz"
+      when: "{{ not without_sources and not project_path.stat.exists }}"
+
+    - name: Unarchive CMF
+      shell: "tar --strip-components=1 -xf ../{{ project }}/cmf.tar.gz -C ../{{ project }}/docroot && rm ../{{ project }}/cmf.tar.gz"
+      args:
+        # Unarchive module does not work properly in Ansible 2.1.1.0.
+        warn: no
+      when: "{{ not without_sources and not project_path.stat.exists }}"
 
     - name: Prepare CIBox-structured repository
       synchronize:

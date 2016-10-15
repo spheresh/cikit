@@ -19,7 +19,7 @@ The power of the system - simplicity. All provisioning is the same for local and
 
 - [Create matrix of virtual servers (droplets).](matrix)
 - Automated builds for every commit in a pull request on GitHub (private repositories supported).
-- Multi CMS/CMF support. To add support of a new one, you just need to put pre-configurations to `cmf/<NAME>/<MAJOR_VERSION>` and ensure that core files can be downloaded via Git.
+- Multi CMS/CMF support. To add support of a new one, you just need to put pre-configurations to `cmf/<NAME>/<MAJOR_VERSION>` and ensure that core files can be downloaded as an archive.
 - Opportunity to keep multiple projects on the same CI server.
 - Triggering builds via comments in pull requests.
 - Midnight server cleaning :)
@@ -27,7 +27,7 @@ The power of the system - simplicity. All provisioning is the same for local and
 ## Quick Start
 
 - Add your host credentials to the `inventory` file.
-- `./cibox repository --project=<NAME> [--cmf=drupal] [--version=7.51] [--host=https://github.com] [--vendor=drupal] [--without-sources]`
+- `./cibox repository --project=<NAME> [--cmf=drupal] [--version=7.51] [--without-sources]`
 - `./cibox provision --project=<NAME> [--limit=<HOST>]`
 
 The `--without-sources` option for `repository` task affected on downloading CMF sources. If you want to create an empty project - use it.
