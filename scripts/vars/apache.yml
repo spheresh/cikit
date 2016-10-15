@@ -10,10 +10,10 @@ apache_mods_disabled:
   - rpaf.load
   - ruid2.load
 apache_vhosts:
-  - servername: "{{ site_url if site_url is defined and vagrant else 'JenkinsCI' }}"
+  - servername: "{{ (site_url | regex_replace('^(.*)://', 'http://')) if site_url is defined and vagrant else 'JenkinsCI' }}"
     documentroot: "{{ webroot }}/{{ 'docroot' if site_url is defined and vagrant else '' }}"
 apache_vhosts_ssl:
-  - servername: "{{ site_url if site_url is defined and vagrant else 'JenkinsCI' }}"
+  - servername: "{{ (site_url | regex_replace('^(.*)://', 'https://')) if site_url is defined and vagrant else 'JenkinsCI' }}"
     documentroot: "{{ webroot }}/{{ 'docroot' if site_url is defined and vagrant else '' }}"
     certificate_file: "{{ cibox_ssl_folder }}/ssl.crt"
     certificate_key_file: "{{ cibox_ssl_folder }}/ssl.key"
