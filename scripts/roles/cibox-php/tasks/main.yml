@@ -1,0 +1,35 @@
+---
+- name: Check if PHP version supported
+  fail:
+    msg: "PHP of {{ cibox_php_version }} version is unsupported. Choose between 5.6 and 7.0"
+  when: "{{ cibox_php_version != '5.6' and cibox_php_version != '7.0' }}"
+
+- name: Add APT repository
+  apt_repository:
+    repo: "{{ cibox_php.repo }}"
+
+- name: Update APT cache
+  apt:
+    update_cache: yes
+
+- name: Install PHP packages
+  shell: "apt-get install php{{ cibox_php_version }}-{{ cibox_php.packages | join(' php' + cibox_php_version + '-') }} -y"
+  args:
+    warn: no
+
+- name: Install Apache module for PHP
+  apt:
+    name: "libapache2-mod-php{{ cibox_php_version }}"
+    state: latest
+
+- name: Set interpreter version as system default
+  shell: "ln -fs /usr/bin/{{ item }}{{ cibox_php_version }} /etc/alternatives/{{ item }}"
+  with_items: ["php", "phpize", "php-config"]
+
+- include: xdebug.yml
+- include: xhprof.yml
+- include: configure.yml
+
+- name: Enalbe PHP for Apache
+  shell: "a2dismod php* && a2enmod php{{ cibox_php_version }}"
+  ignore_errors: yes

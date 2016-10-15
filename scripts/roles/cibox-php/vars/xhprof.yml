@@ -1,0 +1,8 @@
+---
+cibox_php_xhprof:
+  "5":
+    repo: https://github.com/phacility/xhprof.git
+    version: master
+  "7":
+    repo: https://github.com/RustJason/xhprof.git
+    version: php7
