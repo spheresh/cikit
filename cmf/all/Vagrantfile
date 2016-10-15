@@ -4,25 +4,14 @@ VAGRANTFILE_API_VERSION = "2"
 
 require "yaml"
 
-boxes = {}
-isUp = "up" == ARGV[0]
 isWindows = Vagrant::Util::Platform.windows?
-# https://github.com/mitchellh/vagrant/issues/7043#issuecomment-197935659
-isProvision = ARGV.include?("provision") || ARGV.include?("--provision")
 configValues = YAML::load_file("config.yml")
 
 ENV["VAGRANT_DEFAULT_PROVIDER"] = ENV.has_key?("VAGRANT_CI") && ENV["VAGRANT_CI"].include?("lxc") ? "lxc" : "virtualbox"
 
-boxes["lxc"] = {
-  "original" => "",
-  "provisioned" => "http://cici.ffwua.com/ubuntu14.04provisionedCIBox.lxc.box",
-}
-
-boxes["virtualbox"] = {
-  "original" => "http://cici.ffwua.com/ubuntu14.04LTS_cibox.box",
-  # Provisioned on September 29, 2016
-  "provisioned" => "http://propeople.com.ua/BR0kEN--cibox.box",
-}
+boxes = {}
+boxes["lxc"] = "http://cici.ffwua.com/ubuntu14.04provisionedCIBox.lxc.box"
+boxes["virtualbox"] = "http://cici.ffwua.com/ubuntu14.04LTS_cibox.box"
 
 if isWindows
   # Help Vagrant to detect Cygwin.
@@ -48,7 +37,7 @@ end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Use the box, depending on Vagrant provider.
-  config.vm.box_url = "#{boxes[ENV["VAGRANT_DEFAULT_PROVIDER"]][isProvision ? "original" : "provisioned"]}"
+  config.vm.box_url = "#{boxes[ENV["VAGRANT_DEFAULT_PROVIDER"]]}"
   # Automatically name the box.
   config.vm.box = File.basename(config.vm.box_url)
   # Hosts Updated plugin insert this value to "hosts".
@@ -97,11 +86,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :linux__nfs_options => ["rw", "no_subtree_check", "no_root_squash", "async"]
   end
 
-  if isProvision
-    config.vm.provision :cibox,
-      :controller => "./cibox",
-      :playbook => "provisioning/provision"
-  end
+  config.vm.provision :cibox,
+    :controller => "./cibox",
+    :playbook => "provisioning/provision"
 
   if ENV["REINSTALL"]
     config.vm.provision :shell,
@@ -122,11 +109,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.shell = "sh"
   config.ssh.insert_key = false
   config.ssh.forward_agent = true
-
-  # Users are not able to be authenticated via key pair in already provisioned
-  # VM. During bootstrapping the machine we need automatically logged in to set
-  # up environment properly.
-  if isUp
-    config.ssh.password = "vagrant"
-  end
 end
