@@ -1,0 +1,8 @@
+---
+- name: Build installation instructions
+  shell: "curl -sL https://deb.nodesource.com/setup_{{ cibox_nodejs_version | int }}.x | sudo -E bash -"
+
+- name: Install Node.js
+  apt:
+    name: nodejs
+    state: latest
