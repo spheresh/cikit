@@ -40,30 +40,17 @@
         msg: "You are not allowed to install {{ cmf | capitalize }} {{ version }} because it isn't pre-configured."
       when: "{{ not cmf_configs.stat.exists }}"
 
-    - name: Checking for existing project
-      stat:
-        path: "../{{ project }}/docroot"
-      register: project_path
-
-    - name: Create project directory
+    - name: Prepare directory for project
       file:
-        mode: 0755
         path: "../{{ project }}/docroot"
         state: directory
-      when: "{{ not project_path.stat.exists }}"
 
     - name: Download CMF
-      get_url:
-        url: "https://{{ cmfs[cmf].download_url }}-{{ version }}.tar.gz"
-        dest: "../{{ project }}/cmf.tar.gz"
-      when: "{{ not without_sources and not project_path.stat.exists }}"
-
-    - name: Unarchive CMF
-      shell: "tar --strip-components=1 -xf ../{{ project }}/cmf.tar.gz -C ../{{ project }}/docroot && rm ../{{ project }}/cmf.tar.gz"
+      shell: "curl -s https://{{ cmfs[cmf].download_url }}-{{ version }}.tar.gz | tar --strip-components=1 -xzC ./"
       args:
-        # Unarchive module does not work properly in Ansible 2.1.1.0.
         warn: no
-      when: "{{ not without_sources and not project_path.stat.exists }}"
+        chdir: "../{{ project }}/docroot"
+      when: "{{ not without_sources }}"
 
     - name: Prepare CIBox-structured repository
       synchronize:
@@ -71,7 +58,7 @@
         dest: "../{{ project }}/{{ item.dest | default('') }}"
         archive: no
         recursive: yes
-        rsync_opts: ["--exclude=*.retry"]
+        rsync_opts: ["--exclude=*.retry", "--exclude=.git"]
       with_items:
         - src: "../cmf/all/"
         - src: "../cmf/{{ cmf }}/all/"
@@ -85,7 +72,7 @@
 
     - name: Setting permissions for project tree
       file:
-        mode: 0777
+        mode: 0755
         path: "../{{ project }}"
         state: directory
         recurse: yes
