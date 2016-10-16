@@ -121,13 +121,10 @@
         state: present
       with_items: "{{ basic_packages }}"
 
-    - name: Downloading EasyInstall
-      get_url:
-        url: https://raw.githubusercontent.com/ActiveState/ez_setup/v0.9/ez_setup.py
-        dest: ~/ez_setup.py
-
     - name: Install EasyInstall
-      shell: "cd ~ && python ez_setup.py && rm -f ez_setup.py"
+      shell: "curl -s https://raw.githubusercontent.com/ActiveState/ez_setup/v0.9/ez_setup.py | python"
+      args:
+        warn: no
 
     - name: Install PIP
       shell: "easy_install pip"
@@ -140,7 +137,7 @@
 
     - name: Create CIBox command line utility
       file:
-        src: /var/www/cibox
+        src: "{{ webroot }}/cibox"
         dest: /usr/bin/cibox
         state: link
       when: vagrant
