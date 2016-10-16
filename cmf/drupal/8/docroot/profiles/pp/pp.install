@@ -6,6 +6,7 @@
  */
 
 use Drupal\user\Entity\User;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_install().
@@ -14,7 +15,7 @@ function pp_install() {
   $config_factory = \Drupal::configFactory();
 
   // Enable default permissions for system roles.
-  foreach ([DRUPAL_ANONYMOUS_RID, DRUPAL_AUTHENTICATED_RID] as $rid) {
+  foreach ([AccountInterface::ANONYMOUS_ROLE, AccountInterface::AUTHENTICATED_ROLE] as $rid) {
     user_role_grant_permissions($rid, ['access content']);
   }
 
