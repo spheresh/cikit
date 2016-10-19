@@ -43,6 +43,7 @@ cibox_php:
         default_enable: 1
         coverage_enable: 1
         max_nesting_level: 1000
+        overload_var_dump: 0
         remote_connect_back: 1
   packages:
     - dev

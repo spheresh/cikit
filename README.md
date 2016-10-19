@@ -70,12 +70,14 @@ Currently `provision.yml` playbook powered with tags, so you can run only part o
 
 - php
 - misc
+- sass
 - security
 - nginx
 - selenium
 - memcache
 - php-stack
 - solr
+- nodejs
 - jenkins
 - composer
 - sniffers
