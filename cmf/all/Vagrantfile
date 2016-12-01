@@ -41,7 +41,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Automatically name the box.
   config.vm.box = File.basename(config.vm.box_url)
   # Hosts Updated plugin insert this value to "hosts".
-  config.vm.hostname = "#{configValues["project"]}.dev"
+  # The "site_url" will appear in "config.yml" via repository builder.
+  # See "scripts/repository.yml".
+  config.vm.hostname = configValues["site_url"].split('//').last
   # Handle port collisions.
   config.vm.usable_port_range = (10200..10500)
 
