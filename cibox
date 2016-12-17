@@ -131,7 +131,7 @@ elif [[ "$(uname -s)" =~ "CYGWIN" ]]; then
 fi
 
 # Pass any extra arguments for "ansible-playbook". Most useful
-# case: "ANSIBLE_ARGS=-vvvv ansible.sh reinstall"
+# case: "ANSIBLE_ARGS=-vvvv cibox reinstall"
 if [ -n "${ANSIBLE_ARGS}" ]; then
   params+=" ${ANSIBLE_ARGS}"
 fi
