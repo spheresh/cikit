@@ -1,8 +1,8 @@
 ---
-cibox_php_version: 5.6
+cibox_php_version: 7.1
 cibox_php:
   repo: ppa:ondrej/php
-  xdebug: 2.4.1
+  xdebug: 2.5.0
   config:
     global:
       memory_limit: 512M
@@ -27,10 +27,6 @@ cibox_php:
         shm_size: 96M
         enable_cli: 0
         cache_by_default: 1
-    xhprof:
-      type: extension
-      config:
-        output_dir: /tmp/xhprof
     xdebug:
       type: zend_extension
       config:
@@ -43,7 +39,6 @@ cibox_php:
         default_enable: 1
         coverage_enable: 1
         max_nesting_level: 1000
-        overload_var_dump: 0
         remote_connect_back: 1
   packages:
     - dev
