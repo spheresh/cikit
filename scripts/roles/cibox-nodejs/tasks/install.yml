@@ -1,6 +1,8 @@
 ---
 - name: Build installation instructions
   shell: "curl -sL https://deb.nodesource.com/setup_{{ cibox_nodejs_version | int }}.x | sudo -E bash -"
+  args:
+    warn: no
 
 - name: Install Node.js
   apt:
