@@ -2,7 +2,7 @@
 - name: Get list of all droplets
   include: ../vboxmanage.yml
   args:
-    command: "list vms | grep {{ application }}"
+    command: "list vms"
 
 - name: Print list of all droplets
   debug:
