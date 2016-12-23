@@ -41,3 +41,7 @@
 - include: startvm.yml
   args:
     droplet_name: "{{ vm_name }}"
+
+- name: Print name of newly created droplet
+  debug:
+    msg: "Droplet '{{ vm_name }}' has been created."
