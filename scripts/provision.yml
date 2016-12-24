@@ -21,7 +21,7 @@
       prompt: Which version of Node.js you'd want to install? (4/5/6)
       default: skip
       private: no
-      tags: ["nodejs"]
+      tags: ["nodejs", "phantomjs"]
 
     - name: setup_solr
       prompt: Do you want to install Solr? (yes/NO)
@@ -172,6 +172,9 @@
 
     - role: cikit-nodejs
       tags: ["nodejs"]
+
+    - role: cikit-phantomjs
+      tags: ["phantomjs"]
 
     - role: ansible-composer
       tags: ["composer", "php-stack"]
