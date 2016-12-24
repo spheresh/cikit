@@ -3,7 +3,7 @@
 
 - name: Download Jenkins
   get_url:
-    url: "{{ jenkins_pkg_version }}"
+    url: "{{ jenkins.package }}"
     dest: ~/jenkins.deb
     mode: 440
 
@@ -13,7 +13,8 @@
     dest: /etc/default/jenkins
 
 - name: Install Jenkins
-  shell: "dpkg -i ~/jenkins.deb"
+  # Do not override previously created Jenkins config during installation.
+  shell: "yes N | dpkg -i ~/jenkins.deb"
 
 - name: Restart service
   service:
@@ -22,9 +23,27 @@
 
 - include: cli.yml
 
+- name: Copy configs
+  template:
+    src: "configs/{{ item | basename }}"
+    dest: '{{ jenkins_lib }}/{{ item | basename | regex_replace("\.j2", "") }}'
+    owner: "{{ jenkins_data.user }}"
+    group: "{{ jenkins_data.group }}"
+    force: yes
+  with_fileglob: ../templates/configs/*.j2
+
+- name: Restart service
+  service:
+    name: jenkins
+    state: restarted
+
 - name: Install/update plugins
-  shell: "java -jar {{ jenkins.cli_dest }} -s {{ jenkins_host }} install-plugin {{ item }}"
-  with_items: "{{ plugins }}"
+  # Firstly: plugin downloading.
+  # Secondly: install plugin dependencies.
+  shell: >
+    java -jar {{ jenkins.cli }} -s {{ jenkins_host }} install-plugin http://mirrors.jenkins-ci.org/plugins/{{ item.key }}/{{ item.value }}/{{ item.key }}.hpi &&
+    curl -X POST -d "<jenkins><install plugin='{{ item.key }}@{{ item.value }}' /></jenkins>" -H 'Content-Type: text/xml' {{ jenkins_host }}/pluginManager/installNecessaryPlugins
+  with_dict: "{{ plugins }}"
   notify: Restart Jenkins
 
 - name: Restore service
@@ -44,5 +63,3 @@
   lineinfile:
     dest: /etc/sudoers
     line: "{{ jenkins_data.user }} ALL=(ALL) NOPASSWD:ALL"
-
-- include: configure.yml

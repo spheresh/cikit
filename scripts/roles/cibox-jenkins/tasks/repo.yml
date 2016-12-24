@@ -1,23 +1,17 @@
 ---
-# Add Jenkins repository key
-- name: Add jenkins apt-key
+- name: Add APT key
   apt_key:
-    url: "{{ jenkins.deb.key }}"
+    url: "{{ jenkins.key }}"
     state: present
 
-# Add Jenkins repository
-- name: Add Jenkins repository
+- name: Add APT repository
   apt_repository:
-    repo: "{{ jenkins.deb.repo }}"
+    repo: "{{ jenkins.repo }}"
     state: present
   ignore_errors: yes
-
-# Ugly workaround fixing the auto-add src repo when using apt_repository
-#- name: Remove invalid Jenkins src repository
-#  action: command sed --in-place '/deb-src.*pkg.jenkins-ci/d' /etc/apt/sources.list
 
 - name: Install dependencies
   apt:
     pkg: "{{ item }}"
     state: installed
-  with_items: "{{ jenkins.deb.dependencies }}"
+  with_items: "{{ jenkins.dependencies }}"

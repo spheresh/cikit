@@ -3,18 +3,7 @@
     <actions/>
     <description></description>
     <keepDependencies>false</keepDependencies>
-    <properties>
-        <jenkins.plugins.hipchat.HipChatNotifier_-HipChatJobProperty plugin="hipchat@0.1.8">
-            <room></room>
-            <startNotification>false</startNotification>
-            <notifySuccess>false</notifySuccess>
-            <notifyAborted>false</notifyAborted>
-            <notifyNotBuilt>false</notifyNotBuilt>
-            <notifyUnstable>false</notifyUnstable>
-            <notifyFailure>false</notifyFailure>
-            <notifyBackToNormal>false</notifyBackToNormal>
-        </jenkins.plugins.hipchat.HipChatNotifier_-HipChatJobProperty>
-    </properties>
+    <properties/>
     <scm class="hudson.scm.NullSCM"/>
     <canRoam>true</canRoam>
     <disabled>true</disabled>
@@ -35,9 +24,5 @@ scp root@CHANGE_TO_PROD_SERVER_I:/var/www/backup/proddump.sql.gz /var/www/backup
         </hudson.tasks.Shell>
     </builders>
     <publishers/>
-    <buildWrappers>
-        <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.1">
-            <colorMapName>xterm</colorMapName>
-        </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
-    </buildWrappers>
+    <buildWrappers/>
 </project>

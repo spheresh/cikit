@@ -4,17 +4,17 @@
     <description>Create build on every commit to pull request on GitHub.</description>
     <keepDependencies>false</keepDependencies>
     <properties>
-        <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.14.0">
+        <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.25.0">
             <projectUrl>https://github.com/VENDOR/PROJECT/</projectUrl>
+            <displayName></displayName>
         </com.coravy.hudson.plugins.github.GithubProjectProperty>
     </properties>
-    <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.0">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@3.0.1">
         <configVersion>2</configVersion>
         <userRemoteConfigs>
             <hudson.plugins.git.UserRemoteConfig>
                 <refspec>+refs/pull/*:refs/remotes/origin/pr/*</refspec>
                 <url>git@github.com:VENDOR/PROJECT.git</url>
-                <credentialsId>00793e48-3d61-4891-9f43-e27701dffafd</credentialsId>
             </hudson.plugins.git.UserRemoteConfig>
         </userRemoteConfigs>
         <branches>
@@ -25,18 +25,22 @@
         <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
         <submoduleCfg class="list"/>
         <extensions>
+            <hudson.plugins.git.extensions.impl.WipeWorkspace/>
             <hudson.plugins.git.extensions.impl.CloneOption>
                 <shallow>true</shallow>
+                <noTags>false</noTags>
                 <reference></reference>
+                <depth>0</depth>
+                <honorRefspec>false</honorRefspec>
             </hudson.plugins.git.extensions.impl.CloneOption>
             <hudson.plugins.git.extensions.impl.SubmoduleOption>
                 <disableSubmodules>true</disableSubmodules>
                 <recursiveSubmodules>false</recursiveSubmodules>
                 <trackingSubmodules>false</trackingSubmodules>
+                <reference></reference>
+                <parentCredentials>false</parentCredentials>
                 <timeout>5</timeout>
             </hudson.plugins.git.extensions.impl.SubmoduleOption>
-            <hudson.plugins.git.extensions.impl.CleanCheckout/>
-            <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
         </extensions>
     </scm>
     <canRoam>true</canRoam>
@@ -44,25 +48,46 @@
     <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
     <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
     <triggers>
-        <org.jenkinsci.plugins.ghprb.GhprbTrigger plugin="ghprb@1.15-0">
+        <org.jenkinsci.plugins.ghprb.GhprbTrigger plugin="ghprb@1.33.4">
             <spec>* * * * *</spec>
+            <latestVersion>3</latestVersion>
+            <configVersion>3</configVersion>
             <adminlist>BR0kEN-</adminlist>
             <allowMembersOfWhitelistedOrgsAsAdmin>false</allowMembersOfWhitelistedOrgsAsAdmin>
             <orgslist>propeopleua</orgslist>
             <cron>* * * * *</cron>
-            <triggerPhrase></triggerPhrase>
+            <buildDescTemplate>#$pullId: $title</buildDescTemplate>
             <onlyTriggerPhrase>false</onlyTriggerPhrase>
             <useGitHubHooks>false</useGitHubHooks>
             <permitAll>false</permitAll>
-            <commentFilePath></commentFilePath>
             <whitelist></whitelist>
             <autoCloseFailedPullRequests>false</autoCloseFailedPullRequests>
+            <displayBuildErrorsOnDownstreamBuilds>false</displayBuildErrorsOnDownstreamBuilds>
             <whiteListTargetBranches>
                 <org.jenkinsci.plugins.ghprb.GhprbBranch>
                     <branch></branch>
                 </org.jenkinsci.plugins.ghprb.GhprbBranch>
             </whiteListTargetBranches>
-            <project>{{ item.name }}</project>
+            <blackListTargetBranches>
+                <org.jenkinsci.plugins.ghprb.GhprbBranch>
+                    <branch></branch>
+                </org.jenkinsci.plugins.ghprb.GhprbBranch>
+            </blackListTargetBranches>
+            <gitHubAuthId>ee9d2a24-e661-4e54-8078-439d571514c7</gitHubAuthId>
+            <triggerPhrase>.*\[test\W+this\W+please\].*</triggerPhrase>
+            <skipBuildPhrase>.*\[skip\W+ci\].*</skipBuildPhrase>
+            <extensions>
+                <org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
+                    <commitStatusContext></commitStatusContext>
+                    <triggeredStatus></triggeredStatus>
+                    <startedStatus></startedStatus>
+                    <statusUrl></statusUrl>
+                    <addTestResults>true</addTestResults>
+                </org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
+                <org.jenkinsci.plugins.ghprb.extensions.comments.GhprbCommentFile>
+                    <commentFilePath>${WORKSPACE}/docroot/commentinfo.md</commentFilePath>
+                </org.jenkinsci.plugins.ghprb.extensions.comments.GhprbCommentFile>
+            </extensions>
         </org.jenkinsci.plugins.ghprb.GhprbTrigger>
     </triggers>
     <concurrentBuild>false</concurrentBuild>
@@ -71,10 +96,6 @@
             <command>#!/usr/bin/env bash -e
 
 export PYTHONUNBUFFERED=1
-# Create file for reports.
-touch ${WORKSPACE}/commentinfo.md
-# Store the name of file for reports to variable for future usage.
-export ARTIFACTS=$_
 export PROJECT=$(echo ${JOB_NAME//_PR_BUILDER/} | tr '[:upper:]' '[:lower:]')
 export BUILD_NAME=${PROJECT}_build_${BUILD_NUMBER}
 export SITE_URL=https://$(php -r "echo parse_url('${JOB_URL}')['host'];")/${BUILD_NAME}
@@ -98,8 +119,9 @@ sudo chown -R www-data:jenkins $_
 </command>
         </hudson.tasks.Shell>
     </builders>
+    <publishers/>
     <buildWrappers>
-        <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.2">
+        <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.3">
             <colorMapName>xterm</colorMapName>
         </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
     </buildWrappers>
