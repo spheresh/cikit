@@ -534,6 +534,10 @@ a:hover, a:hover:hover, a:link:hover, a:visited:hover {
   display: none;
 }
 
+#visible-am-container {
+  margin-right: 15px;
+}
+
 #header > .searchbox {
   padding: 0;
 }
