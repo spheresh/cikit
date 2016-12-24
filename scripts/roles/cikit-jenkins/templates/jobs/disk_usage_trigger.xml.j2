@@ -14,7 +14,6 @@
       <spec>H/10 * * * *</spec>
       <labelRestriction>false</labelRestriction>
       <enableConcurrentBuild>false</enableConcurrentBuild>
-      <script>[ $(df -H | head -2 | tail -1 | awk '{printf "%d", $5}') -gt 92 ] && exit 0 || exit 1</script>
       <script>[ $(df -H | head -2 | tail -1 | awk &apos;{printf &quot;%d&quot;, $5}&apos;) -gt 92 ] &amp;&amp; exit 0 || exit 1</script>
     </org.jenkinsci.plugins.scripttrigger.ScriptTrigger>
   </triggers>
