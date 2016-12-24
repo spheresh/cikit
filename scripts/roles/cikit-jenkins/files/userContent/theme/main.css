@@ -597,6 +597,11 @@ th.pane {
   color: #444
 }
 
+.build-row-cell .pane.build-name .display-name {
+  margin-left: 25px;
+  margin-top: 3px;
+}
+
 .bottom-sticker-edge {
   display: none
 }
