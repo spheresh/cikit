@@ -1,4 +1,0 @@
----
-dependencies:
-  - role: ansible-composer
-    when: ansible_composer_role_executed is not defined

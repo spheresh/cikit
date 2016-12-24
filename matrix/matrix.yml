@@ -3,7 +3,7 @@
 
   vars:
     domain: m2.propeople.com.ua
-    application: cibox
+    application: cikit
     # Allow to pass "--restart=nginx,jenkins,apache" to this script and restart necessary services.
     restart: ""
 

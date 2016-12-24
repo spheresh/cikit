@@ -6,7 +6,7 @@
   include: ../vboxmanage.yml
   args:
     # Example:
-    # "SATA-0-0"="/home/vbox/VirtualBox VMs/cibox02/cibox02.vdi"
+    # "SATA-0-0"="/home/vbox/VirtualBox VMs/cikit02/cikit02.vdi"
     command: "showvminfo {{ droplet_name }} --machinereadable | awk -F '=' '/SATA-0/ {print $2}'"
 
 - name: Resize hard drive

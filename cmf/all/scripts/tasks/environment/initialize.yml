@@ -13,6 +13,8 @@
       comment: "{{ project_workspace }}/commentinfo.md"
       dir: "{{ project_workspace }}/reports"
       url: "{{ site_url }}/reports"
+    # Get pages through localhost to avoid HTTP authentication. Useful for automated testing.
+    testing_url: "{{ 'http://127.0.0.1:8080/' + build_id if build_id is defined else site_url }}"
 
 - name: Ensure that project directory has correct permissions
   file:

@@ -2,7 +2,7 @@
 
 # WARNING! This file is managed by Ansible and MUST NOT be edited directly.
 # If you familiar with Behat configs then edit "/var/www/scripts/templates/behat.j2"
-# and run "cibox tests" to apply changes.
+# and run "cikit tests" to apply changes.
 default:
   formatters:
     html:
@@ -30,5 +30,5 @@ default:
               CURLOPT_TIMEOUT: 300
               CURLOPT_CONNECTTIMEOUT: 0
       selenium2: ~
-      base_url: {{ "http://localhost:8080/" + build_id if build_id is defined else site_url }}
+      base_url: {{ testing_url }}
       files_path: resources
