@@ -11,7 +11,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
     <org.jenkinsci.plugins.scripttrigger.ScriptTrigger plugin="scripttrigger@0.34">
-      <spec>* * * * *</spec>
+      <spec>H/10 * * * *</spec>
       <labelRestriction>false</labelRestriction>
       <enableConcurrentBuild>false</enableConcurrentBuild>
       <script>[ $(df -H | head -2 | tail -1 | awk '{printf "%d", $5}') -gt 92 ] && exit 0 || exit 1</script>
