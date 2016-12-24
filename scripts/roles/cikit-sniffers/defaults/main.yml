@@ -1,8 +1,8 @@
 ---
 git_repos:
   Drupal:
-    branch: 7.x-2.x
-    repo: https://github.com/klausi/coder.git
+    branch: 8.x-2.x
+    repo: git://git.drupal.org/project/coder.git
 
   DrupalSecure:
     branch: master
@@ -10,7 +10,7 @@ git_repos:
 
   Security:
     branch: master
-    repo: https://github.com/podarok/phpcs-security-audit.git
+    repo: https://github.com/FloeDesignTechnologies/phpcs-security-audit.git
 
   Symfony2:
     branch: master
