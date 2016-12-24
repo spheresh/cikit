@@ -10,10 +10,10 @@
     cmfs:
       drupal:
         download_url: "www.drupal.org/files/projects/drupal"
-        default_version: "7.51"
+        default_version: "7.53"
       wordpress:
         download_url: "wordpress.org/wordpress"
-        default_version: "4.6.1"
+        default_version: "4.7"
 
   vars_files:
     - ../config.yml
