@@ -1,5 +1,0 @@
----
-- name: "Compile {{ name }} extension"
-  shell: "phpize{{ cibox_php_version }} && ./configure && make clean && make -j 5 all && make install"
-  args:
-    chdir: "{{ dir }}"

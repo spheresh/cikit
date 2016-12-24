@@ -1,11 +1,11 @@
 # This playbook could be run in various modes:
 #
 # 1. Install Behat, generate "behat.yml" from template and run Selenium hub.
-# cibox tests
+# cikit tests
 # 2. Actions from first step and run Behat tests.
-# cibox tests --run
+# cikit tests --run
 # 3. The same as second variant, but with Xvfb service started. Tests could be run without display.
-# cibox tests --run --headless
+# cikit tests --run --headless
 ---
 - hosts: localhost
   gather_facts: yes

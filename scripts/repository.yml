@@ -52,7 +52,7 @@
         chdir: "../{{ project }}/docroot"
       when: "{{ not without_sources }}"
 
-    - name: Prepare CIBox-structured repository
+    - name: Prepare CIKit-structured repository
       synchronize:
         src: "{{ item.src }}"
         dest: "../{{ project }}/{{ item.dest | default('') }}"
@@ -63,7 +63,7 @@
         - src: "../cmf/all/"
         - src: "../cmf/{{ cmf }}/all/"
         - src: "{{ cmf_configs.stat.path }}/"
-        - src: "../cibox"
+        - src: "../cikit"
         - src: "../config.yml"
         - src: "../inventory"
 

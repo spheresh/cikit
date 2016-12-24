@@ -47,7 +47,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Handle port collisions.
   config.vm.usable_port_range = (10200..10500)
 
-  config.vm.post_up_message = "Documentation: https://github.com/BR0kEN-/cibox
+  config.vm.post_up_message = "Documentation: https://github.com/BR0kEN-/cikit
 
  ██████╗ ██╗     ██████╗   ██████╗  ██╗  ██╗
 ██╔════╝ ██║     ██╔══██╗ ██╔═══██╗ ╚██╗██╔╝
@@ -88,22 +88,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :linux__nfs_options => ["rw", "no_subtree_check", "no_root_squash", "async"]
   end
 
-  config.vm.provision :cibox,
-    :controller => "./cibox",
+  config.vm.provision :cikit,
+    :controller => "./cikit",
     :playbook => "provisioning/provision"
 
   if ENV["REINSTALL"]
     config.vm.provision :shell,
-      :inline => "cibox reinstall"
+      :inline => "cikit reinstall"
   end
 
   # Create Selenium hub.
   config.vm.provision :shell,
-    :inline => "cibox tests",
+    :inline => "cikit tests",
     :run => "always"
 
   # Create Selenium node.
-  config.vm.provision :cibox,
+  config.vm.provision :cikit,
     :controller => "./selenium.sh",
     :playbook => "#{configValues["selenium"]}",
     :run => "always"

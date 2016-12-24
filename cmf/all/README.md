@@ -1,4 +1,4 @@
-# CIBox
+# CIKit
 
 ## Statistic
 
@@ -32,7 +32,7 @@ vagrant ssh
 Re-install web application (should be executed inside of VM).
 
 ```shell
-cibox reinstall
+cikit reinstall
 ```
 
 ### Provision

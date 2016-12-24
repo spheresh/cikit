@@ -1,18 +1,18 @@
-# Continuous Integration Box
+# Continuous Integration Kit
 
-**CIBox** - is [Ansible](https://github.com/ansible/ansible) based system for deployment environment for web application development. With this tool you able to deploy local web-server based on [Vagrant](https://github.com/mitchellh/vagrant) and/or remote one.
+**CIKit** - is [Ansible](https://github.com/ansible/ansible) based system for deployment environment for web application development. With this tool you able to deploy local web-server based on [Vagrant](https://github.com/mitchellh/vagrant) and/or remote one.
 
 The power of the system - simplicity. All provisioning is the same for local and remote machines, except logic for installing additional software on remote (Jenkins, for example), but it quite simple too (just `when: not vagrant` as condition for Ansible tasks).
 
 *Currently based on `Ubuntu 14.04 LTS (64bit)`*.
 
 ```ascii
-  ██████╗ ██╗     ██████╗   ██████╗  ██╗  ██╗
- ██╔════╝ ██║     ██╔══██╗ ██╔═══██╗ ╚██╗██╔╝
- ██║      ██║     ██████╔╝ ██║   ██║  ╚███╔╝
- ██║      ██║     ██╔══██╗ ██║   ██║  ██╔██╗
- ╚██████╗ ██║     ██████╔╝ ╚██████╔╝ ██╔╝ ██╗
-  ╚═════╝ ╚═╝     ╚═════╝   ╚═════╝  ╚═╝  ╚═╝
+ ██████╗ ██╗    ██╗  ██╗ ██╗ ████████╗
+██╔════╝ ██║    ██║ ██╔╝ ██║ ╚══██╔══╝
+██║      ██║    █████╔╝  ██║    ██║   
+██║      ██║    ██╔═██╗  ██║    ██║   
+╚██████╗ ██║    ██║  ██╗ ██║    ██║   
+ ╚═════╝ ╚═╝    ╚═╝  ╚═╝ ╚═╝    ╚═╝   
 ```
 
 ## Main possibilities
@@ -27,8 +27,8 @@ The power of the system - simplicity. All provisioning is the same for local and
 ## Quick Start
 
 - Add your host credentials to the `inventory` file.
-- `./cibox repository --project=<NAME> [--cmf=drupal] [--version=7.51] [--without-sources]`
-- `./cibox provision --project=<NAME> [--limit=<HOST>]`
+- `./cikit repository --project=<NAME> [--cmf=drupal] [--version=7.51] [--without-sources]`
+- `./cikit provision --project=<NAME> [--limit=<HOST>]`
 
 The `--without-sources` option for `repository` task affected on downloading CMF sources. If you want to create an empty project - use it.
 
@@ -37,25 +37,25 @@ The `--without-sources` option for `repository` task affected on downloading CMF
 #### Drupal 7
 
 ```shell
-./cibox repository --project=test
+./cikit repository --project=test
 ```
 
 #### Drupal 8
 
 ```shell
-./cibox repository --project=test --version=8.3.x-dev
+./cikit repository --project=test --version=8.3.x-dev
 ```
 
 #### WordPress 4
 
 ```shell
-./cibox repository --project=test --cmf=wordpress --version=4.6.1
+./cikit repository --project=test --cmf=wordpress --version=4.6.1
 ```
 
 #### Add Jenkins project to existing CI server
 
 ```shell
-./cibox jenkins-job --project=test [--limit=<HOST>]
+./cikit jenkins-job --project=test [--limit=<HOST>]
 ```
 
 **Note**: these commands should be executed on your host, not inside of virtual machine!
@@ -65,7 +65,7 @@ The `--without-sources` option for `repository` task affected on downloading CMF
 Currently `provision.yml` playbook powered with tags, so you can run only part of it.
 
 ```shell
-./cibox provision --tags=TAGNAME
+./cikit provision --tags=TAGNAME
 ```
 
 - php
@@ -94,21 +94,21 @@ ANSIBLE_ARGS="--tags=TAGNAME" vagrant provision
 
 As you see, any set of arguments can be passed for `ansible-playbook` command.
 
-## The power of `cibox` utility
+## The power of `cikit` utility
 
 Run with custom inventory file:
 
 ```shell
-ANSIBLE_INVENTORY="/path/to/inventory" ./cibox
+ANSIBLE_INVENTORY="/path/to/inventory" ./cikit
 ```
 
 Run with custom set of arguments:
 
 ```shell
-ANSIBLE_ARGS="-vvvv" ./cibox
+ANSIBLE_ARGS="-vvvv" ./cikit
 ```
 
-By default, `cibox` - is a global utility which looks for a project in `/var/www/`. But, if you specify a playbook outside of this directory, then working folder will be the path of this playbook.
+By default, `cikit` - is a global utility which looks for a project in `/var/www/`. But, if you specify a playbook outside of this directory, then working folder will be the path of this playbook.
 
 ## Dependencies
 

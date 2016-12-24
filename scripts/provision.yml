@@ -12,12 +12,12 @@
     - vars/apache.yml
 
   vars_prompt:
-    - name: cibox_php_version
+    - name: cikit_php_version
       prompt: Which version of PHP you'd want to install? (5.6/7.0/7.1)
       private: no
       tags: ["php", "php-stack"]
 
-    - name: cibox_nodejs_version
+    - name: cikit_nodejs_version
       prompt: Which version of Node.js you'd want to install? (4/5/6)
       default: skip
       private: no
@@ -56,9 +56,9 @@
 
   vars:
     vagrant: no
-    cibox_ssl_folder: /etc/ssl/private
+    cikit_ssl_folder: /etc/ssl/private
 
-    cibox_protected_folders:
+    cikit_protected_folders:
       - path: "{{ webroot }}"
         user: "{{ http_auth_user }}"
         pass: "{{ http_auth_pass }}"
@@ -140,37 +140,37 @@
         state: latest
       with_items: "{{ pip_packages }}"
 
-    - name: Create CIBox command line utility
+    - name: Create CIKit command line utility
       file:
-        src: "{{ webroot }}/cibox"
-        dest: /usr/bin/cibox
+        src: "{{ webroot }}/cikit"
+        dest: /usr/bin/cikit
         state: link
       when: vagrant
 
-    - name: Generate Bash completion for CIBox utility
+    - name: Generate Bash completion for CIKit utility
       template:
-        src: templates/cibox.complete.sh.j2
+        src: templates/cikit.complete.sh.j2
         dest: /etc/bash_completion.d
       when: vagrant
 
   roles:
-    - role: cibox-misc
+    - role: cikit-misc
       tags: ["misc"]
 
-    - role: cibox-ssl-config
+    - role: cikit-ssl-config
       tags: ["ssl", "security"]
 
-    - role: cibox-nginx
+    - role: cikit-nginx
       tags: ["nginx", "php-stack", "security"]
       when: not vagrant
 
     - role: ansible-role-apache
       tags: ["apache", "php-stack"]
 
-    - role: cibox-php
+    - role: cikit-php
       tags: ["php", "php-stack"]
 
-    - role: cibox-nodejs
+    - role: cikit-nodejs
       tags: ["nodejs"]
 
     - role: ansible-composer
@@ -179,31 +179,31 @@
     - role: ansible-role-mysql
       tags: ["mysql", "php-stack"]
 
-    - role: cibox-jetty-solr
+    - role: cikit-jetty-solr
       when: extras.solr
       tags: ["solr", "php-stack"]
 
-    - role: cibox-sniffers
+    - role: cikit-sniffers
       tags: ["sniffers", "php-stack"]
 
-    - role: cibox-mysql-config
+    - role: cikit-mysql-config
       tags: ["mysql", "php-stack"]
 
     - role: ansible-role-memcached
       tags: ["memcache", "php-stack"]
 
-    - role: cibox-swap
+    - role: cikit-swap
       when: not vagrant and extras.swap and ansible_virtualization_type != "openvz"
       tags: ["swap"]
 
-    - role: cibox-selenium
+    - role: cikit-selenium
       tags: ["selenium"]
 
-    - role: cibox-security
+    - role: cikit-security
       tags: ["security"]
       when: not vagrant
 
-    - role: cibox-jenkins
+    - role: cikit-jenkins
       when: not vagrant
       tags: ["jenkins"]
 

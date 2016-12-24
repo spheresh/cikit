@@ -5,7 +5,7 @@ Control a situation on a physical server using `Ansible`.
 ## List of droplets
 
 ```shell
-./cibox matrix/matrix.yml --limit=<HOSTNAME> --tags=vm --droplet-list
+./cikit matrix/matrix.yml --limit=<HOSTNAME> --tags=vm --droplet-list
 ```
 
 Result of execution of this command will be similar to this:
@@ -13,7 +13,7 @@ Result of execution of this command will be similar to this:
 ```shell
 ok: [m2.propeople.com.ua] => {
     "msg": [
-        "\"cibox01\" {f06aec56-3b0b-4a4c-9109-acf17601dc9b}"
+        "\"cikit01\" {f06aec56-3b0b-4a4c-9109-acf17601dc9b}"
     ]
 }
 ```
@@ -23,7 +23,7 @@ On the left is the name of VM, on the right - UUID.
 ## Create new droplet
 
 ```shell
-./cibox matrix/matrix.yml --limit=<HOSTNAME> --tags=vm --droplet-add
+./cikit matrix/matrix.yml --limit=<HOSTNAME> --tags=vm --droplet-add
 ```
 
 ## Delete droplet
@@ -31,13 +31,13 @@ On the left is the name of VM, on the right - UUID.
 To know the name of droplet desired to delete, look at list of available droplets.
 
 ```shell
-./cibox matrix/matrix.yml --limit=<HOSTNAME> --tags=vm --droplet-delete=<NAME|UUID>
+./cikit matrix/matrix.yml --limit=<HOSTNAME> --tags=vm --droplet-delete=<NAME|UUID>
 ```
 
 ## Restart droplet
 
 ```shell
-./cibox matrix/matrix.yml --limit=matrix --tags=vm --droplet-edit=<NAME|UUID>
+./cikit matrix/matrix.yml --limit=matrix --tags=vm --droplet-edit=<NAME|UUID>
 ```
 
 ## Edit droplet
@@ -45,7 +45,7 @@ To know the name of droplet desired to delete, look at list of available droplet
 All sizes (memory and hard drive) must be in *megabytes*.
 
 ```shell
-./cibox matrix/matrix.yml --limit=matrix --tags=vm --droplet-edit=<NAME|UUID> [--droplet-cpus=<NN>] [--droplet-memory=<NN>] [--droplet-size=<NN>]
+./cikit matrix/matrix.yml --limit=matrix --tags=vm --droplet-edit=<NAME|UUID> [--droplet-cpus=<NN>] [--droplet-memory=<NN>] [--droplet-size=<NN>]
 ```
 
 **Read lines below before changing the configuration of virtual machine!**

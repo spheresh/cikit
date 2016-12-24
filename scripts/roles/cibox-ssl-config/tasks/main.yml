@@ -1,9 +1,0 @@
----
-- name: Assures SSL folder exists
-  file:
-    path: "{{ cibox_ssl_folder }}"
-    state: directory
-    recurse: yes
-
-- name: Create self-signed SSL cert
-  command: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/C=US" -keyout {{ cibox_ssl_folder }}/ssl.key -out {{ cibox_ssl_folder }}/ssl.crt
