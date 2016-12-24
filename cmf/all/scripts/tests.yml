@@ -57,7 +57,9 @@
       when: run
 
     - name: Create Behat report
-      shell: 'echo "<a href=\"{{ reports.url }}/behat/index.html\" target=\"_blank\">Behat</a>" >> {{ reports.comment }}'
+      # See "report-link.yml".
+      shell: >
+        printf '\n- <a href="{{ reports.url }}/behat/index.html">Behat</a>' >> {{ reports.comment }}
       args:
         removes: "{{ reports.dir }}/behat/*.html"
       when: run

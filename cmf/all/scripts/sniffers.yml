@@ -31,7 +31,7 @@
       args:
         data:
           type: "phpcs.{{ item }}"
-          title: "CodeSniffer {{ item }}"
+          title: "[CodeSniffer] {{ item }}"
       with_items: "{{ phpcs.standards }}"
 
     - name: Run JSHint

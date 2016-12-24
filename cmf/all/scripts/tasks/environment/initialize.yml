@@ -10,8 +10,8 @@
 - name: Set path to reports directory and URL by which they will be accessible
   set_fact:
     reports:
-      comment: "{{ project_webroot }}/commentinfo.md"
-      dir: "{{ project_webroot }}/reports"
+      comment: "{{ project_workspace }}/commentinfo.md"
+      dir: "{{ project_workspace }}/reports"
       url: "{{ site_url }}/reports"
 
 - name: Ensure that project directory has correct permissions
@@ -24,7 +24,7 @@
 - name: Initialize an empty build report
   copy:
     dest: "{{ reports.comment }}"
-    content: "Site installed at: <a href=\"{{ site_url }}\" target=\"_blank\">{{ site_url }}</a>"
+    content: 'Build available at: <a href="{{ site_url }}">{{ site_url }}</a>'
 
 - name: Check installation of Composer packages
   stat:

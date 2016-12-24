@@ -1,3 +1,8 @@
 ---
 - name: "Create {{ data.title }} report"
-  shell: 'if [ -s {{ reports.dir }}/{{ data.type }}.txt ]; then echo "<a href=\"{{ reports.url }}/{{ data.type }}.txt\" target=\"_blank\">{{ data.title }}</a>" >> {{ reports.comment }}; fi'
+  # The reason, why "printf" using instead of "echo".
+  # https://github.com/ansible/ansible/issues/5206#issuecomment-38111435
+  shell: >
+    if [ -s {{ reports.dir }}/{{ data.type }}.txt ]; then
+      printf '\n- <a href="{{ reports.url }}/{{ data.type }}.txt">{{ data.title }}</a>' >> {{ reports.comment }}
+    fi
