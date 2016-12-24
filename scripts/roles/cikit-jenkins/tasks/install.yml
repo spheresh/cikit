@@ -38,8 +38,6 @@
     dest: "{{ jenkins_lib }}"
     owner: "{{ jenkins_data.user }}"
     group: "{{ jenkins_data.group }}"
-    force: yes
-    directory_mode: yes
 
 - name: Restart service
   service:
