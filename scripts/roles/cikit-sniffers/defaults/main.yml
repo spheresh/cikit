@@ -20,6 +20,10 @@ git_repos:
     branch: master
     repo: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git
 
+  HTML:
+    branch: 2.0.7
+    repo: https://github.com/squizlabs/HTML_CodeSniffer.git
+
 npm_packages:
   - jshint
 
