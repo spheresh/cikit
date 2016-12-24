@@ -3,5 +3,15 @@ phpcs:
   standards: ["Drupal", "DrupalSecure", "Security"]
   extensions: ["php", "inc", "install", "module"]
 
+# Available standards:
+# - WCAG2A
+# - WCAG2AA
+# - WCAG2AAA
+# - Section508
+htmlcs:
+  Frontpage:
+    path: /
+    standard: Section508
+
 scan_dirs:
   - "profiles/{{ profile }}/*/custom"

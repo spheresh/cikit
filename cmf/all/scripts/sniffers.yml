@@ -19,7 +19,7 @@
         state: "{{ item }}"
       with_items: ["absent", "directory"]
 
-    - name: Run CodeSniffer
+    - name: Run PHPCS
       shell: "phpcs --standard={{ item }} --extensions={{ phpcs.extensions | join(',') }} -n {{ scan_dirs | join(' ') }} > {{ reports.dir }}/phpcs.{{ item }}.txt"
       args:
         chdir: "{{ project_workspace }}"
@@ -31,8 +31,19 @@
       args:
         data:
           type: "phpcs.{{ item }}"
-          title: "[CodeSniffer] {{ item }}"
+          title: "[PHPCS] {{ item }}"
       with_items: "{{ phpcs.standards }}"
+
+    - name: Run HTMLCS
+      shell: "htmlcs {{ testing_url }}/{{ item.value.path }} {{ item.value.standard }} > {{ reports.dir }}/htmlcs.{{ item.key }}.txt"
+      with_dict: "{{ htmlcs }}"
+
+    - include: tasks/misc/report-link.yml
+      args:
+        data:
+          type: "htmlcs.{{ item.key }}"
+          title: "[HTMLCS] {{ item.key }}"
+      with_dict: "{{ htmlcs }}"
 
     - name: Run JSHint
       shell: 'find {{ item }} ! -path "*mute*" -type f \( -iname "*.js" ! -iname "*min.js" \) -print0 | sudo xargs -0 jshint > {{ reports.dir }}/jshint.txt'
