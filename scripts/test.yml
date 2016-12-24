@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  vars_files:
+    - ../config.yml
+    - vars/ports.yml
+    - vars/mysql.yml
+    - vars/nginx.yml
+    - vars/apache.yml
+
+  vars:
+    droplet_add: no
+
+  tasks:
+    - shell: >
+        printf '\n- <a href="vk.com">VK</a>' >> test.txt
