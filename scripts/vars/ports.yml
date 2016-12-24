@@ -4,7 +4,7 @@ apache_listen_port_ssl: "{{ 443 if vagrant else 44344 }}"
 jenkins_port: 8079
 jetty_solr_port: 8078
 
-# See "templates/cibox.nginx.j2".
+# See "cibox-nginx/templates/cibox.j2".
 nginx_proxies:
   - location: "/"
     port: "{{ apache_listen_port_ssl }}"
