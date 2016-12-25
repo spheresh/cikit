@@ -525,6 +525,19 @@ a:hover, a:hover:hover, a:link:hover, a:visited:hover {
   background-size: auto 30px, cover;
 }
 
+#jenkins-home-link {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 85px;
+  height: 40px;
+}
+
+#jenkins-home-link > * {
+  display: none;
+}
+
 #header .login {
   top: inherit;
   margin-top: 3px
@@ -624,10 +637,6 @@ th.pane {
 
 #projectstatus th a:hover {
   color: #666
-}
-
-a#jenkins-home-link {
-  opacity: 1 !important
 }
 
 table.progress-bar.red td.progress-bar-done {
@@ -741,10 +750,6 @@ pre a {
 .yuimenuitem-selected > a > img {
   -webkit-filter: brightness(10000);
   filter: brightness(10000)
-}
-
-#jenkins-home-link {
-  display: none !important
 }
 
 .jenkins_ver {
