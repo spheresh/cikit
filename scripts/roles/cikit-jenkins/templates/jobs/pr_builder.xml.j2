@@ -78,11 +78,11 @@
             <skipBuildPhrase>.*\[skip\W+ci\].*</skipBuildPhrase>
             <extensions>
                 <org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
-                    <commitStatusContext></commitStatusContext>
+                    <commitStatusContext>CIKit</commitStatusContext>
                     <triggeredStatus></triggeredStatus>
                     <startedStatus></startedStatus>
                     <statusUrl></statusUrl>
-                    <addTestResults>true</addTestResults>
+                    <addTestResults>false</addTestResults>
                 </org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
                 <org.jenkinsci.plugins.ghprb.extensions.comments.GhprbCommentFile>
                     <commentFilePath>${WORKSPACE}/docroot/commentinfo.md</commentFilePath>
