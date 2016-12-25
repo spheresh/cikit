@@ -1,4 +1,9 @@
 ---
+- name: Define packages for installation
+  set_fact:
+    apache_packages: "{{ cikit_apache.packages }}"
+  when: "{{ apache_packages is not defined }}"
+
 - name: Purge Apache configs
   apt:
     name: apache2
@@ -6,7 +11,7 @@
 
 - name: Remove directory with Apache configs
   file:
-    path: "{{ apache_conf_path }}"
+    path: "{{ cikit_apache.dest }}"
     state: absent
 
 - name: Reinstall Apache
@@ -25,5 +30,5 @@
     executable: /bin/bash
   ignore_errors: yes
   with_items:
-    - "{{ apache_listen_port }}"
-    - "{{ apache_listen_port_ssl }}"
+    - "{{ apache_port }}"
+    - "{{ apache_port_ssl }}"

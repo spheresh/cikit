@@ -1,14 +1,4 @@
 ---
-apache_version: 2.4.7-1ubuntu4.13
-apache_remove_default_vhost: yes
-apache_mods_enabled:
-  - rewrite.load
-  - ssl.load
-  - vhost_alias.load
-apache_mods_disabled:
-  - fcgid.load
-  - rpaf.load
-  - ruid2.load
 apache_vhosts:
   - servername: "{{ (site_url | regex_replace('^(.*)://', 'http://')) if site_url is defined and vagrant else 'JenkinsCI' }}"
     documentroot: "{{ webroot }}/{{ 'docroot' if site_url is defined and vagrant else '' }}"

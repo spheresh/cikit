@@ -1,15 +1,7 @@
 ---
 apache_version: 2.4.7-1ubuntu4.13
-
-apache_listen_port: 80
-apache_listen_port_ssl: 443
-
-apache_create_vhosts: yes
-apache_vhosts_filename: vhosts.conf
-
-# On Debian/Ubuntu, a default virtualhost is included in Apache's configuration.
-# Set this to "yes" to remove that default.
-apache_remove_default_vhost: no
+apache_port: 80
+apache_port_ssl: 443
 
 apache_vhosts:
   # Additional properties: 'serveradmin, serveralias, extra_parameters'.
@@ -25,12 +17,19 @@ apache_vhosts_ssl: []
   #   # Optional.
   #   certificate_chain_file: "/path/to/certificate_chain.crt"
 
-apache_ssl_dir: /etc/apache2/ssl
-apache_ssl_protocol: "All -SSLv2 -SSLv3"
-apache_ssl_cipher_suite: "AES256+EECDH:AES256+EDH"
-
-# Only used on Debian/Ubuntu.
-apache_mods_enabled:
-  - rewrite.load
-  - ssl.load
-apache_mods_disabled: []
+apache_data:
+  conf:
+    en:
+      - fqdn.conf
+    dis: []
+  mods:
+    en:
+      - rewrite.load
+      - ssl.load
+      - vhost_alias.load
+    dis: []
+  sites:
+    en:
+      - vhosts
+    dis:
+      - 000-default.conf

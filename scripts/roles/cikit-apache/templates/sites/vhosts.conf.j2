@@ -1,9 +1,10 @@
+{# @todo Rework the template #}
+# {{ ansible_managed }}
 DirectoryIndex index.php index.html
-
 {# Set up VirtualHosts #}
 {% for vhost in apache_vhosts %}
 {% if vhost.servername != "" and vhost.documentroot != "" %}
-<VirtualHost *:{{ apache_listen_port }}>
+<VirtualHost *:{{ apache_port }}>
   ServerName {{ vhost.servername }}
 {% if vhost.serveralias is defined %}
   ServerAlias {{ vhost.serveralias }}
@@ -15,9 +16,8 @@ DirectoryIndex index.php index.html
 {% endif %}
   <Directory "{{ vhost.documentroot }}">
     AllowOverride All
-    Options -Indexes FollowSymLinks
-    Order allow,deny
-    Allow from all
+    Options -Indexes +FollowSymLinks
+    Require all granted
   </Directory>
 {% if vhost.extra_parameters is defined %}
   {{ vhost.extra_parameters }}
@@ -27,10 +27,10 @@ DirectoryIndex index.php index.html
 
 {% endfor %}
 
-{# Set up SSL VirtualHosts. #}
+{# Set up SSL VirtualHosts #}
 {% for vhost in apache_vhosts_ssl %}
 {% if vhost.servername != "" and vhost.documentroot != "" %}
-<VirtualHost *:{{ apache_listen_port_ssl }}>
+<VirtualHost *:{{ apache_port_ssl }}>
   ServerName {{ vhost.servername }}
 {% if vhost.serveralias is defined %}
   ServerAlias {{ vhost.serveralias }}
@@ -38,9 +38,10 @@ DirectoryIndex index.php index.html
   DocumentRoot {{ vhost.documentroot }}
 
   SSLEngine on
-  SSLCipherSuite {{ apache_ssl_cipher_suite }}
-  SSLProtocol {{ apache_ssl_protocol }}
+  SSLCipherSuite {{ cikit_apache.ssl.cipher_suite }}
+  SSLProtocol {{ cikit_apache.ssl.protocol }}
   SSLHonorCipherOrder On
+  SSLCompression off
   SSLCertificateFile {{ vhost.certificate_file }}
   SSLCertificateKeyFile {{ vhost.certificate_key_file }}
 {% if vhost.certificate_chain_file is defined %}
@@ -52,9 +53,8 @@ DirectoryIndex index.php index.html
 {% endif %}
   <Directory "{{ vhost.documentroot }}">
     AllowOverride All
-    Options -Indexes FollowSymLinks
-    Order allow,deny
-    Allow from all
+    Options -Indexes +FollowSymLinks
+    Require all granted
   </Directory>
 {% if vhost.extra_parameters is defined %}
   {{ vhost.extra_parameters }}
