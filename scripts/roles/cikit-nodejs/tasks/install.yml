@@ -8,3 +8,7 @@
   apt:
     name: nodejs
     state: latest
+
+- name: Mark role as executed
+  set_fact:
+    cikit_nodejs_role_executed: yes
