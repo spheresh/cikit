@@ -24,6 +24,10 @@ The power of the system - simplicity. All provisioning is the same for local and
 - Triggering builds via comments in pull requests.
 - Midnight server cleaning :)
 
+## Documentation
+
+Global project documentation [available here](docs).
+
 ## Quick Start
 
 - Add your host credentials to the `inventory` file.
