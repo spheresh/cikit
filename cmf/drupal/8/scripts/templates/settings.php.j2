@@ -1,3 +1,4 @@
+// {{ ansible_managed }}
 {% for name, value in databases.iteritems() %}
 $databases['{{ name }}'] = [
   'default' => [
@@ -15,7 +16,8 @@ $databases['{{ name }}'] = [
 $settings['environment'] = '{{ env }}';
 
 $settings['trusted_host_patterns'] = [
-  '{{ site_url.split('//') | last | regex_escape }}$',
+  {# See: http://stackoverflow.com/a/40397212 #}
+  '{{ site_url.rpartition("//")[-1].partition("/")[0] | regex_escape }}$',
 ];
 
 $config_directories[CONFIG_SYNC_DIRECTORY] = 'sites/default/config';
