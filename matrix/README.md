@@ -28,6 +28,8 @@ Add your own host inside of `inventory` file and run the following command:
 ./cikit matrix/matrix.yml --limit=<HOSTNAME>
 ```
 
+New droplets (VMs) will be based on an image, which is assume as [base](vars/virtualmachine.yml#L13) for the matrix.
+
 ### Add trusted SSL certificate
 
 Inside of the `/path/to/directory/` two files must be located: `*.crt` and `*.key`. They are will be copied and NGINX start to use them immediately.
