@@ -26,7 +26,7 @@
 - name: Copy configs
   template:
     src: "configs/{{ item | basename }}"
-    dest: '{{ jenkins_lib }}/{{ item | basename | regex_replace("\.j2", "") }}'
+    dest: '{{ jenkins_lib }}/{{ item | basename | splitext | first }}'
     owner: "{{ jenkins_data.user }}"
     group: "{{ jenkins_data.group }}"
     force: yes
