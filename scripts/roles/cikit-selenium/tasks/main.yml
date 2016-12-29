@@ -20,15 +20,3 @@
   with_items: "{{ selenium_packages }}"
 
 - include: dependencies.yml
-
-- name: Create Xvfb service
-  template:
-    src: service.j2
-    dest: "/etc/init.d/{{ item.dest | lower }}"
-    mode: 0750
-  with_items:
-    - dest: Xvfb
-      service: ~
-
-- name: Enable Xvfb on boot
-  shell: update-rc.d xvfb defaults

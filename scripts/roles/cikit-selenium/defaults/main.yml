@@ -15,8 +15,6 @@ selenium_packages:
   - xfonts-75dpi
   - xfonts-scalable
   - xfonts-cyrillic
-  - xvfb
-  - x11-apps
   - imagemagick
   - firefox
   - google-chrome-stable
