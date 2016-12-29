@@ -17,9 +17,10 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>
-mysql -uroot -proot -e &quot;show databases;&quot; -s | egrep &quot;build&quot; | xargs -I &quot;@@&quot; mysql -uroot -proot -e &quot;DROP DATABASE @@&quot;
+      <command>COMMAND=&quot;mysql -uroot -proot -se&quot;
+${COMMAND} &quot;SHOW DATABASES&quot; | grep &quot;build&quot; | xargs -I &quot;@@&quot; ${COMMAND} &quot;DROP DATABASE `@@`&quot;
 
+sudo chown -R jenkins:jenkins ${JENKINS_HOME}
 sudo rm -rf /var/www/*build*
 </command>
     </hudson.tasks.Shell>
