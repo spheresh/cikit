@@ -24,8 +24,8 @@ git_repos:
     branch: 2.0.7
     repo: https://github.com/squizlabs/HTML_CodeSniffer.git
 
-npm_packages:
-  - jshint
-
-gem_packages:
-  - scss-lint
+packages:
+  npm:
+    - eslint
+  gem:
+    - scss-lint

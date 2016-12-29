@@ -31,8 +31,8 @@ commentinfo.md
 !.htaccess
 # Helper file that afect to "synchronize" task of Ansible.
 !.rsync-filter
-!.gitignore
-!.gitmodules
+!.git*
+!.eslint*
 
 !composer.json
 !selenium.sh
