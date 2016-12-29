@@ -5,9 +5,3 @@
   args:
     chdir: "{{ project_workspace }}"
   environment: "{{ env_vars }}"
-
-- include: tasks/misc/report-link.yml
-  args:
-    data:
-      type: "security_review"
-      title: "Security review"

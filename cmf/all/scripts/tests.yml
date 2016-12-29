@@ -57,7 +57,6 @@
       when: run
 
     - name: Create Behat report
-      # See "report-link.yml".
       shell: >
         printf '\n- <a href="{{ reports.url }}/behat/index.html">Behat</a>' >> {{ reports.comment }}
       args:

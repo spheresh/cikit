@@ -1,8 +1,0 @@
----
-- name: "Create {{ data.title }} report"
-  # The reason, why "printf" using instead of "echo".
-  # https://github.com/ansible/ansible/issues/5206#issuecomment-38111435
-  shell: >
-    if [ ! -z "$(cat {{ reports.dir }}/{{ data.type }}.txt | xargs)" ]; then
-      printf '\n- <a href="{{ reports.url }}/{{ data.type }}.txt">{{ data.title }}</a>' >> {{ reports.comment }}
-    fi
