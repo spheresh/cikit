@@ -12,7 +12,7 @@
 # - ansible-playbook
 
 # List of allowed variables for passing as parameters for "ansible-playbook".
-APB_VARS="limit tags list-tags module-path"
+APB_VARS="limit tags list-tags module-path become-user"
 
 locate_path()
 {
