@@ -9,10 +9,11 @@ phpcs:
 # - WCAG2AAA
 # - Section508
 htmlcs:
-  - name: Frontpage
+  Frontpage:
     path: /
     standard: Section508
 
+# If you ending a pattern by asterisk then put trailing slash at the end!
 scan_dirs:
   - "wp-content/plugins"
   - "wp-content/themes"
