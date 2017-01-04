@@ -2,6 +2,8 @@
 # vi: set ft=ruby :
 VAGRANTFILE_API_VERSION = "2"
 
+Vagrant.require_version ">= 1.7.0"
+
 require "yaml"
 
 isWindows = Vagrant::Util::Platform.windows?
