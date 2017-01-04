@@ -13,5 +13,6 @@ htmlcs:
     path: /
     standard: Section508
 
+# If you ending a pattern by asterisk then put trailing slash at the end!
 scan_dirs:
   - "profiles/{{ profile }}/*/custom"
