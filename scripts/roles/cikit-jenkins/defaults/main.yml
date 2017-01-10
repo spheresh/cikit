@@ -1,5 +1,7 @@
 ---
 jenkins_install: yes
+jenkins_reinstall_deb: no
+
 jenkins_job: default
 jenkins_port: 8080
 jenkins_prefix: jenkins

@@ -5,6 +5,7 @@
     jenkins_host: "http://localhost:{{ jenkins_port }}/{{ jenkins_prefix }}"
 
 - include: install.yml
-  when: "{{ jenkins_install }}"
+  when: "{{ jenkins_install and not jenkins_reinstall_deb }}"
 
-- include: jobs.yml
+- include: install-deb.yml
+  when: "{{ jenkins_reinstall_deb }}"
