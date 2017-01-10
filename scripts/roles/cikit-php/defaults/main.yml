@@ -38,6 +38,7 @@ cikit_php:
         remote_handler: dbgp
         default_enable: 1
         coverage_enable: 1
+        overload_var_dump: 0
         max_nesting_level: 1000
         remote_connect_back: 1
   packages:
