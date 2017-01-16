@@ -1,4 +1,4 @@
-module VagrantPlugins::CIKIt
+module VagrantPlugins::CIKit
   class Config < Vagrant.plugin("2", :config)
     attr_accessor :playbook
     attr_accessor :controller
