@@ -12,8 +12,4 @@
 - include: install.yml
   when: not _phpvirtualbox.stat.exists
 
-- name: Restart VBoxWeb service
-  service:
-    name: vboxweb-service
-    state: restarted
-    enabled: yes
+- include: configure.yml
