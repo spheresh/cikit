@@ -1,10 +1,4 @@
 ---
-- name: Add repository
-  apt_repository:
-    repo: "{{ item }}"
-    state: present
-  with_items: "{{ apt.repositories }}"
-
 - name: Add key
   apt_key:
     url: "{{ item }}"
@@ -12,6 +6,15 @@
   # That's funny, but "apt.keys" returns a method of the object.
   # Just add execution brackets and get the object keys.
   with_items: "{{ apt['keys'] }}"
+
+- name: Add repository
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items: "{{ apt.repositories }}"
+
+- name: Update APT keys
+  shell: apt-key update
 
 - name: Install package
   apt:
