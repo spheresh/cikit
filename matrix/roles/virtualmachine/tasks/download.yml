@@ -3,7 +3,7 @@
   file:
     path: "{{ virtualmachine.path }}"
     state: directory
-    owner: "{{ phpvirtualbox.user.user }}"
+    owner: "{{ phpvirtualbox.users.system.name }}"
     recurse: yes
 
 - name: Download and unarchive VM
@@ -11,6 +11,6 @@
     src: "{{ virtualmachine.package }}"
     dest: "{{ virtualmachine.path }}"
     copy: no
-    owner: "{{ phpvirtualbox.user.user }}"
+    owner: "{{ phpvirtualbox.users.system.name }}"
 
 - include: check.yml
