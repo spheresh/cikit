@@ -7,13 +7,13 @@
 - name: Register Virtual Machine
   include: vboxmanage.yml
   args:
-    command: "registervm {{ vm_path }}"
+    command: "registervm '{{ vm_path }}'"
     ignore_errors: yes
 
 - name: Check VM registration status
   fail:
     msg: "{{ vboxmanage_result.stderr }}"
-  when: "{{ vboxmanage_result.stderr.find('has the same UUID as an existing virtual machine') < 0 }}"
+  when: "{{ vboxmanage_result.stderr and vboxmanage_result.stderr.find('has the same UUID as an existing virtual machine') < 0 }}"
 
 - include: droplet/list.yml
   when: "{{ droplet_list }}"
