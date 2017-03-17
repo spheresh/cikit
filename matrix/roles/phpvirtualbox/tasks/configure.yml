@@ -1,15 +1,13 @@
 ---
 - name: Create config
-  copy:
-    src: "{{ phpvirtualbox.path }}/config.php-example"
-    dest: "{{ phpvirtualbox.path }}/config.php"
+  shell: "cp {{ phpvirtualbox.path }}/config.php-example {{ phpvirtualbox.path }}/config.php"
 
 - name: Configure
   replace:
     dest: "{{ phpvirtualbox.path }}/config.php"
     regexp: '^var \${{ item.search }}.*;$'
     replace: "var ${{ item.search }} = '{{ item.replace }}';"
-  with_dict:
+  with_items:
     - search: "username"
       replace: "{{ phpvirtualbox.user.user }}"
 
