@@ -14,6 +14,8 @@
 
 - name: Rename package
   shell: "mv {{ cikit_phantomjs.dest | dirname }}/{{ cikit_phantomjs_package }} {{ cikit_phantomjs.dest }}"
+  args:
+    creates: "{{ cikit_phantomjs.dest }}"
 
 - name: Create link to executable script
   file:
