@@ -16,7 +16,7 @@ mysql:
 
 databases:
   default:
-    name: "{{ cmf }}_{{ project | default('EMPTY') }}_{{ build_id | default(env) }}"
+    name: "{{ cmf }}_{{ project | replace('-', '_') }}_{{ build_id | default(env) }}"
 #    source:
 #      # Database name on remote host.
 #      db: ""
