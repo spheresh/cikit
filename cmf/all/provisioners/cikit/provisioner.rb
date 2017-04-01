@@ -10,10 +10,10 @@ module VagrantPlugins::CIKit
         :env => environment_variables,
       ) do |io_name, data|
         @machine.env.ui.info(data, {
-         :new_line => false,
-         :prefix => false,
-         :color => io_name == :stderr ? :red : :green,
-       })
+          :new_line => false,
+          :prefix => false,
+          :color => io_name == :stderr ? :red : :green,
+        })
       end
 
       if not result.exit_code.zero?
