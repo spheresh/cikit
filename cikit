@@ -118,14 +118,10 @@ if [ ! -f ${playbook} ]; then
   exit 1
 fi
 
-# Divide options by "--" instead of usual "space" to allow pass complex
-# strings as an argument.
-IFS="--"
-
 # The "EXTRA_VARS" passed as environment variable. Parse it first
 # to not allow overwrite explicitly passed options.
 if [ -n "${EXTRA_VARS}" ]; then
-  for var in "${EXTRA_VARS}"; do
+  for var in $(IFS="--" echo "${EXTRA_VARS}"); do
     extra_var "${var}"
   done
 fi
@@ -134,9 +130,6 @@ fi
 for ((i = 2; i <= $#; i++)); do
   extra_var "${!i}"
 done
-
-# Restore standard delimiter.
-unset IFS
 
 # Remove last comma.
 extra_vars=${extra_vars%%,}
