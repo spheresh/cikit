@@ -2,11 +2,11 @@
 - name: Get the name of original VM
   include: ../vboxmanage.yml
   args:
-    command: "list vms | awk '{print $1}'"
+    command: "list vms | awk '/{{ application }}/ {print $1}'"
 
 - name: Determine a number of a new VM
   set_fact:
-    vm_num: "{{ '%02d' | format(vboxmanage_result.stdout_lines | count) }}"
+    vm_num: "{{ '%02d' | format(vboxmanage_result.stdout_lines | count | int + 1) }}"
 
 - name: Set name for a new VM
   set_fact:
@@ -14,8 +14,7 @@
 
 - include: clone.yml
   args:
-    # The first VM - is an initial.
-    name: "{{ vboxmanage_result.stdout_lines | first }}"
+    name: "{{ vm_path | basename | splitext | first }}"
     new: "{{ vm_name }}"
 
 - name: Get list of all forwarding ports
