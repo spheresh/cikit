@@ -1,3 +1,5 @@
+$base_url = '{{ site_url }}';
+
 {% for name, value in databases.iteritems() %}
 $databases['{{ name }}'] = [
   'default' => [
