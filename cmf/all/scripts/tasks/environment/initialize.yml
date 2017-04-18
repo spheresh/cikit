@@ -18,10 +18,13 @@
 
 - name: Ensure that project directory has correct permissions
   file:
-    path: "{{ project_webroot }}"
+    path: "{{ item }}"
     mode: 0755
     state: directory
-    recurse: yes
+  with_items:
+    - "{{ project_webroot }}"
+    - "{{ reports.dir }}"
+    - "{{ project_workspace }}/{{ settings | dirname }}"
 
 - name: Initialize an empty build report
   copy:

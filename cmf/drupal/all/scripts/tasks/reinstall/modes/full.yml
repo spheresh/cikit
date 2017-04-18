@@ -4,7 +4,7 @@
 - include: tasks/environment/prepare.yml
 
 - name: Create settings.php
-  shell: "cp default.settings.php settings.php"
+  shell: "cp default.settings.php {{ settings | basename }}"
   args:
     chdir: "{{ project_workspace }}/{{ settings | dirname }}"
 
