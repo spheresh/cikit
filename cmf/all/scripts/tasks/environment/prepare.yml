@@ -9,3 +9,9 @@
     - "{{ tmproot }}"
     - "{{ webroot }}/backup"
     - "{{ project_workspace }}/{{ filesystem }}"
+
+- name: Ensure correct permissions for settings
+  file:
+    mode: 0666
+    dest: "{{ project_workspace }}/{{ settings }}"
+    state: touch

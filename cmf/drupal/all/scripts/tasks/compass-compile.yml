@@ -7,7 +7,7 @@
 
 - name: Check for SCSS
   stat:
-    path: "{{ project_workspace }}/{{ theme_path.stdout }}/config.rb"
+    path: "{{ theme_path.stdout }}/config.rb"
   register: config_rb
 
 - name: Compile SCSS
