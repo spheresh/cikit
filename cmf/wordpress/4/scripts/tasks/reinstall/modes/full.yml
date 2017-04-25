@@ -20,12 +20,12 @@
       - "--admin_user={{ wordpress.user.name }}"
       - "--admin_email={{ wordpress.user.name }}@{{ site_domain }}"
       - "--admin_password={{ wordpress.user.pass }}"
-  when: "{{ not sql_workflow }}"
+  when: not sql_workflow
 
 # Download and import databases.
 - include: tasks/database/import.yml
-  when: "{{ sql_workflow and 'source' in item.value }}"
   with_dict: "{{ databases }}"
+  when: "sql_workflow and 'source' in item.value"
 
 # Unique way for both workflows.
 - include: tasks/wp.yml name="Set username for super user" command="db"
@@ -48,7 +48,7 @@
 - include: tasks/wp.yml name="Update site domain" command="db"
   with_items:
     - query: ["'update wp_site s, wp_blogs b set s.domain = \"{{ site_domain }}\", b.domain = s.domain'"]
-  when: "{{ sql_workflow }}"
+  when: sql_workflow
 
 - include: tasks/wp.yml name="Manage plugins" command="plugin"
   with_items: "{{ plugins }}"

@@ -6,7 +6,7 @@
 - name: "Check for {{ name }} hostname"
   fail:
     msg: "{{ name }} hostname is undefined. Configure it inside of inventory file in [{{ name }}] group."
-  when: "{{ name not in groups }}"
+  when: name not in groups
 
 - name: "Set the {{ name }} hostname"
   set_fact:
