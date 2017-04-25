@@ -9,7 +9,7 @@
   set_fact:
     subcommand: "{{ item.key if 'key' in item else item | join(' ') }}"
     arguments: "{{ item.value if 'key' in item else (item[item | join(' ')] or []) | join(' ') }}"
-  when: "{{ item is defined }}"
+  when: item is defined
 
 - name: "{{ name | default('drush ' + utility + ' ' + subcommand + ' ' + arguments) }}"
   shell: "drush {{ utility }} {{ subcommand }} {{ arguments }} -y"

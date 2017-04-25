@@ -12,6 +12,6 @@
   shell: "wp {{ utility }} {{ subcommand }} {{ arguments }} --allow-root"
   args:
     chdir: ../docroot
-  when: "{{ arguments | length }}"
+  when: arguments | length
   register: wp_cli_result
   environment: "{{ env_vars }}"

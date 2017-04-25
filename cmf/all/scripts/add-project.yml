@@ -11,7 +11,7 @@
     - name: Check for required variables
       fail:
         msg: "You need to sepcify an argument: --{{ item }}=<VALUE>"
-      when: "{{ item }} is undefined"
+      when: item is undefined
       with_items: ["repo", "name"]
 
     - name: Clone repository
