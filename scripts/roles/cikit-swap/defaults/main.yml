@@ -1,7 +1,0 @@
----
-# This should be a "count" parameter for Unix "dd" command.
-# See http://druler.com/node/860 for additional instructions.
-swap:
-  file: /swapfile1
-  size: 100M
-  blocks: 24
