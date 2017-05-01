@@ -1,5 +1,0 @@
-# Specify here a list of IP addresses for disabling basic HTTP authentication.
----
-allowed_ips:
-  # Localhost must be without authentication to run Behat tests.
-  - 127.0.0.1
