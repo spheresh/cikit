@@ -1,5 +1,3 @@
-composer_bin: /usr/local/bin
-composer_dir: /usr/share/composer
 composer_packages:
   wp-cli/wp-cli: 0.*
   drush/drush: 8.*
