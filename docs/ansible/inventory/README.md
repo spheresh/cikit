@@ -10,7 +10,7 @@ cikit01.example.com ansible_user=root ansible_port=2201
 ```
 
 - `host-name` is a human-readable name which you have to use in `--limit` parameter for `cikit` utility.
-- `cikit01.example.com` - hostname you want to provision.
+- `cikit01.example.com` - hostname you want to provision (could be IP, but will [complicate your life](../../matrix/domain)).
 - `ansible_user` - username for accessing the host via SSH.
 - `ansible_port` - number of port for accessing the host via SSH.
 
