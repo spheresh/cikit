@@ -7,11 +7,11 @@
   args:
     # Example:
     # "SATA-0-0"="/home/vbox/VirtualBox VMs/cikit02/cikit02.vdi"
-    command: "showvminfo {{ droplet_name }} --machinereadable | awk -F '=' '/SATA-0/ {print $2}'"
+    command: "showvminfo '{{ droplet_name }}' --machinereadable | awk -F '=' '/SATA-0/ {print $2}'"
 
 - name: Resize hard drive
   include: ../vboxmanage.yml
   args:
     # Unable to decrease size of HD.
-    command: "modifyhd {{ vboxmanage_result.stdout }} --resize={{ droplet_size }}"
+    command: "modifyhd '{{ vboxmanage_result.stdout }}' --resize={{ droplet_size }}"
     ignore_errors: yes
