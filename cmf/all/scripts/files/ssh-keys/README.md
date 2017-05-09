@@ -9,7 +9,7 @@ This folder could contain as much as needed keys. Every key should have an exten
 ## New key
 
 ```shell
-ssh-keygen -t rsa -b 2048 -C "email@example.com" -N '' -q -f PROJECT.private.key && mv $_.pub ${_//private/public}
+ssh-keygen -t rsa -b 2048 -C "cikit@PROJECT" -N '' -q -f PROJECT.private.key && mv $_.pub ${_//private/public}
 ```
 
 Do not forget to add a `PROJECT.public.key` to `~/.ssh/authorized_keys` file on necessary machines.
