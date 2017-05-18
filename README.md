@@ -1,10 +1,8 @@
 # Continuous Integration Kit
 
-**CIKit** is [Ansible](https://github.com/ansible/ansible) based system for web application development. You are able to deploy a local web-server based on [Vagrant](https://github.com/mitchellh/vagrant) and/or remote one with this tool.
+**CIKit** - [Ansible](https://github.com/ansible/ansible)-based system for deploying development environments or clusters of them. With this tool everyone is able to create virtual machine (based on [Vagrant](https://github.com/mitchellh/vagrant) using VirtualBox provider) for particular team member, matrix of continuous integration servers or single CI server for project(s).
 
-The power of the system - simplicity. The provisioning is the same whether it's local or remote machine, except of a logic for installing additional software on remote machine (Jenkins, for example), but it's also quite simple (just `when: not vagrant` as a condition for Ansible tasks).
-
-*Currently based on `Ubuntu 14.04 LTS (64bit)`*.
+*Currently based on [Ubuntu 16.04 LTS (64 bit)](docs/vagrant/box)*.
 
 ```ascii
  ██████╗ ██╗    ██╗  ██╗ ██╗ ████████╗
@@ -17,17 +15,18 @@ The power of the system - simplicity. The provisioning is the same whether it's 
 
 ## Main possibilities
 
-- [Create matrix of virtual servers (droplets).](matrix)
+- [Create matrix of virtual servers (droplets)](docs/matrix).
 - Automated builds for each commit in a pull request on GitHub (private repositories are supported).
 - Multi CMS/CMF support (`Drupal` and `WordPress` at the moment). To introduce a new one, you just have to add pre-configurations to `cmf/<NAME>/<MAJOR_VERSION>` and make sure that system is downloadable as an archive.
 - Opportunity to keep multiple projects on the same CI server.
 - Triggering builds via comments in pull requests.
 - Applying [sniffers](docs/project/sniffers) to control code quality.
+- Possibility to choose software versions.
 - Midnight server cleaning :)
 
 ## Documentation
 
-Global project documentation [available here](docs).
+Global project documentation [available here](docs#documentation).
 
 ## Slack
 

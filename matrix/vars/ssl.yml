@@ -1,6 +1,6 @@
 ---
-# Directory should contain "*.crt" and "*.key" files to be copied to server.
-#ssl_src: /etc/certs/cikit-host
+# Directory (local!) must contain "*.crt" and "*.key" files to be copied to server.
+ssl_src: no
 ssl:
   dest: /etc/ssl/private
   bits: 2048

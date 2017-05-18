@@ -1,39 +1,40 @@
 ---
 - hosts: all
-  gather_facts: yes
   become: yes
+  gather_facts: yes
 
   vars_files:
     - ../config.yml
-    - vars/ip.yml
     - vars/ruby.yml
+    - vars/solr.yml
     - vars/ports.yml
     - vars/mysql.yml
     - vars/nginx.yml
     - vars/apache.yml
+    - vars/security.yml
 
   vars_prompt:
-    - name: cikit_php_version
+    - name: php_version
       prompt: Which version of PHP you'd want to install? (5.6/7.0/7.1)
-      default: 7.0
+      default: 7.1
       private: no
       tags: ["php", "php-stack"]
 
-    - name: cikit_nodejs_version
+    - name: nodejs_version
       prompt: Which version of Node.js you'd want to install? (4/5/6/7)
       default: 6
       private: no
       tags: ["nodejs", "phantomjs"]
 
-    - name: cikit_ruby_version
-      prompt: Which version of Ruby you'd want to install? (2.4.0/2.3.3/2.2.6/2.1.10)
+    - name: ruby_version
+      prompt: Which version of Ruby you'd want to install? (2.1.10/2.2.6/2.3.3/2.4.0)
       default: 2.4.0
       private: no
       tags: ["sniffers", "sass", "ruby"]
 
-    - name: setup_solr
-      prompt: Do you want to install Solr? (yes/NO)
-      default: false
+    - name: solr_version
+      prompt: Which version of Solr you'd want to install? (5.5.4/6.5.1/no)
+      default: "no"
       private: no
       tags: ["solr"]
 
@@ -48,7 +49,7 @@
 
     - name: http_auth_pass
       prompt: Password for HTTP authentication
-      default: r3str1cteDHere
+      default: password
       private: yes
       # WARNING!!! This condition will be processed only inside of Vagrantfile! The "vagrant"
       # variable is undefined here and "when" construction aren't processed by Ansible for prompts.
@@ -56,32 +57,38 @@
       tags: ["security"]
 
   vars:
-    vagrant: no
-    cikit_ssl_folder: /etc/ssl/private
-
-    cikit_protected_folders:
-      - path: "{{ webroot }}"
-        user: "{{ http_auth_user }}"
-        pass: "{{ http_auth_pass }}"
-
     basic_packages:
       apt:
+        - git
+        - tar
+        - vim
+        - curl
+        - htop
+        - make
+        - time
+        - tree
+        - rsync
+        - unzip
         - python
         - python-dev
         - python-pycurl
+        - python-passlib
         - python-simplejson
-        - curl
-        - make
-        - rsync
-        - git
+        - python-software-properties
+        - libmagickcore-dev
+        - libmagickwand-dev
         - libmysqlclient-dev
+        - imagemagick
         - apparmor-utils
         - bsdutils
-        - software-properties-common
-        - python-software-properties
         - build-essential
+        - software-properties-common
         - libffi-dev
         - libssl-dev
+        - rng-tools
+        - zlib1g-dev
+        # Needed for "rbenv".
+        - libreadline-dev
 
       pip:
         - setuptools
@@ -93,10 +100,18 @@
         - ansible
 
   pre_tasks:
-    - include: tasks/detect-vagrant.yml
+    - name: Check Ansible compatibility
+      fail:
+        msg: "Continuation is possible only with Ansible 2.2.x on host machine."
+      when: "ansible_version.major < 2 and ansible_version.minor < 2"
       tags: ["always"]
 
-    - name: "Obtain home directory of \"{{ ansible_user }}\" user"
+    - name: Check whether virtual machine will be provisioned
+      set_fact:
+        vagrant: "{{ ansible_host is defined and '127.0.0.1' == ansible_host }}"
+      tags: ["always"]
+
+    - name: Obtain home directory of "{{ ansible_user }}" user
       shell: "eval echo ~{{ ansible_user }}"
       register: user_home
       tags: ["always"]
@@ -131,20 +146,35 @@
       when: vagrant
 
     - name: Process facts
-      set_fact:
-        extras:
-          solr: "{{ setup_solr | bool }}"
+      set_fact: {"install_{{ item.key }}": "{{ item.value not in ['no', false] }}"}
+      with_dict:
+        solr: "{{ solr_version }}"
       tags: ["always"]
+
+    - name: Spoof Sendmail if not installed
+      file:
+        src: /bin/true
+        path: /usr/sbin/sendmail
+        state: link
+        force: no
+
+    # https://github.com/propeoplemd/cibox/pull/349
+    - name: Recover possible fail
+      shell: dpkg --configure -a
+      ignore_errors: yes
+
+    - name: Install APT packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      register: cikit_apt_needs_cache_update
+      with_items: "{{ basic_packages.apt }}"
 
     - name: Update APT cache
       apt:
         update_cache: yes
-
-    - name: Install basic packages for Ansible
-      apt:
-        name: "{{ item }}"
-        state: present
-      with_items: "{{ basic_packages.apt }}"
+      # Update cache only if new packages were installed.
+      when: cikit_apt_needs_cache_update.changed
 
     - name: Install EasyInstall and PIP
       shell: "[ $(which {{ item.tool }}) ] || {{ item.script }}"
@@ -166,15 +196,12 @@
       with_items: "{{ basic_packages.pip }}"
 
   roles:
-    - role: cikit-misc
-      tags: ["misc"]
-
-    - role: cikit-ssl-config
-      tags: ["ssl", "security"]
+    - role: cikit-security
+      tags: ["security"]
 
     - role: cikit-nginx
-      tags: ["nginx", "php-stack", "security"]
       when: not vagrant
+      tags: ["nginx", "php-stack", "security"]
 
     - role: cikit-apache
       tags: ["apache", "php-stack"]
@@ -188,14 +215,17 @@
     - role: cikit-phantomjs
       tags: ["phantomjs"]
 
-    - role: ansible-composer
+    - role: cikit-composer
       tags: ["composer", "php-stack"]
 
-    - role: ansible-role-mysql
+    - role: cikit-mysql
       tags: ["mysql", "php-stack"]
 
-    - role: cikit-jetty-solr
-      when: extras.solr
+    - role: cikit-java
+      tags: ["java", "solr", "sniffers", "jenkins"]
+
+    - role: cikit-solr
+      when: install_solr
       tags: ["solr", "php-stack"]
 
     - role: cikit-ruby
@@ -204,18 +234,11 @@
     - role: cikit-sniffers
       tags: ["sniffers", "php-stack"]
 
-    - role: cikit-mysql-config
-      tags: ["mysql", "php-stack"]
-
     - role: ansible-role-memcached
       tags: ["memcache", "php-stack"]
 
     - role: cikit-selenium
       tags: ["selenium"]
-
-    - role: cikit-security
-      tags: ["security"]
-      when: not vagrant
 
     - role: cikit-jenkins
       when: not vagrant

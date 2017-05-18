@@ -73,10 +73,6 @@ end
 
 ENV["VAGRANT_DEFAULT_PROVIDER"] = ENV.has_key?("VAGRANT_CI") && ENV["VAGRANT_CI"].include?("lxc") ? "lxc" : "virtualbox"
 
-boxes = {}
-boxes["lxc"] = "http://cici.ffwua.com/ubuntu14.04provisionedCIBox.lxc.box"
-boxes["virtualbox"] = "http://cici.ffwua.com/ubuntu14.04LTS_cibox.box"
-
 if not Vagrant.has_plugin?("vagrant-hostsupdater")
   system "vagrant plugin install vagrant-hostsupdater"
 end
@@ -92,7 +88,7 @@ end
 
 Vagrant.configure(VAGRANT_API_VERSION) do |config|
   # Use the box, depending on Vagrant provider.
-  config.vm.box_url = "#{boxes[ENV["VAGRANT_DEFAULT_PROVIDER"]]}"
+  config.vm.box_url = "http://propeople.com.ua/pub/CIKit_Ubuntu_16.04_LTS.box"
   # Automatically name the box.
   config.vm.box = File.basename(config.vm.box_url)
   # The "hostsupdater" plugin insert this value to "hosts".
@@ -111,6 +107,10 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
 ╚██████╗ ██║    ██║  ██╗ ██║    ██║
  ╚═════╝ ╚═╝    ╚═╝  ╚═╝ ╚═╝    ╚═╝
 "
+
+  # Change the name of VM.
+  config.vm.define config.vm.hostname do |vm|
+  end
 
   config.vm.provider :virtualbox do |vb|
     vb.name = configValues["project"]

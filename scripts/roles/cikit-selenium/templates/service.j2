@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-SERVICE="{{ item.dest.split('.')[0] | basename | lower }}"
-PID=$(ps aux | grep '{{ item.dest }}' | grep -v grep | awk '{print $2}')
+SERVICE="{{ item.dest | basename | splitext | first | lower }}"
+PID="$(ps aux | grep '{{ item.dest }}' | grep -v grep | awk '{print $2}')"
 
-STARTED="${SERVICE} service (PID: ${PID}) started."
-STOPPED="${SERVICE} service stopped."
+STARTED="$SERVICE service (PID: $PID) started."
+STOPPED="$SERVICE service stopped."
 
 ARGS=""
 
@@ -13,20 +13,20 @@ done
 
 do_start()
 {
-  if [ -n "${PID}" ]; then
-    echo ${STARTED}
+  if [ -n "$PID" ]; then
+    echo "$STARTED"
   else
-    nohup {{ item.service }} {{ item.dest }} ${ARGS} > /var/log/${SERVICE}.out.log 2> /var/log/${SERVICE}.error.log < /dev/null &
+    nohup {{ item.service }} "{{ item.dest }}" ${ARGS} > "/var/log/$SERVICE.out.log" 2> "/var/log/$SERVICE.error.log" < /dev/null &
   fi
 }
 
 do_stop()
 {
-  if [ -n "${PID}" ]; then
-    kill ${PID}
+  if [ -n "$PID" ]; then
+    kill "$PID"
     unset PID
   else
-    echo ${STOPPED}
+    echo "$STOPPED"
   fi
 }
 
@@ -38,19 +38,20 @@ case "${1:-''}" in
     do_stop
     ;;
   status)
-    if [ -z "${PID}" ]; then
-      echo ${STOPPED}
+    if [ -z "$PID" ]; then
+      echo "$STOPPED"
       exit 2
     fi
 
-    echo ${STARTED}
+    echo "$STARTED"
     ;;
   restart)
     do_stop
     do_start
     ;;
   *)
-  echo "Usage: /etc/init.d/${SERVICE} {start|stop|status|restart}"
+  echo "Usage: /etc/init.d/$SERVICE {start|stop|status|restart}"
   exit 1
 esac
+
 exit 0

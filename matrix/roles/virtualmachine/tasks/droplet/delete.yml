@@ -6,5 +6,5 @@
 - name: Delete VM
   include: ../vboxmanage.yml
   args:
-    command: "unregistervm {{ droplet_delete }} -delete"
+    command: "unregistervm '{{ droplet_delete }}' -delete"
     ignore_errors: yes

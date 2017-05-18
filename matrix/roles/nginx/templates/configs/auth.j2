@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 satisfy any;
-{% for ip in nginx.allowed_ip %}
+{% for ip in allowed_hosts %}
 allow {{ ip }};
 {% endfor %}
 deny all;
