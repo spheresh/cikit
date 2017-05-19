@@ -74,15 +74,15 @@ extra_var()
     fi
   done
 
-  if [ "$var" == "$val" ]; then
+  if [[ "$var" == "$val" || "" == "$val" ]]; then
     val="true"
   fi
 
   # Replace all "-" by "_" in argument name.
   var=${var//-/_}
 
-  # Allow to pass JSON as is.
-  if [[ "$val" != "{*" && "${val: -1}" != "}" ]]; then
+  # Allow to pass JSON and arrays as is.
+  if [[ ${val::1} != "{" && ${val::-1} != "}" ]] && [[ ${val::1} != "[" && ${val::-1} != "]" ]]; then
     val="\"$val\""
   fi
 
