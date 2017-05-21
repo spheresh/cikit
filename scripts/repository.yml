@@ -13,7 +13,7 @@
         default_version: "7.54"
       wordpress:
         download_url: "wordpress.org/wordpress"
-        default_version: "4.7"
+        default_version: "4.7.5"
 
   vars_files:
     - ../config.yml
@@ -21,16 +21,10 @@
   tasks:
     - include: tasks/project-variable.yml
 
-    - fail:
-        msg: "Project name should only contain letters, numbers, hyphens or dots. It cannot start with a hyphen or dot."
-      # Project name will be used as VM hostname, so use the same regex for validating it as Vagrant.
-      # https://github.com/mitchellh/vagrant/blob/6d3ab39b27d7cc4036c01b17d703bdd5dbe1b8ee/plugins/kernel_v2/config/vm.rb#L595
-      when: "{{ not project | replace('_', '-') | match('^[a-z0-9][-.a-z0-9]*$', 'i') }}"
-
     - name: Set default version of CMF
       set_fact:
         version: "{{ cmfs[cmf].default_version }}"
-      when: "{{ version is undefined }}"
+      when: version is undefined
 
     - name: Determine major version of CMF
       set_fact:
@@ -44,7 +38,7 @@
     - name: CMF is not available
       fail:
         msg: "You are not allowed to install {{ cmf | capitalize }} {{ version }} because it isn't pre-configured."
-      when: "{{ not cmf_configs.stat.exists }}"
+      when: not cmf_configs.stat.exists
 
     - name: Prepare directory for project
       file:
@@ -56,7 +50,7 @@
       args:
         warn: no
         chdir: "../{{ project }}/docroot"
-      when: "{{ not without_sources }}"
+      when: not without_sources
 
     - name: Prepare CIKit-structured repository
       synchronize:
@@ -107,7 +101,7 @@
     - include_vars: "../{{ project }}/REPLACEMENTS.yml"
 
     - name: Seeking the placeholders
-      shell: "find ../{{ project }}/scripts/ -type f -exec sed -i {{ \"''\" if ansible_os_family == 'Darwin' else '' }} 's/<{{ item.key }}>/{{ item.value }}/g' {} \\;"
+      shell: "find ../{{ project }}/scripts/ -type f -exec sed -i {{ \"''\" if ansible_os_family == 'Darwin' else '' }} 's/<{{ item.key }}>/{{ item.value | regex_escape }}/g' {} \\;"
       environment:
         LC_ALL: C
       with_dict: "{{ replacements }}"

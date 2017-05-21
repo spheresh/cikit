@@ -14,7 +14,6 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <properties/>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
@@ -29,6 +28,10 @@
   <builders>
     <hudson.tasks.Shell>
       <command>COMMAND=&quot;mysql -uroot -proot -se&quot;
+
+# This build could be triggered by one of PR builders. Ansible might change the
+# owner of some directories making further builds impossible.
+sudo chown -R "${USER}":"${USER}" "${HOME}"
 
 if ! ${FORCE}; then
   # Return "force" state if empty space on device is coming to the end.

@@ -1,31 +1,54 @@
 ---
 - hosts: all
   become: yes
+  gather_facts: no
 
   vars:
+    credentials_storage: ../cikit-credentials
     application: cikit
     # Allow to pass "--restart=nginx,jenkins,apache" to this script and restart necessary services.
     restart: ""
 
   pre_tasks:
+    - name: Check Ansible compatibility
+      fail:
+        msg: "Continuation is possible only with Ansible 2.2.x on host machine."
+      when: "ansible_version.major < 2 and ansible_version.minor < 2"
+      tags: ["always"]
+
+    - name: Ensure Python is installed on remote host
+      raw: "[ $(which python) ] || (apt update -y && apt install python-minimal -y)"
+      tags: ["always"]
+
+      # "gather_facts" after performing required tasks.
+      # See https://gist.github.com/gwillem/4ba393dceb55e5ae276a87300f6b8e6f#gistcomment-1869582
+    - name: Gather facts
+      setup: ~
+      tags: ["always"]
+
     - name: Determine domain
       set_fact:
-        domain: "{{ domain | default(inventory_hostname) }}"
+        domain: "{{ domain | default(ansible_host) }}"
+      tags: ["always"]
 
     - include_vars: "{{ item }}"
       with_fileglob: vars/*
       tags: ["always"]
 
-    - name: Check Ansible compatibility
-      fail:
-        msg: "You need Ansible 2.x on your host machine!"
-      when: "{{ ansible_version.major }} < 2"
+    - name: Compute allowed hosts
+      set_fact:
+        # Ensure current IP is in the list. Otherwise we're risking to lose access to provisioning machine.
+        allowed_hosts: "{{ os_configuration.allowed_hosts + [ansible_env.SSH_CLIENT.split() | first] }}"
+      tags: ["always"]
 
     - name: Configure hostname
       hostname:
         name: "{{ domain }}"
 
   roles:
+    - role: os-configuration
+      tags: ["config"]
+
     - role: apt
       tags: ["apt"]
 
@@ -53,5 +76,5 @@
         name: "{{ item }}"
         state: restarted
       with_items: "{{ restart.split(',') }}"
-      when: "{{ restart | length > 0 }}"
+      when: restart | length > 0
       tags: ["always"]

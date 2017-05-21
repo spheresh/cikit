@@ -1,17 +1,16 @@
 ---
 - name: Check type of provisioning environment
   shell: "dmidecode -s system-product-name"
-  register: system_product_name
+  register: cikit_nginx_system_product_name
 
 - name: Get IP-gateway if provisioning doing for VM
   shell: "ip route | head -n1 | awk '{print $3}'"
-  register: system_gateway_ip
-  when: "{{ 'VirtualBox' == system_product_name.stdout }}"
+  register: cikit_nginx_system_gateway_ip
+  when: "'VirtualBox' == cikit_nginx_system_product_name.stdout"
 
 - name: Set real IP
   set_fact:
-    nginx_real_ip: "{{ system_gateway_ip.stdout }}"
-  when: "{{ system_gateway_ip is defined }}"
+    nginx_real_ip: "{{ cikit_nginx_system_gateway_ip.stdout }}"
 
 - name: Create global config
   template:

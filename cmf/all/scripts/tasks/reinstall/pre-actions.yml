@@ -1,0 +1,37 @@
+# This file is a very early execution of the build on CI server and MUST be
+# used carefully!
+#
+# NOTE: you can control the process by simple conditions, parsed in commit
+# messages.
+#
+# Example:
+# git commit -m '[composer install][skip tests] Update Composer dependencies'
+#
+# As a result this script will have the "actions" variable containing an array
+# with "composer install" and "skip tests" strings. In other words: all data
+# between square brackets will be stored into "actions" variable and available
+# during execution of this script.
+#
+# Based on above explanations you can do the following here:
+# - include: tasks/actions/composer-install.yml
+#   when: "'composer install' in actions"
+#
+# Want to run it locally? Not a big deal!
+# ./cikit reinstall --actions='["composer install", "my next action"]'
+---
+- name: Compute actions to run
+  set_fact: {
+    "{{ item }}_cache": "/tmp/cikit-cache-{{ item }}-{{ project }}",
+    "{{ item }}_install": "{{ item + ' install' in actions or 'default' != env }}",
+  }
+  with_items: ["composer", "npm"]
+
+- include: actions/packages-install.yml
+  args:
+    manager: "Composer"
+    command: "composer install"
+    filename: "composer.json"
+    dirname: "vendor"
+    install: "{{ composer_install }}"
+    cache: "{{ composer_cache }}"
+    path: "{{ project_workspace }}"

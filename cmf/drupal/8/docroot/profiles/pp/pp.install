@@ -20,9 +20,14 @@ function pp_install() {
   }
 
   // Assign user 1 the "administrator" role.
-  $user = User::load(1);
+  /* @var \Drupal\user\UserStorageInterface $user_storage */
+  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+
+  /* @var \Drupal\user\Entity\User $user */
+  $user = $user_storage->load(1);
   $user->roles[] = 'administrator';
-  $user->save();
+
+  $user_storage->save($user);
 
   foreach ([
     'user.settings' => [
